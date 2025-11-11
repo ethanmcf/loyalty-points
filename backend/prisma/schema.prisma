@@ -1,0 +1,119 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum RoleType {
+  regular
+  cashier
+  manager
+  superuser
+}
+
+enum TransactionType {
+  purchase
+  redemption
+  adjustment
+  event
+  transfer
+}
+
+enum PromotionType {
+  automatic
+  onetime
+}
+
+model User {
+  // User info
+  id                    Int           @id @default(autoincrement())
+  utorid                String        @unique
+  name                  String
+  email                 String        @unique
+  password              String?
+  role                  RoleType
+  birthday              String?
+  // Account info
+  points                Int           @default(0)
+  activated             Boolean
+  verified              Boolean
+  suspicious            Boolean
+  avatarUrl             String?
+  // Login info
+  createdAt             String // ISO 8601 format
+  lastLogin             String? // ISO 8601 format
+  token                 String
+  expiresAt             String // ISO 8601 format
+  resetToken            String
+  resetExpiresAt        String // ISO 8601 format
+  // Related activity
+  promotions            Promotion[]   @relation("UserPromotions") // Promotions user has
+  transactions          Transaction[] @relation("Affected") // Transactions user has 
+  transferTransactions  Transaction[] @relation("Related") // Transactions user has 
+  createdTransactions   Transaction[] @relation("Creator") // Transactions user created
+  attendingEvents       Event[]       @relation("Guests") // Events user is a guest at
+  organizingEvents      Event[]       @relation("Organizers") // Events user is an organizer for
+  processedTransactions Transaction[] @relation("Processor") // Transactions user as processed
+}
+
+model Promotion {
+  // Promotion info
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String
+  type        PromotionType
+  startTime   String
+  endTime     String
+  minSpending Int?
+  rate        Float?
+  points      Int?
+  used        Boolean
+  users       User[]        @relation("UserPromotions")
+  // Transactions that used the promotion
+  Transaction Transaction[] @relation("TransationPromotions")
+}
+
+model Transaction {
+  // Transaction info
+  id           Int             @id @default(autoincrement())
+  type         TransactionType
+  spent        Int
+  remark       String?
+  amount       Int
+  suspicious   Boolean
+  processed    Boolean // Only false if type is redemption (and not already prcessed)
+  // Related user in transfer 
+  relatedId    Int?
+  relatedUser  User?           @relation("Related", fields: [userId], references: [id], onDelete: Cascade)
+  // Affected user in the transaction
+  userId       Int
+  user         User            @relation("Affected", fields: [userId], references: [id], onDelete: Cascade)
+  // Creator of the transaction
+  creatorId    Int
+  creator      User            @relation("Creator", fields: [creatorId], references: [id], onDelete: Cascade)
+  // Processor of the transaction
+  processorId  Int?
+  processor    User?           @relation("Processor", fields: [processorId], references: [id], onDelete: Cascade)
+  // Applied promotions
+  promotionIds Promotion[]     @relation("TransationPromotions")
+}
+
+model Event {
+  // Envent info
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+  location      String
+  startTime     DateTime // ISO 8601 format
+  endTime       DateTime // ISO 8601 format
+  capacity      Int?
+  pointsRemain  Int
+  pointsAwarded Int      @default(0)
+  published     Boolean  @default(false)
+  // Related users
+  organizers    User[]   @relation("Organizers") // Organizing users
+  guests        User[]   @relation("Guests") // Guest users
+}

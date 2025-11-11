@@ -1,0 +1,116 @@
+We used AI as an aid on this assignment. It is important to note that this was used as an aid
+to our learning and not as a means to complete the entire assignment for us. For example,
+we used ChatGPT to address some basic clarifications or write a small piece of example code. 
+Examples of the prompts we used and the responses we got from AI are shown below.
+
+(1)  (Jennifer Tan)
+Prompt: if i save a datetime object in prisma and then retrieve it, what will the data type of the retreived value be? 
+
+Response: 
+object. 
+
+post.createdAt instanceof Date; // true
+post.createdAt.toISOString();   // "2025-10-13T17:30:00.000Z"
+post.createdAt.getFullYear();   // 2025
+
+(2)  (Jennifer Tan)
+Prompt: how do i check if something is in ISO 8601 format?
+
+Response: 
+If you want to check whether the input string is a valid ISO 8601 date, use just:
+
+!isNaN(new Date(dateTime).getTime());
+
+Returns true for any parseable ISO string (like "2025-11-03T19:25:04.296387+00:00").
+
+Or if you need strict ISO format validation, truncate microseconds and unify timezone before comparing:
+
+const normalized = dateTime.replace(/(\.\d{3})\d+/, '$1').replace('+00:00', 'Z');
+return !isNaN(date.getTime()) && date.toISOString() === normalized;
+
+(3) (Ethan McFarland)
+prompt: what is the regex for a string that must have 8-20 characters, at least one uppercase, one lowercase, one number, one special character
+
+response: 
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[{\]};:'",<.>/?\\|`~]).{8,20}$/
+
+(4)  (Ethan McFarland)
+prompt: how does multer work and how can I use it to get a file from a body param in an js endpoint
+
+response: 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
+
+(5)  (Jennifer Tan)
+prompt: when im doing connect, what if i want to connect more than 1 id at a time (like i want to connect multiple book ids to one person) 
+
+response: 
+const bookIds = [1, 2, 3];
+
+await prisma.user.update({
+  where: { id: userId },
+  data: {
+    books: {
+      connect: bookIds.map(id => ({ id }))
+    }
+  }
+});
+
+(6) (Veda Kesarwani)
+prompt: how do i use try catch blocks in an endpoint and return a 500 error
+
+response: 
+You can wrap your endpoint logic in a try...catch block and send a 500 status when an unexpected error occurs. Example using Express:
+
+app.get('/api/data', async (req, res) => {
+  try {
+    const result = await someAsyncOperation();
+    res.status(200).json({ data: result });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+The try block contains your normal logic.
+Any thrown or rejected errors go to the catch block.
+
+(7) (Veda Kesarwani)
+Prompt: how do I restrict an express endpoint to certain user roles using middleware?
+
+Response:
+You can create a middleware that checks req.user.role:
+
+function authorize(roles) {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    next();
+  };
+}
+
+(8) (Veda Kesarwani)
+Prompt: what is ISO format and how do i use that in javascript and prisma?
+
+Response:
+ISO 8601 is the standard date/time format used by most APIs and databases. It looks like "2025-11-06T18:42:00.000Z", where Z means UTC time.
+
+In JavaScript, you can convert any date to ISO format with:
+
+new Date().toISOString();
+
+
+To parse an ISO string back into a date object:
+
+const date = new Date("2025-11-06T18:42:00.000Z");
+
+
+In Prisma, DateTime fields are automatically returned as JavaScript Date objects, which you can format using .toISOString() when sending them in JSON responses.

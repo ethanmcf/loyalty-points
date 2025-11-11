@@ -1,0 +1,53 @@
+(1) Content contributed by Jennifer Tan
+/transactions/ - Created/debugged
+/transactions/:transactionsId - Created-debugged
+/transactions/:transactionsId/processed - Created-Debugged
+/events - Created-Debugged
+/events/:eventId - Created-Debugged
+/events/:eventId/organizers - Created-Debugged
+/events/:eventId/organizers/:userId - Created-Debugged
+/events/:eventId/guests - Created-Debugged
+/:eventId/guests/me DELETE - Helped Debugged
+/:eventId/guests/me POST - Helped Debugged
+isMandatoryValidStrings(strings) - Helper Function - Created-Debugged
+checkISO8601Format(dateTime) - Helper Function - Created-Debugged
+prisma schema -> schema was worked on by all team members at the time 
+index.js -> updated by all members
+
+(2) Content contributed by Ethan McFarland
+/users - Created/Debugged
+/users/:userid - Created/Debugged
+/users/me - Created/Debugged
+/users/me/password - Created/Debugged
+/users/:userId/transactions - Created/Debugged
+/auth/tokens - Created/Debugged
+/auth/resets - Created/Debugged
+/auth/resets/:userToken - Created/Debugged
+authorizeMiddleware.js - Created/Debugged
+rateLimitMiddleware.js - Created/Debugged
+storageMiddleware.js - Created/Debugged
+/events/:eventId - Helped Debugged
+/events/:eventId/transactions - Helped Debugged
+/transactions/:transactionsId - Helped Debugged
+/transactions - Helped Debugged
+/users/me/transactions - Helped Debugged
+createAuthToken(utorid, role, expiresInDays) -> helper func
+containsExtraFields(allowedFields, body) -> helper func
+prisma schema -> schema was worked on by all team members at the time 
+index.js -> updated by all members
+
+
+(3) Content contributed by Veda Kesarwani 
+/events/:eventId/guests/:userId
+/events/:eventId/guests/me
+/events/:eventId/transactions
+/promotions
+/promotions/:promotionId 
+/transactions/:transactionsId/suspicious
+/users/me/transactions
+ran tests on Postman and debugged via automated tester on Markus for the endpoints listed above
+helped debug some issues in /transactions
+prisma schema -> schema was worked on by all team members at the time 
+index.js -> updated by all members
+
+All group members collaborated effectively and participated in all meetings/discussions.
