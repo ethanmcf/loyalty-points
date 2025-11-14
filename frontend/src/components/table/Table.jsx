@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Table.css";
+import { Link, useLocation } from "react-router-dom";
 
 /**
  * This is a helper function that lets us generate a table and helps us to get selected data
@@ -9,7 +10,12 @@ import "./Table.css";
  * function that will set the value of a selectedData in another file when we click on an instance
  */
 export function Table({ data, selectedData, setSelectedData }) {
-  const [headers, setHeaders] = useState(); // get the headers
+  const [url, setUrl] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    setUrl(location.pathname);
+  }, [location]);
 
   const handleSelectChange = (id) => {
     // check if the item already exists in selectedData
@@ -37,7 +43,7 @@ export function Table({ data, selectedData, setSelectedData }) {
 
   // Reference: https://www.w3schools.com/tags/tag_table.asp
   return (
-    <table>
+    <table id="table-base">
       {/* Header */}
       <tr>
         <th>
@@ -48,7 +54,7 @@ export function Table({ data, selectedData, setSelectedData }) {
           />
         </th>
         {/* Select All */}
-        {headers.map((header, h_index) => (
+        {Object.keys(data).map((header, h_index) => (
           <th key={h_index}>{header}</th>
         ))}
       </tr>
@@ -68,6 +74,10 @@ export function Table({ data, selectedData, setSelectedData }) {
               {value}
             </td>
           ))}
+          {/* View details, clicking on this navigates to the details page */}
+          <td>
+            <Link to={`${url}/${instance.id}`}>View Details</Link>
+          </td>
         </tr>
       ))}
     </table>
