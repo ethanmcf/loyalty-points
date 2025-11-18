@@ -2,29 +2,34 @@
 "use strict";
 
 /* STARTER CODE */
-require("dotenv").config();
+const dotenv = require("dotenv");
 
-const port = (() => {
-  const args = process.argv;
-
-  if (args.length !== 3) {
-    console.error("usage: node index.js port");
-    process.exit(1);
-  }
-
-  const num = parseInt(args[2], 10);
-  if (isNaN(num)) {
-    console.error("error: argument must be an integer.");
-    process.exit(1);
-  }
-
-  return num;
-})();
+// load backend secrets
+dotenv.config({ path: "./.env" });
+// load shared root env
+dotenv.config({ path: "../.env" });
 
 const express = require("express");
 const app = express();
 
 app.use(express.json());
+
+// Use cors
+const cors = require("cors");
+const frontendUrl = process.env.FRONTEND_URL;
+app.use(
+  cors({
+    origin: frontendUrl,
+
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+
+    allowedHeaders: ["Content-Type", "Authorization"],
+
+    credentials: true,
+  })
+);
+
+const port = process.env.BACKEND_PORT;
 
 const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);

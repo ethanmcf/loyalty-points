@@ -2,9 +2,15 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = "lkasjf:I:lkjslkja23la9a:"; //process.env.JWT_SECRET;
+const SECRET_KEY = process.env.JWT_SECRET;
 
-function createAuthToken(payload, expiresInDays = 7) {
+function createAuthToken(user, expiresInDays = 7) {
+  const payload = {
+    id: user.id,
+    utorid: user.utorid,
+    name: user.name,
+    role: user.role,
+  };
   const token = jwt.sign(payload, SECRET_KEY, {
     expiresIn: `${expiresInDays}d`,
   });
