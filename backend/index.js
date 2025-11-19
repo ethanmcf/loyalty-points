@@ -4,8 +4,8 @@
 /* STARTER CODE */
 const dotenv = require("dotenv");
 
-// load backend secrets
-dotenv.config({ path: "./.env" });
+// // load backend secrets
+// dotenv.config({ path: "./.env" });
 // load shared root env
 dotenv.config({ path: "../.env" });
 
