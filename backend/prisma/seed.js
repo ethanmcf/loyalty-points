@@ -68,7 +68,6 @@ async function createUsers() {
       where: { utorid: user.utorid },
     });
     if (exists) {
-      console.log(`Skipping existing user: ${user.utorid}`);
       continue;
     }
 
@@ -99,11 +98,12 @@ async function createUsers() {
     console.log(`Created: ${user.utorid} (${user.role})`);
     createdCount++;
   }
-
-  console.log(`Seed finished. ${createdCount} new users created.`);
+  console.log(`${createdCount} new users created.`);
 }
 async function seed() {
-  createUsers();
+  console.log("Seed starting");
+  await createUsers();
+  console.log("Seed finished");
 }
 
 seed().finally(() => prisma.$disconnect());
