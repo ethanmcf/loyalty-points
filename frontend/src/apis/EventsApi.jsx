@@ -1,12 +1,9 @@
 // Reference: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
+const baseURL = `${import.meta.env.VITE_BACKEND_URL}/users`;
 
 /**
- *
  * @returns a list of the events with the defined variables applied
  * @note The filters that can be used are: name, location, started, ended, showFull, page, limit
- */
-
-/**
  *
  * @param {string} [name]
  * @param {string} [location]
@@ -16,7 +13,7 @@
  * @param {number} [page] Must be a positive integer, default is 1
  * @param {number} [limit] Must be a positive integer, default is 10
  * @param {number} [published] // only accessible by the manager or higher
- * @returns
+ * @param {string} authToken The Authorization Token
  */
 export async function getAllEvents(
   name,
@@ -26,13 +23,15 @@ export async function getAllEvents(
   showFull,
   page,
   limit,
-  published
+  published,
+  authToken
 ) {
   // depends on the role
   const requestOptions = {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
     },
   };
 
@@ -73,7 +72,7 @@ export async function getAllEvents(
     params.append("limit", limit);
   }
 
-  const url = `localhost:8000/events?${params.toString()}`;
+  const url = `${baseURL}/events?${params.toString()}`;
 
   try {
     const allEventsResponse = await fetch(url, requestOptions);
@@ -100,24 +99,9 @@ export async function getAllEvents(
  * @param {string} endTime Must be in ISO 8601 Format
  * @param {string | null} capacity Must be null if not a valid number
  * @param {number} points Must be a positive Integer
+ * @param {string} authToken The Authorization Token
  *
  * @returns The status code of the call and the response body.
- *
- * @example
- * // successful creation
- * 201 Created on success
- * {
- *  "id": 1,
- *  "name": "Event 1",
- *  "description": "A simple event",
- *  "location": "BA 2250",
- *  "startTime": "2025-11-10T09:00:00Z",
- *  "endTime": "2025-11-10T17:00:00Z",
- *  "capacity": 200, "pointsRemain": 500,
- *  "pointsAwarded": 0, "published": false,
- *  "organizers": [],
- *  "guests": []
- * }
  */
 export async function postNewEvent(
   name,
@@ -126,15 +110,16 @@ export async function postNewEvent(
   startTime,
   endTime,
   capacity,
-  points
+  points,
+  authToken
 ) {
-  // depends on the role
   const requestOptions = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
     },
-    body: {
+    body: JSON.stringify({
       name,
       description,
       location,
@@ -142,11 +127,11 @@ export async function postNewEvent(
       endTime,
       capacity,
       points,
-    },
+    }),
   };
 
   // TODO: figure out what port we have it on
-  const url = "localhost:8000/events/";
+  const url = `${baseURL}/events/`;
   try {
     const newEventResponse = await fetch(url, requestOptions);
 
@@ -168,15 +153,16 @@ export async function postNewEvent(
  *
  * @note regular user cannot see the following information: the points allocated to the event, or the list of guests
  */
-export async function getSingleEvent(eventId) {
+export async function getSingleEvent(eventId, authToken) {
   // depends on the role
   const requestOptions = {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`, //TODO: we need to find some other way to get this
     },
   };
-  const url = `localhost:8000/events/${eventId}`;
+  const url = `${baseURL}/events/${eventId}`;
   try {
     const allEventsResponse = await fetch(url, requestOptions);
 
@@ -200,14 +186,16 @@ export async function patchSingleEvent(
   endTime,
   capacity,
   points,
-  published
+  published,
+  authToken
 ) {
   const requestOptions = {
     method: "PATCH",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`, //TODO: we need to find some other way to get this
     },
-    body: {
+    body: JSON.stringify({
       name,
       description,
       location,
@@ -216,9 +204,9 @@ export async function patchSingleEvent(
       capacity,
       points,
       published,
-    },
+    }),
   };
-  const url = `localhost:8000/events/${eventId}`;
+  const url = `${baseURL}/events/${eventId}`;
   try {
     const allEventsResponse = await fetch(url, requestOptions);
 
@@ -237,15 +225,16 @@ export async function patchSingleEvent(
  * @method DELETE
  * @param {number} eventId
  */
-export async function deleteSingleEvent(eventId) {
+export async function deleteSingleEvent(eventId, authToken) {
   // depends on the role
   const requestOptions = {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`, //TODO: we need to find some other way to get this
     },
   };
-  const url = `localhost:8000/events/${eventId}`;
+  const url = `${baseURL}/events/${eventId}`;
   try {
     const allEventsResponse = await fetch(url, requestOptions);
 
@@ -269,18 +258,19 @@ export async function deleteSingleEvent(eventId) {
  * @param {number} utorid
  * @returns
  */
-export async function postOrganizerToEvent(eventId, utorid) {
+export async function postOrganizerToEvent(eventId, utorid, authToken) {
   // depends on the role
   const requestOptions = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`, //TODO: we need to find some other way to get this
     },
-    body: {
+    body: JSON.stringify({
       utorid,
-    },
+    }),
   };
-  const url = `localhost:8000/events/${eventId}/organizers`;
+  const url = `${baseURL}/events/${eventId}/organizers`;
   try {
     const allEventsResponse = await fetch(url, requestOptions);
 
@@ -301,24 +291,25 @@ export async function postOrganizerToEvent(eventId, utorid) {
  * @param {number} userId
  * @returns
  */
-export async function deleteOrganizerFromEvent(eventId, userId) {
+export async function deleteOrganizerFromEvent(eventId, userId, authToken) {
   // depends on the role
   const requestOptions = {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`, //TODO: we need to find some other way to get this
     },
   };
-  const url = `localhost:8000/events/${eventId}/organizers/${userId}`;
+  const url = `${baseURL}/events/${eventId}/organizers/${userId}`;
   try {
-    const allEventsResponse = await fetch(url, requestOptions);
+    const res = await fetch(url, requestOptions);
 
-    if (!allEventsResponse.ok) {
+    if (!res.ok) {
       console.error("Error occured: ", allEventsResponse.status);
     }
 
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
+    const eventsJSON = await res.json();
+    return eventsJSON; // expected should be no content
   } catch (error) {
     console.error("Error: ", error);
   }
@@ -329,18 +320,19 @@ export async function deleteOrganizerFromEvent(eventId, userId) {
  * @param {number} eventId
  * @param {number} utorid
  */
-export async function postGuestToEvent(eventId, utorid) {
+export async function postGuestToEvent(eventId, utorid, authToken) {
   // depends on the role
   const requestOptions = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`, //TODO: we need to find some other way to get this
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`, //TODO: we need to find some other way to get this
     },
-    body: {
+    body: JSON.stringify({
       utorid,
-    },
+    }),
   };
-  const url = `localhost:8000/events/${eventId}/guests`;
+  const url = `${baseURL}/events/${eventId}/guests`;
   try {
     const allEventsResponse = await fetch(url, requestOptions);
 

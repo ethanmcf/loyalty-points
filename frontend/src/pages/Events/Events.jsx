@@ -1,34 +1,4 @@
 import { useEffect } from "react";
-
-const exampleData = {
-  count: 5,
-  results: [
-    {
-      id: 1,
-      name: "Event 1",
-      location: "BA 2250",
-      startTime: "2025-11-10T09:00:00Z",
-      endTime: "2025-11-10T17:00:00Z",
-      capacity: 200,
-      pointsRemain: 500,
-      pointsAwarded: 0,
-      published: false,
-      numGuests: 0,
-    },
-    {
-      id: 2,
-      name: "Event 2",
-      location: "SF 2250",
-      startTime: "2025-11-10T09:00:00Z",
-      endTime: "2025-11-10T17:00:00Z",
-      capacity: null,
-      pointsRemain: 500,
-      pointsAwarded: 0,
-      published: true,
-      numGuests: 12,
-    },
-  ],
-};
 /**
  * TODO USECASES - Events (45 marks)
  * Event Management (15 marks):
