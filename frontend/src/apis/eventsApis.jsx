@@ -1,5 +1,6 @@
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
+// Join event as a guest
 export async function joinEventLoggedIn(authToken, eventId) {
     const res = await fetch(`${baseURL}/events/${eventId}/guests/me`, {
         method: "POST",
@@ -18,6 +19,7 @@ export async function joinEventLoggedIn(authToken, eventId) {
     return res.json();
 }
 
+// Remove logged in user from event
 export async function leaveEvent(authToken, eventId) {
     const res = await fetch(`${baseURL}/events/${eventId}/guests/me`, {
         method: "DELETE",
@@ -36,6 +38,7 @@ export async function leaveEvent(authToken, eventId) {
     return;
 }
 
+// Delete a user from an event
 export async function removeGuest(authToken, eventId, userId) {
     const res = await fetch(`${baseURL}/events/${eventId}/guests/${userId}`, {
         method: "DELETE",

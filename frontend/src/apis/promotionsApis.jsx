@@ -1,5 +1,6 @@
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
+// For GET /promotions
 export async function getAllPromotions(authToken) {
     const res = await fetch(`${baseURL}/promotions`, {
         method: "GET",
@@ -18,6 +19,7 @@ export async function getAllPromotions(authToken) {
     return res.json();
 }
 
+// For GET /promotions/:promotionId
 export async function getPromotionById(authToken, promotionId) {
     const res = await fetch(`${baseURL}/promotions/${promotionId}`, {
         method: "GET",
@@ -36,6 +38,7 @@ export async function getPromotionById(authToken, promotionId) {
     return res.json();
 }
 
+// For POST /promotions
 export async function createPromotion(authToken, promotionData) {
     const res = await fetch(`${baseURL}/promotions`, {
         method: "POST",
@@ -55,6 +58,7 @@ export async function createPromotion(authToken, promotionData) {
     return res.json();
 }
 
+// For PUT /promotions/:promotionId
 export async function updatePromotion(authToken, promotionId, promotionData) {
     const res = await fetch(`${baseURL}/promotions/${promotionId}`, {
         method: "PUT",
@@ -74,6 +78,7 @@ export async function updatePromotion(authToken, promotionId, promotionData) {
     return res.json();
 }
 
+// For DELETE /promotions/:promotionId
 export async function deletePromotion(authToken, promotionId) {
     const res = await fetch(`${baseURL}/promotions/${promotionId}`, {
         method: "DELETE",
