@@ -72,6 +72,18 @@ export function Navbar() {
           <Route path="/transactions" element={<div>Transactions</div>} />
           <Route path="/promotions" element={<div>Promotions</div>} />
           <Route path="/profile" element={<div>Profile</div>} />
+          <Route
+            path="/events/:eventId"
+            element={<div>Event Details Page</div>}
+          />
+          <Route
+            path="/transactions/:transactionId"
+            element={<div>Transactions Details Page</div>}
+          />
+          <Route
+            path="/promotions/:promotionId"
+            element={<div>Promotions Details Page</div>}
+          />
         </Routes>
       </main>
     </BrowserRouter>
