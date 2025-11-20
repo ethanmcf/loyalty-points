@@ -1,20 +1,24 @@
 import TextField from "@mui/material/TextField";
-import "../../styles/auth.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import { Navbar } from "../../components/navbar/NavBar";
+import { useUser } from "../../contexts/UserContext";
+import "../../styles/auth.css";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const { user, login, logout, updateUser } = useUser();
+  const [utorid, setUtorid] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handle_submit = (e) => {
+  const handle_submit = async (e) => {
     e.preventDefault();
-    setError("Error");
-    // login(username, password)
-    // .then(message => setError(message));
+    try {
+      await login(utorid, password);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -23,15 +27,14 @@ function Login() {
         <h2>Login</h2>
         <form onSubmit={handle_submit}>
           <div className="form-field">
-            <label>University email</label>
+            <label>Utorid</label>
             <TextField
-              type="password"
               variant="outlined"
               className="input"
-              placeholder="first.last@mail.utoronto.ca"
+              placeholder="doejohn1"
               size="small"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={utorid}
+              onChange={(e) => setUtorid(e.target.value)}
             />
           </div>
           <div className="form-field">
