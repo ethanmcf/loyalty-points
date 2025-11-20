@@ -18,6 +18,18 @@ function App() {
             <Route path="/events" element={<Login />} />
             <Route path="/transactions" element={<Login />} />
             <Route path="/promotions" element={<Login />} />
+            <Route
+              path="/events/:eventId"
+              element={<div>Event Details Page</div>}
+            />
+            <Route
+              path="/transactions/:transactionId"
+              element={<div>Transactions Details Page</div>}
+            />
+            <Route
+              path="/promotions/:promotionId"
+              element={<div>Promotions Details Page</div>}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
