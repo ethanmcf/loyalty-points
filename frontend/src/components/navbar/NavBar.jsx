@@ -4,7 +4,8 @@ import { useUser } from "../../contexts/UserContext";
 import "./NavBar.css";
 
 export function Navbar() {
-  const { user } = useUser();
+  const { user, logout } = useUser();
+
   return (
     <header>
       <nav className="nav-bar">
@@ -59,11 +60,14 @@ export function Navbar() {
                 isPending ? "pending" : isActive ? "active" : ""
               }
             >
-              <div className="avatar"></div>
+              Profile
+            </NavLink>
+            <NavLink to="/" onClick={() => logout()}>
+              Logout
             </NavLink>
           </div>
         ) : (
-          <div className="nav-button-container">
+          <div className="links">
             <NavLink to="/login" className="outline-button nav-button">
               log in
             </NavLink>
