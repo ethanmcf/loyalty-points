@@ -1,18 +1,27 @@
-import { useState } from "react";
-import { BrowserRouter, Routes, Link, Route, NavLink } from "react-router-dom";
-import { Dashboard } from "./pages/Dashboard/Dashboard";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./contexts/UserContext";
-import "./App.css";
-import { Navbar } from "./components/navbar/NavBar";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import Landing from "./pages/Landing/Landing";
+import { Layout } from "./components/layout/Layout";
 
 function App() {
-  // Reference: https://reactrouter.com/api/components/NavLink
   return (
-    <div className="App">
-      <UserProvider>
-        <Navbar />
-      </UserProvider>
-    </div>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Landing />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/users" element={<Login />} />
+            <Route path="/events" element={<Login />} />
+            <Route path="/transactions" element={<Login />} />
+            <Route path="/promotions" element={<Login />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 
