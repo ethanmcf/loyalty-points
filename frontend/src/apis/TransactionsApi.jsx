@@ -1,7 +1,7 @@
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 // /transactions/:transactionId/suspicious, patch
-export async function markSuspicious(authToken, transactionId, suspicious) {
+export async function markTransactionSuspicious(authToken, transactionId, suspicious) {
     const res = await fetch(`${baseURL}/transactions/${transactionId}/suspicious`, {
         method: "PATCH",
         headers: {
@@ -10,6 +10,29 @@ export async function markSuspicious(authToken, transactionId, suspicious) {
         },
         body: JSON.stringify({
             suspicious: suspicious
+        }),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        console.log("Error:", error.error);
+        throw new Error(err.error);
+    }
+
+    return res.json();
+}
+
+// transactions/:transactionsId/processed"
+// Set a redemption transaction as being completed
+export async function setTransactionCompleted(authToken, transactionsId, processed) {
+    const res = await fetch(`${baseURL}/transactions/${transactionsId}/processed`, {
+       method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+            processed
         }),
     });
 
