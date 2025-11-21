@@ -29,7 +29,7 @@ function Register() {
       setTimeout(() => {
         setSuccess(false);
         navigate("/login");
-      }, 1000);
+      }, 2500);
     } catch (error) {
       setError(error.message);
       setSuccess(false);
