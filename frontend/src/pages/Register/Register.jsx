@@ -1,6 +1,7 @@
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { registerSelf } from "../../apis/AuthApi";
 import Alert from "@mui/material/Alert";
 import "../../styles/auth.css";
 
@@ -14,7 +15,7 @@ function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handle_submit = (e) => {
+  const handle_submit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords don't match");
@@ -22,7 +23,7 @@ function Register() {
       return;
     }
     try {
-      // registerSelf(); // register no auth token needed
+      await registerSelf(name, email, password); // register no auth token needed
       setSuccess(true);
       setError("");
       setTimeout(() => {
