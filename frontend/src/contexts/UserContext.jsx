@@ -21,19 +21,31 @@ export const UserProvider = ({ children }) => {
       return;
     }
     const userData = await getMyInfo(token);
-    setUser(userData);
+    return userData
   };
 
   // Fetches user info on reloads so login session not lost
   useEffect(() => {
-    fetchLoggedinInfo();
+    const loadUser = async () => {
+      const userData = await fetchLoggedinInfo();
+      if (userData) {
+        setUser(userData);
+      }
+    };
+    loadUser();
   }, []);
 
   const login = async (email, password) => {
     const { token, _ } = await loginApi(email, password);
     localStorage.setItem("token", token);
-    await fetchLoggedinInfo();
+    const userData = await fetchLoggedinInfo();
+    return userData;
   };
+
+  const completeLogin = (userData) => {
+    setUser(userData);
+  };
+
 
   const logout = () => {
     setUser(null);
@@ -53,7 +65,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, updateUser }}>
+    <UserContext.Provider value={{ user, completeLogin, login, logout, updateUser }}>
       {children}
     </UserContext.Provider>
   );

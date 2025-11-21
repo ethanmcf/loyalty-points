@@ -12,12 +12,12 @@ function App() {
       <UserProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
-            {/* Public routes that redirect to profile if logged in */}
+            {/* Public routes that redirect to profile if user is logged in */}
             <Route index element={<LandingPageRedirect />} />
             <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
 
-            {/* Protected routes that need authentication */}
+            {/* Protected routes that need authentication, redirect to login page */}
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/users" element={<ProtectedRoute><div>Users Page</div></ProtectedRoute>} />
             <Route path="/events" element={<ProtectedRoute><div>Events Page</div></ProtectedRoute>} />
@@ -47,7 +47,7 @@ function App() {
 // If user is logged in, redirect "/" to profile page
 function LandingPageRedirect() {
   const { user } = useUser();
-  return user ? <Navigate to="/profile" /> : <Landing />;
+  return user ? <Navigate to="/profile" replace /> : <Landing />;
 }
 
 // Public routes, only non logged in users can access. Redirect to profile if already logged in

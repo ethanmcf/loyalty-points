@@ -7,7 +7,7 @@ import "../../styles/auth.css";
 
 function Login() {
   const navigate = useNavigate();
-  const { user, login, logout, updateUser } = useUser();
+  const { login, completeLogin } = useUser();
   const [utorid, setUtorid] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,13 +16,14 @@ function Login() {
   const handle_submit = async (e) => {
     e.preventDefault();
     try {
-      await login(utorid, password);
+      const loggedInuser = await login(utorid, password);
       setSuccess(true);
       setError("");
       setTimeout(() => {
         setSuccess(false);
-        navigate("/profile");
-      }, 1000);
+        completeLogin(loggedInuser)
+        navigate("/profile")
+      }, 2500);
     } catch (error) {
       setError(error.message);
       setSuccess(false);
