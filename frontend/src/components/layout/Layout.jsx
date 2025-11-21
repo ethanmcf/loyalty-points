@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import { Navbar } from "../navbar/NavBar";
 
 export function Layout({}) {
   return (
     <>
       <header>
-        <Link>Redeema</Link>
+        <Navbar isAuthenticated={false} />
       </header>
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 }

@@ -1,5 +1,8 @@
 /* Creates auth token with correct payload */
-require("dotenv").config();
+const dotenv = require("dotenv");
+
+// load shared root env
+dotenv.config({ path: "../.env" });
 const jwt = require("jsonwebtoken");
 
 const SECRET_KEY = process.env.JWT_SECRET;
