@@ -33,10 +33,10 @@ export const UserProvider = ({ children }) => {
     const { token, _ } = await loginApi(email, password);
     localStorage.setItem("token", token);
     await fetchLoggedinInfo();
-    navigate("/profile");
   };
 
   const logout = () => {
+    setUser(null);
     localStorage.removeItem("token");
     navigate("/");
   };

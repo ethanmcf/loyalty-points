@@ -1,22 +1,38 @@
 import TextField from "@mui/material/TextField";
-import "../../styles/auth.css";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
+import "../../styles/auth.css";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handle_submit = (e) => {
     e.preventDefault();
-    setError("Error");
-    // login(username, password)
-    // .then(message => setError(message));
+    if (password !== confirmPassword) {
+      setError("Passwords don't match");
+      setSuccess(false);
+      return;
+    }
+    try {
+      // registerSelf(); // register no auth token needed
+      setSuccess(true);
+      setError("");
+      setTimeout(() => {
+        setSuccess(false);
+        navigate("/login");
+      }, 1000);
+    } catch (error) {
+      setError(error.message);
+      setSuccess(false);
+    }
   };
 
   return (
@@ -30,7 +46,6 @@ function Register() {
               id="outlined-basic"
               variant="outlined"
               className="input"
-              type="password"
               placeholder="John Doe"
               size="small"
               value={name}
@@ -41,7 +56,7 @@ function Register() {
             <label>University email</label>
             <TextField
               id="outlined-basic"
-              type="password"
+              type="email"
               variant="outlined"
               className="input"
               placeholder="first.last@mail.utoronto.ca"
@@ -72,11 +87,16 @@ function Register() {
               type="password"
               placeholder="Confirm pasword"
               size="small"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
           {!error ? null : <Alert severity="error">{error}</Alert>}
+          {!success ? null : (
+            <Alert severity="success">
+              Email sent! Redirecting to login page ...{" "}
+            </Alert>
+          )}
 
           <div className="btn-container">
             <button type="submit" className="fill-button">

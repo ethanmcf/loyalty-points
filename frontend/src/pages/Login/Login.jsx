@@ -1,23 +1,31 @@
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import { useUser } from "../../contexts/UserContext";
 import "../../styles/auth.css";
 
 function Login() {
+  const navigate = useNavigate();
   const { user, login, logout, updateUser } = useUser();
   const [utorid, setUtorid] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handle_submit = async (e) => {
     e.preventDefault();
     try {
       await login(utorid, password);
+      setSuccess(true);
       setError("");
+      setTimeout(() => {
+        setSuccess(false);
+        navigate("/profile");
+      }, 1000);
     } catch (error) {
       setError(error.message);
+      setSuccess(false);
     }
   };
 
@@ -51,6 +59,12 @@ function Login() {
           </div>
 
           {!error ? null : <Alert severity="error">{error}</Alert>}
+
+          {!success ? null : (
+            <Alert severity="success">
+              Login successful! Redirecting to profile page ...{" "}
+            </Alert>
+          )}
 
           <div className="btn-container">
             <button type="submit" className="fill-button">
