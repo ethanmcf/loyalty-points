@@ -1,15 +1,18 @@
-import { BrowserRouter, Routes, Link, Route, NavLink } from "react-router-dom";
-import { Dashboard } from "../../pages/Dashboard/Dashboard";
+import { Link, NavLink } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
+
 import "./NavBar.css";
 
 export function Navbar() {
+  const { user, logout } = useUser();
+
   return (
-    <BrowserRouter>
-      <header>
-        <nav className="nav-bar">
-          <Link className="logo" to="/">
-            <b>Redeema</b>
-          </Link>
+    <header>
+      <nav className="nav-bar">
+        <Link className="logo" to="/">
+          <b>Redeema</b>
+        </Link>
+        {user ? (
           <div className="links">
             <NavLink
               to="/"
@@ -57,35 +60,23 @@ export function Navbar() {
                 isPending ? "pending" : isActive ? "active" : ""
               }
             >
-              <div className="avatar"></div>
+              Profile
+            </NavLink>
+            <NavLink to="/" onClick={() => logout()}>
+              Logout
             </NavLink>
           </div>
-        </nav>
-      </header>
-
-      <main className="main-page">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/users" element={<div>Users</div>} />
-          <Route path="/events" element={<div>Events</div>} />
-          <Route path="/login" element={<div>Login</div>} />
-          <Route path="/transactions" element={<div>Transactions</div>} />
-          <Route path="/promotions" element={<div>Promotions</div>} />
-          <Route path="/profile" element={<div>Profile</div>} />
-          <Route
-            path="/events/:eventId"
-            element={<div>Event Details Page</div>}
-          />
-          <Route
-            path="/transactions/:transactionId"
-            element={<div>Transactions Details Page</div>}
-          />
-          <Route
-            path="/promotions/:promotionId"
-            element={<div>Promotions Details Page</div>}
-          />
-        </Routes>
-      </main>
-    </BrowserRouter>
+        ) : (
+          <div className="links">
+            <NavLink to="/login" className="outline-button nav-button">
+              log in
+            </NavLink>
+            <NavLink to="/register" className="fill-button nav-button">
+              sign up
+            </NavLink>
+          </div>
+        )}
+      </nav>
+    </header>
   );
 }

@@ -56,3 +56,23 @@ export async function removeGuest(authToken, eventId, userId) {
 
     return;
 }
+
+// Create a new reward transaction for an event
+export async function createEventTransaction(authToken, eventId, eventData) {
+    const res = await fetch(`${baseURL}/events/${eventId}/transactions`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(eventData),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        console.log(error.error);
+        throw new Error(error.error);
+    }
+
+    return res.json();
+}

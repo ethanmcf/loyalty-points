@@ -1,4 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login as loginApi } from "../apis/AuthApi";
+import { getMyInfo } from "../apis/UsersApi";
 
 const UserContext = createContext();
 
@@ -8,14 +11,45 @@ const UserContext = createContext();
  * The Current user
  */
 export const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null); // this is null when nobody is logged in
 
-  const login = (user) => {
-    setUser(user);
+  // Fetches logged in user info
+  const fetchLoggedinInfo = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
+    const userData = await getMyInfo(token);
+    return userData;
+  };
+
+  // Fetches user info on reloads so login session not lost
+  useEffect(() => {
+    const loadUser = async () => {
+      const userData = await fetchLoggedinInfo();
+      if (userData) {
+        setUser(userData);
+      }
+    };
+    loadUser();
+  }, []);
+
+  const login = async (email, password) => {
+    const { token, _ } = await loginApi(email, password);
+    localStorage.setItem("token", token);
+    const userData = await fetchLoggedinInfo();
+    return userData;
+  };
+
+  const completeLogin = (userData) => {
+    setUser(userData);
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   // Should only be called after login has been called
@@ -30,7 +64,9 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider
+      value={{ user, completeLogin, login, logout, updateUser }}
+    >
       {children}
     </UserContext.Provider>
   );
