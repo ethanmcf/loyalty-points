@@ -124,7 +124,7 @@ function PublicRoute({ children }) {
 function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
-    return children;
+    return <div>Loading - temporary if we add skeleton loading</div>;
   }
   return user ? children : <Navigate to="/login" replace />;
 }
