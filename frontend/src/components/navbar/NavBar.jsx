@@ -1,10 +1,20 @@
 import { Link, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
 import "./NavBar.css";
 
 export function Navbar() {
   const { user, logout } = useUser();
+  const [avatar, setAvatar] = useState(null);
+
+  useEffect(() => {
+    if (user?.avatarUrl) {
+      setAvatar(`${import.meta.env.VITE_BACKEND_URL}/${user.avatarUrl}`);
+    } else {
+      setAvatar("../public/default-avatar.png");
+    }
+  }, [user]);
 
   return (
     <header>
@@ -60,7 +70,7 @@ export function Navbar() {
                 isPending ? "pending" : isActive ? "active" : ""
               }
             >
-              Profile
+              <img src={avatar} className="profile-avatar" />
             </NavLink>
             <NavLink to="/" onClick={() => logout()}>
               Logout

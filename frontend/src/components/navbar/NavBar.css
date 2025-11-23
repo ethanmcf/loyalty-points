@@ -9,11 +9,11 @@
   border-bottom: 1px solid #f4f4f4;
   height: 3rem;
 }
-.logo {
-  margin-left: 2rem;
-}
 
-.avatar {
+.logo {
+  margin-left: 3rem;
+}
+.profile-avatar {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 100%;
