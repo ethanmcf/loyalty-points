@@ -5,7 +5,7 @@ import Register from "./pages/Register/Register";
 import Landing from "./pages/Landing/Landing";
 import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
-import { useEffect } from "react";
+import Reset from "./pages/Reset/Reset";
 
 function App() {
   return (
@@ -73,7 +73,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/reset" element={<div>Password reset Page</div>} />
             <Route
               path="/events/:eventId"
               element={
@@ -98,6 +97,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* Both protected and unprotected */}
+            <Route path="/reset" element={<Reset />} />
             {/* Catch-all route for 404 */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
