@@ -250,6 +250,7 @@ function Profile() {
           <p>Role: {user.role}</p>
           <p>Last login: {formatDate(user.lastLogin)}</p>
           <p>Birthday: {user.birthday || "Not disclosed"}</p>
+          <p>Interface: </p>
           <InterfacePicker />
         </div>
         <div className="points-container">
