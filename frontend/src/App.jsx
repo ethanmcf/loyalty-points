@@ -5,8 +5,9 @@ import Register from "./pages/Register/Register";
 import Landing from "./pages/Landing/Landing";
 import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
-import { useEffect } from "react";
+import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
+import { useEffect } from "react";
 
 function App() {
   return (
@@ -74,7 +75,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/reset" element={<div>Password reset Page</div>} />
             <Route
               path="/users/:userId"
               element={
@@ -107,6 +107,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* Both protected and unprotected */}
+            <Route path="/reset" element={<Reset />} />
             {/* Catch-all route for 404 */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
@@ -132,7 +134,7 @@ function PublicRoute({ children }) {
 function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
-    return children;
+    return <div>Loading - temporary if we add skeleton loading</div>;
   }
   return user ? children : <Navigate to="/login" replace />;
 }
