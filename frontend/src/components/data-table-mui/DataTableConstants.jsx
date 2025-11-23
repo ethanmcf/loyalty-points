@@ -2,9 +2,8 @@
  * Filterable: If this is false, then its NOT used as a filter
  * ValueGetter: If this exists, then this is not in the original API response or has a conditional render
  */
-import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
 import { ViewDetailsButton } from "./ViewDetailsButton";
+import { DeleteUserDialog } from "../delete-dialogs/DeleteUserDialog";
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -107,6 +106,8 @@ export const UserColumns = [
     field: "details",
     headerName: "Details",
     width: 150,
+    filterable: false,
+    sortable: false,
     renderCell: (params) => (
       <ViewDetailsButton url={`/users/${params.row.id}`} />
     ),
@@ -163,9 +164,18 @@ export const TransactionColumns = [
     field: "details",
     headerName: "Details",
     width: 150,
+    filterable: false,
+    sortable: false,
     renderCell: (params) => (
       <ViewDetailsButton url={`/transactions/${params.row.id}`} />
     ),
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => <DeleteUserDialog id={params.row.id} />, // TODO: u add the delete dialog here
   },
 ];
 
@@ -251,9 +261,18 @@ export const EventRegularColumns = [
     field: "details",
     headerName: "Details",
     width: 150,
+    filterable: false,
+    sortable: false,
     renderCell: (params) => (
       <ViewDetailsButton url={`/events/${params.row.id}`} />
     ),
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => <DeleteUserDialog id={params.row.id} />, // TODO: u add the delete dialog here
   },
 ];
 
@@ -305,9 +324,18 @@ export const PromotionsRegularColumns = [
     field: "details",
     headerName: "Details",
     width: 150,
+    filterable: false,
+    sortable: false,
     renderCell: (params) => (
       <ViewDetailsButton url={`/promotions/${params.row.id}`} />
     ),
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => <DeleteUserDialog id={params.row.id} />, // TODO: u add the delete dialog here
   },
 ];
 

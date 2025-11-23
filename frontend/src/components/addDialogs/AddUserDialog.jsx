@@ -9,17 +9,6 @@ import { registerUser } from "../../apis/UsersApi";
 import { useState } from "react";
 import Alert from "@mui/material/Alert";
 
-/**
- *
- * @typedef {Object} AddUserDialogProps
- * @property {boolean} isOpen
- * @property {(isOpen: boolean) => void} setIsOpen
- */
-
-/**
- * @param {AddUserDialogProps} props
- * @reference https://mui.com/material-ui/react-dialog/
- */
 export function AddUserDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);

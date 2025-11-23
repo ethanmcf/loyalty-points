@@ -50,8 +50,6 @@ export function DataTable({ baseURL, role }) {
     items: [],
   });
 
-  const onFilterChange = useCallback((filterModel) => {});
-
   // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   const fetchData = async () => {
     setIsLoading(true);
@@ -169,7 +167,6 @@ export function DataTable({ baseURL, role }) {
         loading={IsLoading}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
         filterModel={filterModel}
         onFilterModelChange={setFilterModel}
         filterMode="server"
