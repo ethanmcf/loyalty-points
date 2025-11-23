@@ -1,4 +1,5 @@
 import "./Profile.css";
+import QRCode from "qrcode";
 import { NavLink } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -31,6 +32,7 @@ function Profile() {
   const [transferSuccess, setTransferSuccess] = useState(false);
 
   // Personal info state
+  const [qrData, setQrData] = useState("");
   const [updatedName, setUpdatedNmae] = useState("");
   const [updatedEmail, setUpdatedEmail] = useState("");
   const [updatedBirthday, setUpdatedBirthday] = useState("");
@@ -122,6 +124,7 @@ function Profile() {
       setTransferError(error.message);
     }
   };
+
   // Helper to format date
   const formatDate = (dateString) => {
     const newDate = new Date(dateString);
@@ -147,6 +150,17 @@ function Profile() {
     };
     fetchusers();
   }, []);
+
+  // Create qr code
+  useEffect(() => {
+    if (user?.utorid) {
+      QRCode.toDataURL(user.utorid, {
+        errorCorrectionLevel: "H",
+        width: 128,
+        height: 128,
+      }).then(setQrData);
+    }
+  }, [user?.utorid]);
 
   // Component for picking recipeient
   const RecipientPicker = () => {
@@ -264,6 +278,9 @@ function Profile() {
               Your have successful transfered {points} points to {selectedUser}
             </Alert>
           )}
+        </div>
+        <div className="qrcode">
+          <img src={qrData} />
         </div>
       </div>
       <div className="content-container">
