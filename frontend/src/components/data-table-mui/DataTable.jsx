@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
+import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import {
@@ -10,8 +11,9 @@ import {
   TransactionColumns,
   UserColumns,
 } from "./DataTableConstants";
+import { useNavigate } from "react-router-dom";
 
-const VITE_BACKEND_URL = "BACKENDURL ENV"; // TODO: change this with env
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL; // TODO: change this with env
 
 /**
  * @typedef {"/transactions" | "/users" | "/transactions" | "/promotions"} overviewURL The baseURLS that the table supports 
@@ -36,9 +38,9 @@ export function DataTable({ baseURL }) {
   // Use State Values
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
-  const [columns, setColumns] = useState();
+  const [columns, setColumns] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
-  let role; // TODO: need to get role
+  const navigate = useNavigate();
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0, // default is 1 (when we call the api, we are going to add one)
@@ -47,6 +49,8 @@ export function DataTable({ baseURL }) {
   const [filterModel, setFilterModel] = useState({
     items: [],
   });
+
+  const onFilterChange = useCallback((filterModel) => {});
 
   // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   const fetchData = async () => {
@@ -96,6 +100,7 @@ export function DataTable({ baseURL }) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`,
       },
     });
 
@@ -113,10 +118,13 @@ export function DataTable({ baseURL }) {
 
   useEffect(() => {
     // TODO: verify the baseURL isnt empty and is valid
+    console.log("filterModel: ", filterModel);
 
     // step 1: generate columns
     const newColumns = generateColumns();
     setColumns(newColumns);
+
+    console.log("Columns Generated");
 
     // step 2: fetch data
     fetchData();
@@ -162,14 +170,17 @@ export function DataTable({ baseURL }) {
       const detailsPageColumn = {
         field: "actions",
         headerName: "Actions",
+        width: 300,
         renderCell: (params) => (
           <strong>
             <Button
               variant="contained"
               size="small"
-              style={{ marginLeft: 16 }}
               tabIndex={params.hasFocus ? 0 : -1}
-              onClick={() => navigate(`/${type}/${params.row.id}`)}
+              onClick={() => {
+                console.log("View Details Button Clicked");
+                navigate(`${baseURL}/${params.row.id}`);
+              }}
             >
               View Details
             </Button>
@@ -182,20 +193,23 @@ export function DataTable({ baseURL }) {
   }
 
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      loading={IsLoading}
-      initialState={{ pagination: { paginationModel } }}
-      pageSizeOptions={[5, 10]}
-      checkboxSelection
-      filterModel={filterModel}
-      setFilterModel={setFilterModel}
-      filterMode="server"
-      paginationMode="server"
-      paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
-      sx={{ border: 0 }}
-    />
+    <Box sx={{ width: "100%" }}>
+      <DataGrid
+        showToolbar
+        rows={rows}
+        columns={columns}
+        rowCount={rowCount}
+        loading={IsLoading}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[5, 10]}
+        checkboxSelection
+        filterModel={filterModel}
+        onFilterModelChange={setFilterModel}
+        filterMode="server"
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+      />
+    </Box>
   );
 }

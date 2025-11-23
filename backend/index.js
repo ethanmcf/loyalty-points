@@ -16,7 +16,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Use cors
 const cors = require("cors");
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173/";
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 app.use(
   cors({
     origin: frontendUrl,

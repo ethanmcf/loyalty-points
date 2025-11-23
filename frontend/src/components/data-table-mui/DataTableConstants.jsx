@@ -1,32 +1,39 @@
 /**
  * Filterable: If this is false, then its NOT used as a filter
- * ValueGetter: If this exists, then this is not in the original API response
+ * ValueGetter: If this exists, then this is not in the original API response or has a conditional render
  */
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
   {
     field: "name",
-    field: "Name",
+    headerName: "Name",
     type: "string",
   },
   {
     field: "utorid",
-    field: "UtorID",
+    headerName: "UtorID",
     type: "string",
     filterable: false,
   },
   {
     field: "email",
-    field: "Email",
+    headerName: "Email",
     type: "string",
     filterable: false,
   },
   {
     field: "birthday",
-    field: "Birthday",
+    headerName: "Birthday",
     type: "string",
     filterable: false,
+    valueGetter: (value, row) => {
+      if (!row.birthday) {
+        return "N/A";
+      }
+
+      return row.birthday;
+    },
   },
   {
     field: "role",
@@ -36,21 +43,28 @@ export const UserColumns = [
   },
   {
     field: "points",
-    field: "Points",
+    headerName: "Points",
     type: "string",
     filterable: false,
   },
   {
     field: "createdAt",
-    field: "Created At",
+    headerName: "Created At",
     type: "string",
     filterable: false,
   },
   {
     field: "lastLogin",
-    field: "Last Login",
+    headerName: "Last Login",
     type: "string",
     filterable: false,
+    valueGetter: (value, row) => {
+      if (!row.lastLogin) {
+        return "N/A";
+      }
+
+      return row.lastLogin;
+    },
   },
   {
     field: "verified",
@@ -59,9 +73,16 @@ export const UserColumns = [
   },
   {
     field: "avatarUrl",
-    field: "Avatar Url",
+    headerName: "Avatar Url",
     type: "string",
     filterable: false,
+    valueGetter: (value, row) => {
+      if (!row.avatarUrl) {
+        return "N/A";
+      }
+
+      return row.avatarUrl;
+    },
   },
   {
     field: "activated",
@@ -72,7 +93,11 @@ export const UserColumns = [
         return null;
       }
 
-      return lastLogin !== undefined || lastLogin !== null || lastLogin !== "";
+      return (
+        row.lastLogin !== undefined ||
+        row.lastLogin !== null ||
+        row.lastLogin !== ""
+      );
     },
   },
 ];
@@ -120,7 +145,7 @@ export const TransactionColumns = [
   },
   {
     field: "remarks",
-    field: "Remarks",
+    headerName: "Remarks",
     type: "string",
   },
 ];
@@ -189,7 +214,7 @@ export const EventRegularColumns = [
   },
   {
     field: "showFull",
-    header: "Show Full",
+    headerName: "Show Full",
     type: "boolean",
     valueGetter: (value, row) => {
       if (!row.numGuests) {

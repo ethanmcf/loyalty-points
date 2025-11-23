@@ -1,5 +1,5 @@
 // Reference: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
-const baseURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";
+const baseURL = import.meta.env.VITE_BACKEND_URL;
 
 /**
  * @returns a list of the events with the defined variables applied

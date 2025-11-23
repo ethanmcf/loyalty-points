@@ -5,6 +5,7 @@ import Register from "./pages/Register/Register";
 import Landing from "./pages/Landing/Landing";
 import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
+import { Users } from "./pages/Users/Users";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
               path="/users"
               element={
                 <ProtectedRoute>
-                  <div>Users Page</div>
+                  <Users />
                 </ProtectedRoute>
               }
             />
