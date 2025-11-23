@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import "./User.css";
 import Button from "@mui/material/Button";
+import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 export function Users() {
   const { user } = useUser();
   const [roleView, setRoleView] = useState(user.role);
@@ -22,8 +23,15 @@ export function Users() {
     <div id="user-page">
       <div className="table-page-header">
         <h2>Users</h2>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <Button></Button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          <AddUserDialog />
           <FormControl>
             <InputLabel id="demo-simple-select-label">Role View</InputLabel>
             <Select
@@ -41,7 +49,7 @@ export function Users() {
           </FormControl>
         </div>
       </div>
-      <DataTable baseURL="/users" />
+      <DataTable baseURL="/users" role={roleView} />
     </div>
   );
 }

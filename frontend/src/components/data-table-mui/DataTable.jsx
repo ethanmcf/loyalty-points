@@ -17,12 +17,14 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL; // TODO: change this 
 
 /**
  * @typedef {"/transactions" | "/users" | "/transactions" | "/promotions"} overviewURL The baseURLS that the table supports 
+ * @typedef {"regular" | "cashier" | "manager" | "superuser"} roleType
  *
 
 /**
  *
  * @typedef {Object} DataTableProps
  * @property {string} baseURL The type of table we are using this for (i.e. events, users, etc.)
+ * @property {roleType} role
  */
 
 /**
@@ -31,7 +33,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL; // TODO: change this 
  * @returns A table with filters and sorting
  *  * @reference https://mui.com/x/api/data-grid/data-grid/
  */
-export function DataTable({ baseURL }) {
+export function DataTable({ baseURL, role }) {
   // UserContext
   const { user } = useUser();
 
