@@ -11,26 +11,28 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // this is null when nobody is logged in
 
   const login = (user) => {
-    setUser(user)
-  }
+    setUser(user);
+  };
 
   const logout = () => {
-      setUser(null);
-  }
+    setUser(null);
+  };
 
   // Should only be called after login has been called
   // Overwrites passed in data to user
   // Assumes user is not null
   // data is a map of new data ie {password: newPassowrd, etc}
   const updateUser = (data) => {
-    setUser(prev => ({
+    setUser((prev) => ({
       ...prev,
-      ...data
+      ...data,
     }));
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user, login, logout }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 
