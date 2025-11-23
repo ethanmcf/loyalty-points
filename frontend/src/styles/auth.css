@@ -59,6 +59,7 @@ form label {
 .link:hover {
   color: rgb(167, 167, 167);
   text-decoration: underline;
+  cursor: pointer;
 }
 p {
   color: rgb(167, 167, 167);
