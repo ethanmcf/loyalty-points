@@ -179,6 +179,7 @@ export function DataTable({ baseURL }) {
               tabIndex={params.hasFocus ? 0 : -1}
               onClick={() => {
                 console.log("View Details Button Clicked");
+                console.log(`${baseURL}/${params.row.id}`);
                 navigate(`${baseURL}/${params.row.id}`);
               }}
             >

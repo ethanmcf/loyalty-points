@@ -75,6 +75,14 @@ function App() {
             />
             <Route path="/reset" element={<div>Password reset Page</div>} />
             <Route
+              path="/users/:userId"
+              element={
+                <ProtectedRoute>
+                  <div>User Details Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/events/:eventId"
               element={
                 <ProtectedRoute>
