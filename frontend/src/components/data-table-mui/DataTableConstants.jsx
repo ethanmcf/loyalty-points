@@ -3,6 +3,8 @@
  * ValueGetter: If this exists, then this is not in the original API response or has a conditional render
  */
 
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
   {
@@ -100,6 +102,25 @@ export const UserColumns = [
       );
     },
   },
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 300,
+    renderCell: (params) => (
+      <strong>
+        <Button
+          variant="contained"
+          size="small"
+          tabIndex={params.hasFocus ? 0 : -1}
+          onClick={() => {
+            navigate(`/users/${params.row.id}`);
+          }}
+        >
+          View Details
+        </Button>
+      </strong>
+    ),
+  },
 ];
 export const TransactionColumns = [
   {
@@ -147,6 +168,25 @@ export const TransactionColumns = [
     field: "remarks",
     headerName: "Remarks",
     type: "string",
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 300,
+    renderCell: (params) => (
+      <strong>
+        <Button
+          variant="contained"
+          size="small"
+          tabIndex={params.hasFocus ? 0 : -1}
+          onClick={() => {
+            navigate(`/transactions/${params.row.id}`);
+          }}
+        >
+          View Details
+        </Button>
+      </strong>
+    ),
   },
 ];
 
@@ -227,6 +267,26 @@ export const EventRegularColumns = [
       return row.numGuests === row.capacity;
     },
   },
+  // Reference: https://mui.com/x/react-data-grid/cells/
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 300,
+    renderCell: (params) => (
+      <strong>
+        <Button
+          variant="contained"
+          size="small"
+          tabIndex={params.hasFocus ? 0 : -1}
+          onClick={() => {
+            navigate(`/events/${params.row.id}`);
+          }}
+        >
+          View Details
+        </Button>
+      </strong>
+    ),
+  },
 ];
 
 export const EventManagerColumns = [
@@ -272,6 +332,25 @@ export const PromotionsRegularColumns = [
     field: "points",
     headerName: "Promotion Points",
     type: "number",
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 300,
+    renderCell: (params) => (
+      <strong>
+        <Button
+          variant="contained"
+          size="small"
+          tabIndex={params.hasFocus ? 0 : -1}
+          onClick={() => {
+            navigate(`/promotions/${params.row.id}`);
+          }}
+        >
+          View Details
+        </Button>
+      </strong>
+    ),
   },
 ];
 

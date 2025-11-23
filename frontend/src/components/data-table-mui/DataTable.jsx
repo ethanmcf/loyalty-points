@@ -13,7 +13,7 @@ import {
 } from "./DataTableConstants";
 import { useNavigate } from "react-router-dom";
 
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL; // TODO: change this with env
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 /**
  * @typedef {"/transactions" | "/users" | "/transactions" | "/promotions"} overviewURL The baseURLS that the table supports 
@@ -161,38 +161,6 @@ export function DataTable({ baseURL, role }) {
       console.error("Cannot recognize type: ", type);
       return;
     }
-
-    // Reference: https://mui.com/x/react-data-grid/cells/
-    if (
-      baseURL === "/promotions" ||
-      baseURL === "/users" ||
-      baseURL === "/events" ||
-      baseURL === "/transactions"
-    ) {
-      const detailsPageColumn = {
-        field: "actions",
-        headerName: "Actions",
-        width: 300,
-        renderCell: (params) => (
-          <strong>
-            <Button
-              variant="contained"
-              size="small"
-              tabIndex={params.hasFocus ? 0 : -1}
-              onClick={() => {
-                console.log("View Details Button Clicked");
-                console.log(`${baseURL}/${params.row.id}`);
-                navigate(`${baseURL}/${params.row.id}`);
-              }}
-            >
-              View Details
-            </Button>
-          </strong>
-        ),
-      };
-      newColumns.push(detailsPageColumn);
-    }
-    return newColumns;
   }
 
   return (
