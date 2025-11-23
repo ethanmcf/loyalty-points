@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useUser } from "../../contexts/UserContext";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import {
@@ -13,10 +14,8 @@ import {
 const VITE_BACKEND_URL = "BACKENDURL ENV"; // TODO: change this with env
 
 /**
- * @param {"events" | "users" | "transactions" | "promotions"} type The type of table we are using this for (i.e. events, users, etc.)
+ * @typedef {"/transactions" | "/users" | "/transactions" | "/promotions"} overviewURL The baseURLS that the table supports 
  *
- * @reference https://mui.com/x/api/data-grid/data-grid/
- */
 
 /**
  *
@@ -28,8 +27,13 @@ const VITE_BACKEND_URL = "BACKENDURL ENV"; // TODO: change this with env
  *
  * @param {DataTableProps} props
  * @returns A table with filters and sorting
+ *  * @reference https://mui.com/x/api/data-grid/data-grid/
  */
 export function DataTable({ baseURL }) {
+  // UserContext
+  const { user } = useUser();
+
+  // Use State Values
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
   const [columns, setColumns] = useState();
@@ -128,17 +132,21 @@ export function DataTable({ baseURL }) {
     } else if (baseURL === "/transactions") {
       newColumns = TransactionColumns;
     } else if (baseURL === "/events") {
-      // Type 1: Regular User
-      newColumns = EventRegularColumns;
-
-      // Type 2: Manager and Higher
-      newColumns = EventManagerColumns;
+      if (user.role === "regular" || user.role === "cashier") {
+        // Type 1: Regular User
+        newColumns = EventRegularColumns;
+      } else {
+        // Type 2: Manager and Higher
+        newColumns = EventManagerColumns;
+      }
     } else if (baseURL === "/promotions") {
-      // Type 1: Regular User
-      newColumns = PromotionsRegularColumns;
-
-      // Type 2: Manager and higher
-      newColumns = PromotionsManagerColumns;
+      if (user.role === "regular" || user.role === "cashier") {
+        // Type 1: Regular User
+        newColumns = PromotionsRegularColumns;
+      } else {
+        // Type 2: Manager and higher
+        newColumns = PromotionsManagerColumns;
+      }
     } else {
       console.error("Cannot recognize type: ", type);
       return;
