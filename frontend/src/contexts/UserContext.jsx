@@ -14,6 +14,8 @@ export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null); // this is null when nobody is logged in
   const [interfaceType, setInterfaceType] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   // Fetches logged in user info
   const fetchLoggedinInfo = async () => {
     const token = localStorage.getItem("token");
@@ -27,11 +29,13 @@ export const UserProvider = ({ children }) => {
   // Fetches user info on reloads so login session not lost
   useEffect(() => {
     const loadUser = async () => {
+      setLoading(true);
       const userData = await fetchLoggedinInfo();
       if (userData) {
         setUser(userData);
         setInterfaceType(userData.role);
       }
+      setLoading(false);
     };
     loadUser();
   }, []);
@@ -74,6 +78,7 @@ export const UserProvider = ({ children }) => {
       value={{
         user,
         interfaceType,
+        loading,
         completeLogin,
         login,
         logout,

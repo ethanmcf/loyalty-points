@@ -5,6 +5,7 @@ import Register from "./pages/Register/Register";
 import Landing from "./pages/Landing/Landing";
 import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
+import { useEffect } from "react";
 import { Users } from "./pages/Users/Users";
 
 function App() {
@@ -129,7 +130,10 @@ function PublicRoute({ children }) {
 
 // Protected routes, only logged in users can access, redirect to login if not authenticated
 function ProtectedRoute({ children }) {
-  const { user } = useUser();
+  const { user, loading } = useUser();
+  if (loading) {
+    return children;
+  }
   return user ? children : <Navigate to="/login" replace />;
 }
 
