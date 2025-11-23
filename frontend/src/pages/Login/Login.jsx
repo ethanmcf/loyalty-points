@@ -21,8 +21,8 @@ function Login() {
       setError("");
       setTimeout(() => {
         setSuccess(false);
-        completeLogin(loggedInuser)
-        navigate("/profile")
+        completeLogin(loggedInuser);
+        navigate("/profile");
       }, 2500);
     } catch (error) {
       setError(error.message);
@@ -78,6 +78,12 @@ function Login() {
           Don't have an account?{" "}
           <Link to="/register" className="link">
             Register here
+          </Link>
+        </p>
+        <p>
+          Forgot password?{" "}
+          <Link to="/reset" className="link">
+            Click to reset
           </Link>
         </p>
       </div>
