@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
+
 import {
   EventManagerColumns,
   EventRegularColumns,
@@ -11,7 +11,6 @@ import {
   TransactionColumns,
   UserColumns,
 } from "./DataTableConstants";
-import { useNavigate } from "react-router-dom";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -42,7 +41,6 @@ export function DataTable({ baseURL, role }) {
   const [rowCount, setRowCount] = useState(0);
   const [columns, setColumns] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0, // default is 1 (when we call the api, we are going to add one)
@@ -97,7 +95,6 @@ export function DataTable({ baseURL, role }) {
 
     // step 2: set up url
     const url = `${VITE_BACKEND_URL}${baseURL}?${params.toString()}`;
-    console.log("URL: ", url);
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -120,13 +117,10 @@ export function DataTable({ baseURL, role }) {
 
   useEffect(() => {
     // TODO: verify the baseURL isnt empty and is valid
-    console.log("filterModel: ", filterModel);
 
     // step 1: generate columns
     const newColumns = generateColumns();
     setColumns(newColumns);
-
-    console.log("Columns Generated");
 
     // step 2: fetch data
     fetchData();
@@ -161,6 +155,8 @@ export function DataTable({ baseURL, role }) {
       console.error("Cannot recognize type: ", type);
       return;
     }
+
+    return newColumns;
   }
 
   return (

@@ -2,8 +2,9 @@
  * Filterable: If this is false, then its NOT used as a filter
  * ValueGetter: If this exists, then this is not in the original API response or has a conditional render
  */
-
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
+import { ViewDetailsButton } from "./ViewDetailsButton";
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -103,22 +104,11 @@ export const UserColumns = [
     },
   },
   {
-    field: "actions",
-    headerName: "Actions",
-    width: 300,
+    field: "details",
+    headerName: "Details",
+    width: 150,
     renderCell: (params) => (
-      <strong>
-        <Button
-          variant="contained"
-          size="small"
-          tabIndex={params.hasFocus ? 0 : -1}
-          onClick={() => {
-            navigate(`/users/${params.row.id}`);
-          }}
-        >
-          View Details
-        </Button>
-      </strong>
+      <ViewDetailsButton url={`/users/${params.row.id}`} />
     ),
   },
 ];
@@ -170,22 +160,11 @@ export const TransactionColumns = [
     type: "string",
   },
   {
-    field: "actions",
-    headerName: "Actions",
-    width: 300,
+    field: "details",
+    headerName: "Details",
+    width: 150,
     renderCell: (params) => (
-      <strong>
-        <Button
-          variant="contained"
-          size="small"
-          tabIndex={params.hasFocus ? 0 : -1}
-          onClick={() => {
-            navigate(`/transactions/${params.row.id}`);
-          }}
-        >
-          View Details
-        </Button>
-      </strong>
+      <ViewDetailsButton url={`/transactions/${params.row.id}`} />
     ),
   },
 ];
@@ -269,22 +248,11 @@ export const EventRegularColumns = [
   },
   // Reference: https://mui.com/x/react-data-grid/cells/
   {
-    field: "actions",
-    headerName: "Actions",
-    width: 300,
+    field: "details",
+    headerName: "Details",
+    width: 150,
     renderCell: (params) => (
-      <strong>
-        <Button
-          variant="contained"
-          size="small"
-          tabIndex={params.hasFocus ? 0 : -1}
-          onClick={() => {
-            navigate(`/events/${params.row.id}`);
-          }}
-        >
-          View Details
-        </Button>
-      </strong>
+      <ViewDetailsButton url={`/events/${params.row.id}`} />
     ),
   },
 ];
@@ -334,22 +302,11 @@ export const PromotionsRegularColumns = [
     type: "number",
   },
   {
-    field: "actions",
-    headerName: "Actions",
-    width: 300,
+    field: "details",
+    headerName: "Details",
+    width: 150,
     renderCell: (params) => (
-      <strong>
-        <Button
-          variant="contained"
-          size="small"
-          tabIndex={params.hasFocus ? 0 : -1}
-          onClick={() => {
-            navigate(`/promotions/${params.row.id}`);
-          }}
-        >
-          View Details
-        </Button>
-      </strong>
+      <ViewDetailsButton url={`/promotions/${params.row.id}`} />
     ),
   },
 ];
