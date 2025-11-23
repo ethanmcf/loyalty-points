@@ -31,11 +31,17 @@ router.post("/tokens", async (req, res) => {
     return res.status(401).json({ error: "Can't authenticate" });
   }
 
-  // Create and update user token
+  // Create and update user toke
+  const now = new Date();
   const { token, expiresAt } = createAuthToken(user);
   await prisma.user.update({
     where: { id: user.id },
-    data: { token: token, expiresAt: expiresAt, activated: true },
+    data: {
+      token: token,
+      expiresAt: expiresAt,
+      activated: true,
+      lastLogin: now.toISOString(),
+    },
   });
   return res.status(200).json({ token: token, expiresAt: expiresAt });
 });

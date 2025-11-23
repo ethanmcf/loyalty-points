@@ -13,7 +13,7 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null); // this is null when nobody is logged in
-
+  const [interfaceType, setInterfaceType] = useState(null);
   // Fetches logged in user info
   const fetchLoggedinInfo = async () => {
     const token = localStorage.getItem("token");
@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
       return;
     }
     const userData = await getMyInfo(token);
-    return userData
+    return userData;
   };
 
   // Fetches user info on reloads so login session not lost
@@ -30,6 +30,7 @@ export const UserProvider = ({ children }) => {
       const userData = await fetchLoggedinInfo();
       if (userData) {
         setUser(userData);
+        setInterfaceType(userData.role);
       }
     };
     loadUser();
@@ -44,11 +45,12 @@ export const UserProvider = ({ children }) => {
 
   const completeLogin = (userData) => {
     setUser(userData);
+    setInterfaceType(userData.role);
   };
-
 
   const logout = () => {
     setUser(null);
+    setInterfaceType(null);
     localStorage.removeItem("token");
     navigate("/");
   };
@@ -57,15 +59,28 @@ export const UserProvider = ({ children }) => {
   // Overwrites passed in data to user
   // Assumes user is not null
   // data is a map of new data ie {password: newPassowrd, etc}
-  const updateUser = (data) => {
+  const updateUser = async (data) => {
     setUser((prev) => ({
       ...prev,
       ...data,
     }));
   };
 
+  const updateInterfaceType = (type) => {
+    setInterfaceType(type);
+  };
   return (
-    <UserContext.Provider value={{ user, completeLogin, login, logout, updateUser }}>
+    <UserContext.Provider
+      value={{
+        user,
+        interfaceType,
+        completeLogin,
+        login,
+        logout,
+        updateUser,
+        updateInterfaceType,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

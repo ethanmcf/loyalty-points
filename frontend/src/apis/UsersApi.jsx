@@ -65,13 +65,26 @@ export async function updateMyInfo(
   authToken,
   updatedInfo // map of optional fields: name, email, birthday, avatar. ie {name: "name", etc}
 ) {
+  const formData = new FormData();
+
+  if (updatedInfo.email) {
+    formData.append("email", updatedInfo.email);
+  }
+  if (updatedInfo.name) {
+    formData.append("name", updatedInfo.name);
+  }
+  if (updatedInfo.birthday) {
+    formData.append("birthday", updatedInfo.birthday);
+  }
+  if (updatedInfo.avatar) {
+    formData.append("avatar", updatedInfo.avatar);
+  }
   const res = await fetch(`${baseURL}/me`, {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
-    body: JSON.stringify(updatedInfo),
+    body: formData,
   });
 
   if (!res.ok) {

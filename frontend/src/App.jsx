@@ -14,26 +14,88 @@ function App() {
           <Route path="/" element={<Layout />}>
             {/* Public routes that redirect to profile if user is logged in */}
             <Route index element={<LandingPageRedirect />} />
-            <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+            />
 
             {/* Protected routes that need authentication, redirect to login page */}
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/users" element={<ProtectedRoute><div>Users Page</div></ProtectedRoute>} />
-            <Route path="/events" element={<ProtectedRoute><div>Events Page</div></ProtectedRoute>} />
-            <Route path="/transactions" element={<ProtectedRoute><div>Transactions Page</div></ProtectedRoute>} />
-            <Route path="/promotions" element={<ProtectedRoute><div>Promotions Page</div></ProtectedRoute>} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users"
+              element={
+                <ProtectedRoute>
+                  <div>Users Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/events"
+              element={
+                <ProtectedRoute>
+                  <div>Events Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute>
+                  <div>Transactions Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/promotions"
+              element={
+                <ProtectedRoute>
+                  <div>Promotions Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/reset" element={<div>Password reset Page</div>} />
             <Route
               path="/events/:eventId"
-              element={<ProtectedRoute><div>Event Details Page</div></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <div>Event Details Page</div>
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/transactions/:transactionId"
-              element={<ProtectedRoute><div>Transaction Details Page</div></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <div>Transaction Details Page</div>
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/promotions/:promotionId"
-              element={<ProtectedRoute><div>Promotion Details Page</div></ProtectedRoute>}
+              element={
+                <ProtectedRoute>
+                  <div>Promotion Details Page</div>
+                </ProtectedRoute>
+              }
             />
             {/* Catch-all route for 404 */}
             <Route path="*" element={<Navigate to="/" replace />} />
