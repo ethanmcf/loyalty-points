@@ -26,7 +26,13 @@
     margin-bottom: -1rem;
   }
 }
-
+.qrcode {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  width: 100%;
+  height: 128px;
+}
 .content-container {
   margin: 3rem;
   margin-top: -3rem;
