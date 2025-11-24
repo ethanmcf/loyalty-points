@@ -8,13 +8,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useUser } from "../../contexts/UserContext";
 import { getPromotionById, deletePromotion } from "../../apis/promotionsApi";
 
-/**
- * Dialog component for deleting a promotion.
- * It strictly mirrors the pattern of the DeleteUserDialog, 
- * including pre-fetching details and using window.location.reload().
- * @param {object} props - The component props.
- * @param {number} props.id - The ID of the promotion to delete.
- */
 export function DeletePromotionDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -77,7 +70,7 @@ export function DeletePromotionDialog({ id }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button> 
-            <Button onClick={handleDelete} color="error" variant="contained"> 
+            <Button onClick={handleDelete}> 
                 Delete
             </Button>
           </DialogActions>
@@ -85,4 +78,4 @@ export function DeletePromotionDialog({ id }) {
       )}
     </>
   );
-} // may need to edit line 79/80 later 
+}
