@@ -16,7 +16,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Use cors
 const cors = require("cors");
-const frontendUrl = process.env.FRONTEND_URL;
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 app.use(
   cors({
     origin: frontendUrl,
@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-const port = process.env.BACKEND_PORT;
+const port = process.env.BACKEND_PORT || "3000";
 
 const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);

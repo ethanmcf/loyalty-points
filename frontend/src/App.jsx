@@ -6,6 +6,8 @@ import Landing from "./pages/Landing/Landing";
 import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
+import { Users } from "./pages/Users/Users";
+import { useEffect } from "react";
 
 function App() {
   // const { user } = useUser();
@@ -47,7 +49,7 @@ function App() {
               path="/users"
               element={
                 <ProtectedRoute>
-                  <div>Users Page</div>
+                  <Users />
                 </ProtectedRoute>
               }
             />
@@ -72,6 +74,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <div>Promotions Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users/:userId"
+              element={
+                <ProtectedRoute>
+                  <div>User Details Page</div>
                 </ProtectedRoute>
               }
             />
