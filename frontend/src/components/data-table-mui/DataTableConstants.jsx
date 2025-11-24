@@ -6,6 +6,8 @@ import { ViewDetailsButton } from "./ViewDetailsButton";
 import { DeleteUserDialog } from "../delete-dialogs/DeleteUserDialog";
 import { SuspiciousTransactionsDialog } from "../actionDialogs/SuspiciousTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../actionDialogs/ProcessRedemptionTransactionsDialog";
+import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog"; 
+import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog"; 
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -145,7 +147,7 @@ export const TransactionColumns = [
     field: "type",
     headerName: "Type",
     type: "singleSelect",
-    valueOptions: ["purchase", "redemption", "transfer", "adjustment"], //do we put events as well?
+    valueOptions: ["purchase", "redemption", "transfer", "adjustment", "event"], //do we put events as well?
   },
   {
     field: "relatedId",
@@ -282,7 +284,7 @@ export const EventRegularColumns = [
     headerName: "Delete",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <DeleteUserDialog id={params.row.id} />, // TODO: u add the delete dialog here
+    renderCell: (params) => <DeleteEventsDialog id={params.row.id} />, 
   },
 ];
 
@@ -345,7 +347,7 @@ export const PromotionsRegularColumns = [
     headerName: "Delete",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <DeleteUserDialog id={params.row.id} />, // TODO: u add the delete dialog here
+    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />, 
   },
 ];
 
