@@ -1,10 +1,10 @@
 import { Link, Outlet } from "react-router-dom";
 import { Navbar } from "../navbar/NavBar";
 
-export function Layout({}) {
+export function Layout({ key }) {
   return (
     <>
-      <header>
+      <header key={key}>
         <Navbar isAuthenticated={false} />
       </header>
       <main>

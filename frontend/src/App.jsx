@@ -8,6 +8,8 @@ import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 
 function App() {
+  // const { user } = useUser();
+  // const key = user === null || user === undefined ? "anon" : "test";
   return (
     <BrowserRouter>
       <UserProvider>
@@ -124,7 +126,7 @@ function PublicRoute({ children }) {
 function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
-    return <div>Loading - temporary if we add skeleton loading</div>;
+    return <div>loading</div>;
   }
   return user ? children : <Navigate to="/login" replace />;
 }
