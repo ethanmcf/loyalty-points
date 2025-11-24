@@ -304,11 +304,11 @@ export async function deleteOrganizerFromEvent(eventId, userId, authToken) {
   try {
     const res = await fetch(url, requestOptions);
 
+    const eventsJSON = await res.json();
     if (!res.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
+      console.error("Error occured: ", eventsJSON.error);
     }
 
-    const eventsJSON = await res.json();
     return eventsJSON; // expected should be no content
   } catch (error) {
     console.error("Error: ", error);
@@ -347,80 +347,79 @@ export async function postGuestToEvent(eventId, utorid, authToken) {
   }
 }
 
-
 // Join event as a guest
 export async function joinEventLoggedIn(authToken, eventId) {
-    const res = await fetch(`${baseURL}/events/${eventId}/guests/me`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-    });
+  const res = await fetch(`${baseURL}/events/${eventId}/guests/me`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
 
-    if (!res.ok) {
-        const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    console.log(error.error);
+    throw new Error(error.Error);
+  }
 
-    return res.json();
+  return res.json();
 }
 
 // Remove logged in user from event
 export async function leaveEvent(authToken, eventId) {
-    const res = await fetch(`${baseURL}/events/${eventId}/guests/me`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-    });
+  const res = await fetch(`${baseURL}/events/${eventId}/guests/me`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
 
-    if (!res.ok) {
-        const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    console.log(error.error);
+    throw new Error(error.Error);
+  }
 
-    return;
+  return;
 }
 
 // Delete a user from an event
 export async function removeGuest(authToken, eventId, userId) {
-    const res = await fetch(`${baseURL}/events/${eventId}/guests/${userId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-    });
+  const res = await fetch(`${baseURL}/events/${eventId}/guests/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
 
-    if (!res.ok) {
-        const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    console.log(error.error);
+    throw new Error(error.Error);
+  }
 
-    return;
+  return;
 }
 
 // Create a new reward transaction for an event
 export async function createEventTransaction(authToken, eventId, eventData) {
-    const res = await fetch(`${baseURL}/events/${eventId}/transactions`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify(eventData),
-    });
+  const res = await fetch(`${baseURL}/events/${eventId}/transactions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify(eventData),
+  });
 
-    if (!res.ok) {
-        const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.error);
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    console.log(error.error);
+    throw new Error(error.error);
+  }
 
-    return res.json();
+  return res.json();
 }
