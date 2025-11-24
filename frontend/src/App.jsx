@@ -7,11 +7,8 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
-import { useEffect } from "react";
 
 function App() {
-  // const { user } = useUser();
-  // const key = user === null || user === undefined ? "anon" : "test";
   return (
     <BrowserRouter>
       <UserProvider>
