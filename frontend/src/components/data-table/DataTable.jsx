@@ -10,6 +10,7 @@ import {
   PromotionsRegularColumns,
   TransactionColumns,
   UserColumns,
+  UserTransactionsColumns,
 } from "./DataTableConstants";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -140,6 +141,8 @@ export function DataTable({ baseURL, role }) {
         // Type 2: Manager and higher
         newColumns = PromotionsManagerColumns;
       }
+    } else if (baseURL === "/users/me/transactions ") {
+      newColumns = UserTransactionsColumns;
     } else {
       console.error("Cannot recognize type: ", type);
       return;
