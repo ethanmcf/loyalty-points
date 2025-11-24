@@ -6,14 +6,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { getUserById } from "../../apis/UsersApi";
+import { useParams } from "react-router-dom";
+import { removeGuest } from "../../apis/EventsApi";
 
-export function DeleteGuestDialog({ id }) {
+export function DeleteGuestDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deletedUser, setDeletedUser] = useState();
+  const { eventId } = useParams();
 
   const fetchUser = async () => {
     try {
-      const res = await getUserById(localStorage.token, id);
+      const res = await getUserById(localStorage.token, userId);
       setDeletedUser(res);
     } catch (error) {
       console.error(error);
@@ -23,18 +26,24 @@ export function DeleteGuestDialog({ id }) {
 
   useEffect(() => {
     fetchUser();
-  }, [id]);
+  }, [userId]);
 
   const handleClickOpen = () => {
     setIsOpen(true);
   };
   const handleClose = () => {
     setIsOpen(false);
-    window.location.reload(); // TODO: this is temp, i wanna remove this when i figure out the state management
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // u could add a function here
+    try {
+      await removeGuest(localStorage.token, eventId, userId);
+      handleClose();
+    } catch (error) {
+      console.error(error);
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -58,8 +67,8 @@ export function DeleteGuestDialog({ id }) {
             </p>
           </DialogContent>
           <DialogActions>
-            <Button>Cancel</Button>
-            <Button>Delete</Button>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleDelete}>Delete</Button>
           </DialogActions>
         </Dialog>
       )}

@@ -7,6 +7,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
 import { SimpleTable } from "../../components/simple-table/SimpleTable";
+import { AddOrganizerInput } from "./pieces/AddOrganizerInput";
+import { AddGuestInput } from "./pieces/AddGuestInput";
 
 /**
  * I need to be able to
@@ -28,7 +30,7 @@ export function Event() {
     pointsAwarded: 0,
     published: false,
     organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [],
+    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
   });
 
   const fetchData = async () => {
@@ -72,11 +74,11 @@ export function Event() {
             />
           </form>
           <h3>Organizers</h3>
-          <Button>Add Organizer</Button>
+          <AddOrganizerInput />
           <SimpleTable type={"organizers"} data={eventData.organizers} />
           <h3>Guests</h3>
-          <Button>Add Guest</Button>
-          <Button>RSVP Me</Button>
+          <AddGuestInput guestList={eventData.guests} />
+          <SimpleTable type={"guests"} data={eventData.guests} />
           <h3>Transactions</h3>
           <Button>Create A Transaction for this event</Button>
         </>

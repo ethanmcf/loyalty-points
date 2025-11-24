@@ -5,3 +5,12 @@
   border-radius: 1rem;
   text-align: left;
 }
+
+.adding-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 1rem;
+  margin: 1rem 0;
+}

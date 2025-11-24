@@ -271,18 +271,13 @@ export async function postOrganizerToEvent(eventId, utorid, authToken) {
     }),
   };
   const url = `${baseURL}/events/${eventId}/organizers`;
-  try {
-    const allEventsResponse = await fetch(url, requestOptions);
-
-    if (!allEventsResponse.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
-    }
-
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
-  } catch (error) {
-    console.error("Error: ", error);
+  const allEventsResponse = await fetch(url, requestOptions);
+  const eventsJSON = await allEventsResponse.json();
+  if (!allEventsResponse.ok) {
+    console.error("Error occured: ", eventsJSON.error);
+    throw new Error(eventsJSON.error);
   }
+  return eventsJSON;
 }
 
 /**
@@ -333,18 +328,14 @@ export async function postGuestToEvent(eventId, utorid, authToken) {
     }),
   };
   const url = `${baseURL}/events/${eventId}/guests`;
-  try {
-    const allEventsResponse = await fetch(url, requestOptions);
-
-    if (!allEventsResponse.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
-    }
-
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
-  } catch (error) {
-    console.error("Error: ", error);
+  const allEventsResponse = await fetch(url, requestOptions);
+  const eventsJSON = await allEventsResponse.json();
+  if (!allEventsResponse.ok) {
+    console.error("Error occured: ", eventsJSON.error);
+    throw new Error(eventsJSON.error);
   }
+
+  return eventsJSON;
 }
 
 // Join event as a guest

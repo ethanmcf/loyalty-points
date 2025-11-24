@@ -1,3 +1,4 @@
+import { DeleteGuestDialog } from "../delete-dialogs/DeleteGuestDialog";
 import { DeleteOrganizerDialog } from "../delete-dialogs/DeleteOrganizerDialog";
 
 export const OrganizersColumns = [
@@ -26,7 +27,7 @@ export const OrganizersColumns = [
 ];
 
 export const GuestsColumns = [
-  { field: "id", headerName: "ID", type: "number", flex: 1, filterable: false },
+  { field: "id", headerName: "ID", type: "number", filterable: false },
   {
     field: "name",
     headerName: "Name",
@@ -45,6 +46,6 @@ export const GuestsColumns = [
     filterable: false,
     flex: 2,
     sortable: false,
-    renderCell: (params) => <div>Delete Guest</div>,
+    renderCell: (params) => <DeleteGuestDialog userId={params.row.id} />,
   },
 ];
