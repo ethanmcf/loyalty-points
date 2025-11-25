@@ -9,6 +9,7 @@ import {
   postGuestToEvent,
 } from "../../../apis/EventsApi";
 import { useUser } from "../../../contexts/UserContext";
+import { AwardAllGuestButton } from "./AwardAllGuestButton";
 
 export function AddGuestInput({ guestList }) {
   const { eventId } = useParams();
@@ -54,6 +55,7 @@ export function AddGuestInput({ guestList }) {
       setError(error.message);
     }
   };
+
   // TOOD: add success feedback
   return (
     <div className="adding-input">
@@ -78,6 +80,7 @@ export function AddGuestInput({ guestList }) {
           UnRSVP Me
         </Button>
       )}
+      <AwardAllGuestButton variant="contained" />
     </div>
   );
 }

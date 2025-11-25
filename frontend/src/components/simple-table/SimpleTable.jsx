@@ -14,9 +14,6 @@ export function SimpleTable({ type, data }) {
     page: 0,
     pageSize: 10,
   });
-  const [filterModel, setFilterModel] = useState({
-    items: [],
-  });
 
   useEffect(() => {
     setIsLoading(false);
@@ -41,6 +38,7 @@ export function SimpleTable({ type, data }) {
       <DataGrid
         showToolbar
         rows={rows}
+        IsLoading={IsLoading}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}

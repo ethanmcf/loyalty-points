@@ -15,6 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
+import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
 
 /**
  * I need to be able to
@@ -258,11 +259,7 @@ export function Event() {
           <AddGuestInput guestList={eventData.guests} />
           <SimpleTable type={"guests"} data={eventData.guests} />
           <h3>Transactions</h3>
-          <form id="reward-form">
-            <TextField id="amount" label="Amount to Reward" />
-            <TextField id="remark" label="Remarks" />
-          </form>
-          <Button>Submit Transaction</Button>
+          <p> add table that lists transaction history here</p>
         </>
       )}
     </div>
