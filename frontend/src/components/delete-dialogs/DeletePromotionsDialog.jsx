@@ -6,9 +6,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useUser } from "../../contexts/UserContext";
-import { getPromotionById, deletePromotion } from "../../apis/promotionsApi";
+import { getPromotionById, deletePromotion } from "../../apis/promotionsApis";
 
-export function DeletePromotionDialog({ id }) {
+export function DeletePromotionsDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [deletedPromotion, setDeletedPromotion] = useState();
