@@ -14,7 +14,7 @@ import { getTransaction, setTransactionCompleted } from "../../apis/transactions
  * @param {object} props - The component props.
  * @param {number} props.id - The ID of the transaction to process.
  */
-export function ProcessRedemptionDialog({ id }) {
+export function ProcessRedemptionTransactionsDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [transaction, setTransaction] = useState();
