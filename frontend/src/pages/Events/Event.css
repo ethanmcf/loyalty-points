@@ -14,3 +14,17 @@
   gap: 1rem;
   margin: 1rem 0;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.event-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
