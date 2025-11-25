@@ -188,7 +188,7 @@ function PersonalIfno() {
         )}
         {!transferSuccess ? null : (
           <Alert severity="success">
-            Your have successful transfered {points} points
+            Your have successfully transfered {points} points
           </Alert>
         )}
       </div>
