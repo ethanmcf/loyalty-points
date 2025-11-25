@@ -46,7 +46,7 @@ export function DeleteUserDialog({ id }) {
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Delete Confirmation</DialogTitle>
           <DialogContent>
-            Please Confirm that you would like to delete the following user:
+            Please confirm that you would like to delete the following user:
             <p>
               <b>Name:</b> {deletedUser.name}
             </p>
