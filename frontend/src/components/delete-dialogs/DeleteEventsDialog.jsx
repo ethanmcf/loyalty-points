@@ -14,7 +14,7 @@ import { getSingleEvent, deleteSingleEvent } from "../../apis/eventsApi";
  * @param {object} props - The component props.
  * @param {number} props.id - The ID of the event to delete.
  */
-export function DeleteEventDialog({ id }) {
+export function DeleteEventsDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [deletedEvent, setDeletedEvent] = useState();
