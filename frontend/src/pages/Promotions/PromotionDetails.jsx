@@ -11,14 +11,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
-import "./Promotion.css";
+import "./PromotionDetails.css";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { DeletePromotionsDialog } from "../../components/delete-dialogs/DeletePromotionsDialog";
 
-export function Promotion() {
+export function PromotionDetails() {
   const { promotionId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState();
