@@ -7,6 +7,7 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
+import Dashboard from "./pages/Dashboard/Dashboard"
 import { useEffect } from "react";
 
 function App() {
@@ -104,6 +105,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <div>Promotion Details Page</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />
