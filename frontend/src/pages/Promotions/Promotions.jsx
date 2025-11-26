@@ -1,5 +1,5 @@
 import { useUser } from "../../contexts/UserContext";
-import { DataTable } from "../../components/data-table-mui/DataTable";
+import { DataTable } from "../../components/data-table/DataTable";
 import { AddPromotionsDialog } from "../../components/addDialogs/AddPromotionsDialog"; 
 import "./Promotions.css"; 
 

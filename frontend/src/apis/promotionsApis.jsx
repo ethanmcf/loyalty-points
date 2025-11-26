@@ -12,8 +12,8 @@ export async function getAllPromotions(authToken) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -31,8 +31,8 @@ export async function getPromotionById(authToken, promotionId) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -51,8 +51,8 @@ export async function createPromotion(authToken, promotionData) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -71,8 +71,8 @@ export async function updatePromotion(authToken, promotionId, promotionData) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -90,8 +90,8 @@ export async function deletePromotion(authToken, promotionId) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return;
