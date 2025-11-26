@@ -25,11 +25,13 @@ export function AwardSingleGuestDialog({ userId }) {
 
   const handleClose = (e) => {
     e.preventDefault();
+    setCreatedTransaction(null);
+    setError(null);
+    setGuest(null);
     setIsOpen(false);
   };
 
   const handleSubmit = async (e) => {
-    console.log("Submiting");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -44,6 +46,7 @@ export function AwardSingleGuestDialog({ userId }) {
         eventId,
         formJson
       );
+      setCreatedTransaction(res);
     } catch (error) {
       console.error(error);
       setError(error.message);

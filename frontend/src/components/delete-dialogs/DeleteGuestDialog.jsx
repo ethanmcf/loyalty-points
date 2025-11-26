@@ -8,10 +8,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { getUserById } from "../../apis/UsersApi";
 import { useParams } from "react-router-dom";
 import { removeGuest } from "../../apis/EventsApi";
+import Alert from "@mui/material/Alert";
 
 export function DeleteGuestDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deletedUser, setDeletedUser] = useState();
+  const [error, setError] = useState();
   const { eventId } = useParams();
 
   const fetchUser = async () => {
@@ -33,6 +35,8 @@ export function DeleteGuestDialog({ userId }) {
   };
   const handleClose = () => {
     setIsOpen(false);
+    setDeletedUser(null);
+    setError(null);
   };
 
   const handleDelete = async () => {
@@ -41,8 +45,7 @@ export function DeleteGuestDialog({ userId }) {
       await removeGuest(localStorage.token, eventId, userId);
       handleClose();
     } catch (error) {
-      console.error(error);
-      setIsOpen(false);
+      setError(error.message);
     }
   };
 
@@ -65,6 +68,7 @@ export function DeleteGuestDialog({ userId }) {
             <p>
               <b>Email:</b> {deletedUser.email}
             </p>
+            {!error ? null : <Alert severity="error">{error}</Alert>}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

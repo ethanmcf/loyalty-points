@@ -11,7 +11,7 @@ import DialogActions from "@mui/material/DialogActions";
 
 export function AwardAllGuestButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const [createdTransaction, setCreatedTransaction] = useState();
   const [userCount, setUserCount] = useState(0);
   const handleClickOpen = () => {
@@ -23,7 +23,7 @@ export function AwardAllGuestButton() {
     setIsOpen(false);
     setCreatedTransaction(null);
     setUserCount(0);
-    setError("");
+    setError(null);
   };
 
   const handleSubmit = async (e) => {
