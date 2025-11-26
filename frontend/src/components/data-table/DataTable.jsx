@@ -141,10 +141,10 @@ export function DataTable({ baseURL, role }) {
         // Type 2: Manager and higher
         newColumns = PromotionsManagerColumns;
       }
-    } else if (baseURL === "/users/me/transactions ") {
+    } else if (baseURL === "/users/me/transactions") {
       newColumns = UserTransactionsColumns;
     } else {
-      console.error("Cannot recognize type: ", type);
+      console.error("Cannot recognize type: ", baseURL);
       return;
     }
 

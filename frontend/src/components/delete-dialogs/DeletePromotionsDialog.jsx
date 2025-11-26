@@ -15,11 +15,11 @@ export function DeletePromotionsDialog({ id }) {
 
   const fetchPromotion = async () => {
     try {
-      const res = await getPromotionById(user.token, id);
+      const res = await getPromotionById(localStorage.getItem("token"), id);
       setDeletedPromotion(res);
     } catch (error) {
       console.error(error);
-      setIsOpen(false); 
+      setIsOpen(false);
     }
   };
 
@@ -30,21 +30,21 @@ export function DeletePromotionsDialog({ id }) {
   const handleClickOpen = () => {
     setIsOpen(true);
   };
-  
+
   const handleClose = () => {
     setIsOpen(false);
     // TODO based on state management
-    window.location.reload(); 
+    window.location.reload();
   };
 
   const handleDelete = async () => {
     // adding the delete API call
     try {
-        await deletePromotion(user.token, id);
-        handleClose();
+      await deletePromotion(user.token, id);
+      handleClose();
     } catch (error) {
-        console.error("Promotion deletion failed:", error);
-        //TODO need to show actual error msg not one console?
+      console.error("Promotion deletion failed:", error);
+      //TODO need to show actual error msg not one console?
     }
   };
 
@@ -57,7 +57,8 @@ export function DeletePromotionsDialog({ id }) {
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Delete Confirmation</DialogTitle>
           <DialogContent>
-            Please confirm that you would like to delete the following promotion:
+            Please confirm that you would like to delete the following
+            promotion:
             <p>
               <b>Name:</b> {deletedPromotion.name}
             </p>
@@ -65,14 +66,13 @@ export function DeletePromotionsDialog({ id }) {
               <b>Type:</b> {deletedPromotion.type}
             </p>
             <p>
-              <b>Starts:</b> {new Date(deletedPromotion.startTime).toLocaleDateString()}
+              <b>Starts:</b>{" "}
+              {new Date(deletedPromotion.startTime).toLocaleDateString()}
             </p>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button> 
-            <Button onClick={handleDelete}> 
-                Delete
-            </Button>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleDelete}>Delete</Button>
           </DialogActions>
         </Dialog>
       )}
