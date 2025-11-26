@@ -7,11 +7,11 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
-import { Event } from "./pages/Events/Event";
+import { EventDetails } from "./pages/Events/EventDetails";
 import { Promotions } from "./pages/Promotions/Promotions";
 import { Transactions } from "./pages/Transactions/Transactions";
-import { Promotion } from "./pages/Promotions/Promotion";
-import { Events } from "./pages/Events/Events"
+import { PromotionDetails } from "./pages/Promotions/PromotionDetails";
+import { Events } from "./pages/Events/Events";
 
 function App() {
   return (
@@ -91,7 +91,7 @@ function App() {
               path="/events/:eventId"
               element={
                 <ProtectedRoute>
-                  <Event />
+                  <EventDetails />
                 </ProtectedRoute>
               }
             />
@@ -107,7 +107,7 @@ function App() {
               path="/promotions/:promotionId"
               element={
                 <ProtectedRoute>
-                  <Promotion />
+                  <PromotionDetails />
                 </ProtectedRoute>
               }
             />

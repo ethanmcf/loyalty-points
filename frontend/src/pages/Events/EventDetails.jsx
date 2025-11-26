@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./Event.css";
+import "./EventDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
@@ -27,7 +27,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
  * - view the details about an event
  */
 
-export function Event() {
+export function EventDetails() {
   const { eventId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState();
