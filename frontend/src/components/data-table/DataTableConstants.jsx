@@ -385,3 +385,57 @@ export const PromotionsManagerColumns = [
     },
   },
 ];
+
+export const UserTransactionsColumns = [
+  {
+    field: "id",
+    headerName: "ID",
+    type: "number",
+  },
+  {
+    field: "name",
+    headerName: "Name",
+    type: "string",
+  },
+  {
+    field: "promotionId",
+    headerName: "Promotion Id",
+    type: "number",
+  },
+  {
+    field: "type",
+    headerName: "Type",
+    type: "singleSelect",
+    valueOptions: ["purchase", "redemption", "transfer", "adjustment"],
+  },
+  {
+    field: "relatedId",
+    headerName: "Related ID",
+    type: "number",
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    type: "number",
+  },
+  {
+    field: "remarks",
+    headerName: "Remarks",
+    type: "string",
+  },
+  {
+    field: "createdBy",
+    headerName: "Created By",
+    type: "string",
+  },
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/transactions/${params.row.id}`} />
+    ),
+  },
+];
