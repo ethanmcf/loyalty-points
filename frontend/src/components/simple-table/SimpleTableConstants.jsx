@@ -20,9 +20,9 @@ export const OrganizersColumns = [
   {
     field: "actions",
     headerName: "Actions",
-    flex: 3,
     filterable: false,
     sortable: false,
+    type: "actions",
     renderCell: (params) => <DeleteOrganizerDialog userId={params.row.id} />,
   },
 ];
@@ -42,19 +42,19 @@ export const GuestsColumns = [
     flex: 2,
   },
   {
-    field: "delete",
-    headerName: "Delete",
-    filterable: false,
-    flex: 2,
-    sortable: false,
-    renderCell: (params) => <DeleteGuestDialog userId={params.row.id} />,
-  },
-  {
     field: "award",
     headerName: "Award",
+    type: "actions",
     filterable: false,
-    flex: 2,
     sortable: false,
     renderCell: (params) => <AwardSingleGuestDialog userId={params.row.id} />,
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    type: "actions",
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => <DeleteGuestDialog userId={params.row.id} />,
   },
 ];

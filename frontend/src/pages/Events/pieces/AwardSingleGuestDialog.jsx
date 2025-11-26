@@ -10,6 +10,7 @@ import DialogActions from "@mui/material/DialogActions";
 import { createEventTransaction } from "../../../apis/EventsApi";
 import { useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 export function AwardSingleGuestDialog({ userId }) {
   const { eventId } = useParams();
@@ -69,8 +70,8 @@ export function AwardSingleGuestDialog({ userId }) {
 
   return (
     <>
-      <Button onClick={handleClickOpen} variant="contained">
-        Award Guest
+      <Button onClick={handleClickOpen} size="icon">
+        <EmojiEventsIcon />
       </Button>
       <Dialog open={isOpen} onClose={handleClose}>
         {createdTransaction ? (

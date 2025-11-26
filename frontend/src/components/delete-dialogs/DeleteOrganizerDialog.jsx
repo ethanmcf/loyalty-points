@@ -8,7 +8,9 @@ import { getUserById } from "../../apis/UsersApi";
 import { deleteOrganizerFromEvent } from "../../apis/EventsApi";
 import { useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { GridActionsCell } from "@mui/x-data-grid";
+import { GridDeleteIcon } from "@mui/x-data-grid";
 export function DeleteOrganizerDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deletedUser, setDeletedUser] = useState();
@@ -30,13 +32,11 @@ export function DeleteOrganizerDialog({ userId }) {
   }, [userId]);
 
   const handleClickOpen = (e) => {
-    e.preventDefault();
     setIsOpen(true);
   };
 
   const handleClose = (e) => {
     e.preventDefault();
-    setDeletedUser(null);
     setError(null);
     setIsOpen(false);
   };
@@ -52,9 +52,10 @@ export function DeleteOrganizerDialog({ userId }) {
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Remove Organizer
+      <Button size="icon" onClick={handleClickOpen}>
+        <GridDeleteIcon />
       </Button>
+
       {deletedUser && (
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Organizer Removal Confirmation</DialogTitle>

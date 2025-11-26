@@ -9,6 +9,7 @@ import { getUserById } from "../../apis/UsersApi";
 import { useParams } from "react-router-dom";
 import { removeGuest } from "../../apis/EventsApi";
 import Alert from "@mui/material/Alert";
+import { GridDeleteIcon } from "@mui/x-data-grid";
 
 export function DeleteGuestDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,6 @@ export function DeleteGuestDialog({ userId }) {
   };
   const handleClose = () => {
     setIsOpen(false);
-    setDeletedUser(null);
     setError(null);
   };
 
@@ -51,8 +51,8 @@ export function DeleteGuestDialog({ userId }) {
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Remove Guest
+      <Button size="icon" onClick={handleClickOpen}>
+        <GridDeleteIcon />
       </Button>
       {deletedUser && (
         <Dialog open={isOpen} onClose={handleClose}>
