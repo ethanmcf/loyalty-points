@@ -6,7 +6,7 @@
 "use strict";
 require("dotenv").config();
 
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient, PromotionType } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { v4: uuidv4 } = require("uuid");
 const createAuthToken = require("../helpers/createAuthToken");
@@ -100,9 +100,69 @@ async function createUsers() {
   }
   console.log(`${createdCount} new users created.`);
 }
+
+async function createPromotions() {
+  const now = new Date();
+  const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+  const promotionsToCreate = [
+    {
+      name: "Super Sale",
+      description: "Get 50% off on all items!",
+      type: PromotionType.automatic,
+      rate: 0.5,
+      minSpending: null,
+      points: null,
+      used: false,
+      startTime: now.toISOString(),
+      endTime: in30.toISOString(),
+    },
+    {
+      name: "Buy One Get One Free",
+      description: "Buy one get one free!",
+      type: PromotionType.onetime,
+      rate: null,
+      minSpending: null,
+      points: null,
+      used: false,
+      startTime: now.toISOString(),
+      endTime: in30.toISOString(),
+    },
+    {
+      name: "Free Shipping",
+      description: "Enjoy free shipping on orders over $50!",
+      type: PromotionType.automatic,
+      rate: null,
+      minSpending: 50,
+      points: null,
+      used: false,
+      startTime: now.toISOString(),
+      endTime: in30.toISOString(),
+    },
+  ];
+
+  let createdCount = 0;
+
+  for (const promo of promotionsToCreate) {
+    const exists = await prisma.promotion.findFirst({
+      where: { name: promo.name },
+    });
+    if (exists) {
+      continue;
+    }
+
+    await prisma.promotion.create({
+      data: { ...promo, users: { connect: [{ utorid: "supersu1" }] } },
+    });
+    createdCount++;
+  }
+  console.log(`${createdCount} new promotions created.`);
+}
+
 async function seed() {
   console.log("Seed starting");
   await createUsers();
+  await createPromotions();
   console.log("Seed finished");
 }
 

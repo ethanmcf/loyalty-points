@@ -7,7 +7,6 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
-import { useEffect } from "react";
 import { Event } from "./pages/Events/Event";
 import { Promotions } from "./pages/Promotions/Promotions";
 import { Transactions } from "./pages/Transactions/Transactions";
@@ -138,7 +137,7 @@ function PublicRoute({ children }) {
 function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
-    return <div>Loading - temporary if we add skeleton loading</div>;
+    return <div>loading</div>;
   }
   return user ? children : <Navigate to="/login" replace />;
 }
