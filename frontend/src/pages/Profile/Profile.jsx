@@ -5,14 +5,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import {
   PromotionsManagerColumns,
   PromotionsRegularColumns,
-  TransactionColumns,
-} from "../../components/data-table-mui/DataTableConstants";
-import { useState } from "react";
-
+} from "../../components/data-table/DataTableConstants";
+import { DataTable } from "../../components/data-table/DataTable";
 import PersonalIfno from "./PersonalIfno";
 import UpdateInfo from "./UpdateInfo";
 import { useEffect } from "react";
 import { getMyTransactions } from "../../apis/UsersApi";
+import { useState } from "react";
 
 function Profile() {
   const { user } = useUser();
@@ -40,20 +39,7 @@ function Profile() {
       <UpdateInfo />
       <div className="content-container">
         <h2>My transactions</h2>
-        <Box sx={{ width: "100%" }}>
-          <DataGrid
-            showToolbar
-            rows={transactions.results}
-            columns={TransactionColumns}
-            rowCount={transactions.count}
-            initialState={{ pagination: { paginationModel } }}
-            pageSizeOptions={[5, 10]}
-            filterMode="server"
-            paginationMode="server"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-          />
-        </Box>
+        <DataTable baseURL="/users/me/transactions" roleV={user.role} />
       </div>
       <div className="content-container">
         <h2>My promotions</h2>

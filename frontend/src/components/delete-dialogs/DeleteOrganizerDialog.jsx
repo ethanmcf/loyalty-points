@@ -1,19 +1,21 @@
 import Dialog from "@mui/material/Dialog";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { getUserById } from "../../apis/UsersApi";
+import { deleteOrganizerFromEvent } from "../../apis/EventsApi";
+import { useParams } from "react-router-dom";
 
-export function DeleteUserDialog({ id }) {
+export function DeleteOrganizerDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deletedUser, setDeletedUser] = useState();
+  const { eventId } = useParams();
 
   const fetchUser = async () => {
     try {
-      const res = await getUserById(localStorage.token, id);
+      const res = await getUserById(localStorage.token, userId);
       setDeletedUser(res);
     } catch (error) {
       console.error(error);
@@ -23,30 +25,37 @@ export function DeleteUserDialog({ id }) {
 
   useEffect(() => {
     fetchUser();
-  }, [id]);
+  }, [userId]);
 
   const handleClickOpen = () => {
     setIsOpen(true);
   };
   const handleClose = () => {
     setIsOpen(false);
-    window.location.reload(); // TODO: this is temp, i wanna remove this when i figure out the state management
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     // u could add a function here
+    try {
+      await deleteOrganizerFromEvent(eventId, userId, localStorage.token);
+      handleClose();
+    } catch (error) {
+      console.error(error);
+      setIsOpen(false);
+    }
   };
 
   return (
     <>
-      <Button variant="icon" onClick={handleClickOpen}>
-        <DeleteIcon color="error" />
+      <Button variant="contained" onClick={handleClickOpen}>
+        Remove Organizer
       </Button>
       {deletedUser && (
         <Dialog open={isOpen} onClose={handleClose}>
-          <DialogTitle>Delete Confirmation</DialogTitle>
+          <DialogTitle>Organizer Removal Confirmation</DialogTitle>
           <DialogContent>
-            Please confirm that you would like to delete the following user:
+            Please Confirm that you would like to remove the following
+            organizer:
             <p>
               <b>Name:</b> {deletedUser.name}
             </p>
@@ -58,8 +67,8 @@ export function DeleteUserDialog({ id }) {
             </p>
           </DialogContent>
           <DialogActions>
-            <Button>Cancel</Button>
-            <Button>Delete</Button>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleDelete}>Delete</Button>
           </DialogActions>
         </Dialog>
       )}

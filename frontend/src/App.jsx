@@ -7,6 +7,7 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
+import { Event } from "./pages/Events/Event";
 
 function App() {
   return (
@@ -86,7 +87,7 @@ function App() {
               path="/events/:eventId"
               element={
                 <ProtectedRoute>
-                  <div>Event Details Page</div>
+                  <Event />
                 </ProtectedRoute>
               }
             />

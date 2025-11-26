@@ -1,3 +1,4 @@
+
 import { buildQuery } from "./utils/buildQuery";
 const baseURL = `${import.meta.env.VITE_BACKEND_URL}/users`;
 
@@ -8,7 +9,7 @@ export async function changeMyPassword(authToken, oldPassword, newPassword) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
-    body: JSON.stringify({
+    body: JSON.stringify ({
       old: oldPassword,
       new: newPassword,
     }),
@@ -20,7 +21,11 @@ export async function changeMyPassword(authToken, oldPassword, newPassword) {
   }
 }
 
-export async function redeemMyPoints(authToken, amount, remark = null) {
+export async function redeemMyPoints(
+  authToken,
+  amount,
+  remark = null
+) {
   const res = await fetch(`${baseURL}/me/transactions`, {
     method: "POST",
     headers: {
@@ -43,9 +48,9 @@ export async function redeemMyPoints(authToken, amount, remark = null) {
 
 export async function getMyTransactions(
   authToken,
-  searchParams = {} // map of optional fields: type, relatedId, promotionId, amount, operator, page, limit. ie {type: "type", etc}
+  updatedInfo = {} // map of optional fields: type, relatedId, promotionId, amount, operator, page, limit. ie {type: "type", etc}
 ) {
-  const queryParams = buildQuery(searchParams);
+  const queryParams = buildQuery(updatedInfo);
   const res = await fetch(`${baseURL}/me/transactions?${queryParams}`, {
     method: "GET",
     headers: {
@@ -65,26 +70,13 @@ export async function updateMyInfo(
   authToken,
   updatedInfo // map of optional fields: name, email, birthday, avatar. ie {name: "name", etc}
 ) {
-  const formData = new FormData();
-
-  if (updatedInfo.email) {
-    formData.append("email", updatedInfo.email);
-  }
-  if (updatedInfo.name) {
-    formData.append("name", updatedInfo.name);
-  }
-  if (updatedInfo.birthday) {
-    formData.append("birthday", updatedInfo.birthday);
-  }
-  if (updatedInfo.avatar) {
-    formData.append("avatar", updatedInfo.avatar);
-  }
   const res = await fetch(`${baseURL}/me`, {
     method: "PATCH",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
-    body: formData,
+    body: JSON.stringify(updatedInfo),
   });
 
   if (!res.ok) {
@@ -133,9 +125,9 @@ export async function registerUser(authToken, utorid, name, email) {
 
 export async function searchUsers(
   authToken,
-  searchParams = {} // map of optional fields: name, role, verified, activated, page, limit. ie {name: "name", etc}
+  updatedInfo = {} // map of optional fields: name, role, verified, activated, page, limit. ie {name: "name", etc}
 ) {
-  const queryParams = buildQuery(searchParams);
+  const queryParams = buildQuery(updatedInfo);
   const res = await fetch(`${baseURL}/?${queryParams}`, {
     method: "GET",
     headers: {
@@ -212,60 +204,4 @@ export async function updateUserById(
     throw new Error(err.error);
   }
   return res.json(); // User and updated fields
-}
-
-// /users/me/transactions
-// create a new redemption transaction
-export async function createTransaction(authToken, type, amount, remark) {
-  const res = await fetch(`${baseURL}/users/me/transactions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({
-      type,
-      amount,
-      remark,
-    }),
-  });
-
-  if (!res.ok) {
-    const error = await res.json();
-    console.log("Error:", error.error);
-    throw new Error(err.error);
-  }
-
-  return res.json();
-}
-
-// /users/:userId/transactions
-// create a new transfer transaction between the current logged-in user and the user specified by userId
-export async function createTransferTransaction(
-  authToken,
-  userId,
-  type,
-  amount,
-  remark
-) {
-  const res = await fetch(`${baseURL}/users/${userId}/transactions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
-    },
-    body: JSON.stringify({
-      type,
-      amount,
-      remark,
-    }),
-  });
-
-  if (!res.ok) {
-    const error = await res.json();
-    console.log("Error:", error.error);
-    throw new Error(err.error);
-  }
-
-  return res.json();
 }
