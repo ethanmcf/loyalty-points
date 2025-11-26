@@ -16,6 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
 import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
+import { DataTable } from "../../components/data-table/DataTable";
 
 /**
  * I need to be able to
@@ -259,6 +260,7 @@ export function Event() {
           <AddGuestInput guestList={eventData.guests} />
           <SimpleTable type={"guests"} data={eventData.guests} />
           <h3>Transactions</h3>
+          <DataTable baseURL="/transactions?type=event" />
           <p> add table that lists transaction history here</p>
         </>
       )}
