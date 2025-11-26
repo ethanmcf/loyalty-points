@@ -9,6 +9,7 @@ import { getUserById } from "../../../apis/UsersApi";
 import DialogActions from "@mui/material/DialogActions";
 import { createEventTransaction } from "../../../apis/EventsApi";
 import { useParams } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 export function AwardSingleGuestDialog({ userId }) {
   const { eventId } = useParams();
@@ -16,6 +17,7 @@ export function AwardSingleGuestDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [guest, setGuest] = useState();
   const [error, setError] = useState("");
+  const [createdTransaction, setCreatedTransaction] = useState();
 
   const handleClickOpen = () => {
     setIsOpen(true);
@@ -27,6 +29,7 @@ export function AwardSingleGuestDialog({ userId }) {
   };
 
   const handleSubmit = async (e) => {
+    console.log("Submiting");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -42,7 +45,8 @@ export function AwardSingleGuestDialog({ userId }) {
         formJson
       );
     } catch (error) {
-      console.error("Error: ", error);
+      console.error(error);
+      setError(error.message);
     }
   };
 
@@ -66,26 +70,47 @@ export function AwardSingleGuestDialog({ userId }) {
         Award Guest
       </Button>
       <Dialog open={isOpen} onClose={handleClose}>
-        <DialogTitle>Award Confirmation</DialogTitle>
-        <DialogContent>
-          <b>{guest && <>User being Awarded: {guest.name}</>}</b>
-          <DialogContentText>
-            Please enter the amount of points you would like to award and any
-            remarks you would like to leave.
-          </DialogContentText>
-          <form id="reward-form" onSubmit={handleSubmit}>
-            <TextField id="amount" label="Amount to Reward" name="amount" />
-            <TextField id="remark" label="Remarks" name="remark" />
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="text" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="contained" type="submit">
-            Submit Transaction
-          </Button>
-        </DialogActions>
+        {createdTransaction ? (
+          <>
+            <DialogTitle>Event Award Transaction Confirmed</DialogTitle>
+            <DialogContent>
+              You have successfully created a transaction record of awarding:
+              <DialogContentText>
+                <b>{res.awarded} Points</b> to <b>{res.recipient}</b>
+              </DialogContentText>
+              <p>Remarks: {res.remarks}</p>
+            </DialogContent>
+            <DialogActions>
+              <Button variant="text" onClick={handleClose}>
+                Close
+              </Button>
+            </DialogActions>
+          </>
+        ) : (
+          <>
+            <DialogTitle>Award Confirmation</DialogTitle>
+            <DialogContent>
+              <b>{guest && <>User being Awarded: {guest.name}</>}</b>
+              <DialogContentText>
+                Please enter the amount of points you would like to award and
+                any remarks you would like to leave.
+              </DialogContentText>
+              <form id="reward-form" onSubmit={handleSubmit}>
+                <TextField id="amount" label="Amount to Reward" name="amount" />
+                <TextField id="remark" label="Remarks" name="remark" />
+              </form>
+              {!error ? null : <Alert severity="error">{error}</Alert>}
+            </DialogContent>
+            <DialogActions>
+              <Button variant="text" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button variant="contained" type="submit" form="reward-form">
+                Submit Transaction
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     </>
   );
