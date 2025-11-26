@@ -1,4 +1,5 @@
 import { AwardSingleGuestDialog } from "../../pages/Events/pieces/AwardSingleGuestDialog";
+import { ActionGuestDialog } from "../actionDialogs/ActionGuestDialog";
 import { DeleteGuestDialog } from "../delete-dialogs/DeleteGuestDialog";
 import { DeleteOrganizerDialog } from "../delete-dialogs/DeleteOrganizerDialog";
 
@@ -42,19 +43,11 @@ export const GuestsColumns = [
     flex: 2,
   },
   {
-    field: "award",
-    headerName: "Award",
+    field: "action",
+    headerName: "Actions",
     type: "actions",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <AwardSingleGuestDialog userId={params.row.id} />,
-  },
-  {
-    field: "delete",
-    headerName: "Delete",
-    type: "actions",
-    filterable: false,
-    sortable: false,
-    renderCell: (params) => <DeleteGuestDialog userId={params.row.id} />,
+    renderCell: (params) => <ActionGuestDialog userId={params.row.id} />,
   },
 ];

@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getPromotionById } from "../../apis/promotionsApis";
-import { useEffect } from "react";
+import { getPromotionById, updatePromotion } from "../../apis/promotionsApis";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -10,140 +9,228 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { useState, useEffect } from "react";
+import TextField from "@mui/material/TextField";
+import "./Promotion.css";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 
 export function Promotion() {
-  const { promotionalId } = useParams();
+  const { promotionId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState("");
-  const [promotionData, setPromotionData] = useState({
-    id: 3,
-    name: "Start of Summer Celebration",
-    description: "A simple promotion",
-    type: "automatic",
-    endTime: "2025-11-10T17:00:00Z",
-    minSpending: 50,
-    rate: 0.01,
-    points: 0,
-  });
+  const [error, setError] = useState();
+  const [promotionData, setPromotionData] = useState();
+  const [oldPromotionData, setOldPromotionData] = useState();
 
   const fetchData = async () => {
     try {
-      const res = await getPromotionById(localStorage.token, promotionalId);
+      const res = await getPromotionById(
+        localStorage.token,
+        Number(promotionId)
+      );
+      setPromotionData(res);
+      setOldPromotionData(res);
     } catch (error) {
-      console.error("error");
+      setError(error.message);
     }
   };
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
+
+  const handleSetToEdit = (e) => {
+    e.preventDefault();
+    setIsEditing(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const formJson = Object.fromEntries(formData.entries());
+
+    // time
+    const isoStartTime = dayjs(
+      formJson.startTime,
+      "MM/DD/YYYY hh:mm A"
+    ).toISOString();
+    const isoEndTime = dayjs(
+      formJson.endTime,
+      "MM/DD/YYYY hh:mm A"
+    ).toISOString();
+
+    const oldStartTime = new Date(oldPromotionData.startTime);
+    const newStartTime = new Date(isoStartTime);
+    const oldEndTime = new Date(oldPromotionData.endTime);
+    const newEndTime = new Date(isoEndTime);
+
+    // api call
+    try {
+      const reqBody = {
+        name: formJson.name === oldPromotionData.name ? null : formJson.name,
+        description: formJson.description,
+        type: formJson.type,
+        startTime:
+          oldStartTime.toISOString() === newStartTime.toISOString()
+            ? null
+            : isoStartTime,
+        endTime:
+          oldEndTime.toISOString() === newEndTime.toISOString()
+            ? null
+            : isoEndTime,
+        minSpending:
+          Number(formJson.minSpending) === Number(oldPromotionData.minSpending)
+            ? null
+            : Number(formJson.minSpending),
+        rate:
+          Number(formJson.rate) === Number(oldPromotionData.rate)
+            ? null
+            : Number(formJson.rate),
+
+        points:
+          Number(formJson.points) === Number(oldPromotionData.points)
+            ? null
+            : Number(formJson.points),
+      };
+      const res = await updatePromotion(
+        localStorage.token,
+        promotionId,
+        reqBody
+      );
+      setIsEditing(false);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
   return (
-    <div>
+    <div id="promotion-details-page">
       <h2>Promotion Details Page</h2>
-      <form id="promotion-info-form">
-        <TextField
-          id="name"
-          name="name"
-          label="Promotion Name"
-          value={promotionData.name}
-          onChange={(e) =>
-            setPromotionData({ ...promotionData, name: e.target.value })
-          }
-          required
-          disabled={!isEditing}
-        />
-        <TextField
-          id="description"
-          name="description"
-          label="Description"
-          value={promotionData.description}
-          onChange={(e) =>
-            setPromotionData({ ...promotionData, description: e.target.value })
-          }
-          required
-          disabled={!isEditing}
-        />
-        <FormControl fullWidth>
-          <InputLabel id="type">Promotion Type</InputLabel>
-          <Select
-            name="type"
-            id="type"
-            value={promotionData.type}
-            label="Promotion Type"
-            onChange={(e) =>
-              setPromotionData({ ...promotionData, type: e.target.value })
-            }
-          >
-            <MenuItem value={"automatic"}>Automatic</MenuItem>
-            <MenuItem value={"onetime"}>One-time</MenuItem>
-          </Select>
-        </FormControl>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DateTimePicker"]}>
-            <DateTimePicker
+      {!error ? null : <Alert severity="error">{error}</Alert>}
+      {promotionData && (
+        <>
+          <div className="header">
+            <h3>General Data</h3>
+            {isEditing ? (
+              <Button type="submit" form="promotion-info-form">
+                Save
+              </Button>
+            ) : (
+              <Button type="button" form="" onClick={handleSetToEdit}>
+                Edit
+              </Button>
+            )}
+          </div>
+          <form id="promotion-info-form" onSubmit={handleSubmit}>
+            <TextField
+              id="name"
+              name="name"
+              label="Promotion Name"
+              value={promotionData.name}
+              onChange={(e) =>
+                setPromotionData({ ...promotionData, name: e.target.value })
+              }
+              required
               disabled={!isEditing}
-              name="startTime"
-              label="Start Time"
-              value={dayjs(promotionData.startTime)}
+            />
+            <TextField
+              id="description"
+              name="description"
+              label="Description"
+              value={promotionData.description}
               onChange={(e) =>
                 setPromotionData({
                   ...promotionData,
-                  startTime: dayjs(e),
+                  description: e.target.value,
                 })
               }
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DateTimePicker"]}>
-            <DateTimePicker
+              required
               disabled={!isEditing}
-              name="endTime"
-              label="End Time"
-              value={dayjs(promotionData.endTime)}
+            />
+            <FormControl fullWidth>
+              <InputLabel id="type">Promotion Type</InputLabel>
+              <Select
+                name="type"
+                id="type"
+                value={promotionData.type}
+                disabled={!isEditing}
+                label="Promotion Type"
+                onChange={(e) =>
+                  setPromotionData({ ...promotionData, type: e.target.value })
+                }
+              >
+                <MenuItem value={"automatic"}>Automatic</MenuItem>
+                <MenuItem value={"onetime"}>One-time</MenuItem>
+              </Select>
+            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateTimePicker"]}>
+                <DateTimePicker
+                  disabled={!isEditing}
+                  name="startTime"
+                  label="Start Time"
+                  value={dayjs(promotionData.startTime)}
+                  onChange={(e) =>
+                    setPromotionData({
+                      ...promotionData,
+                      startTime: dayjs(e),
+                    })
+                  }
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateTimePicker"]}>
+                <DateTimePicker
+                  disabled={!isEditing}
+                  name="endTime"
+                  label="End Time"
+                  value={dayjs(promotionData.endTime)}
+                  onChange={(e) =>
+                    setPromotionData({
+                      ...promotionData,
+                      endTime: dayjs(e),
+                    })
+                  }
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <TextField
+              id="minSpending"
+              name="minSpending"
+              label="Minimum Spending Requirement"
+              value={promotionData.minSpending}
               onChange={(e) =>
                 setPromotionData({
                   ...promotionData,
-                  endTime: dayjs(e),
+                  minSpending: e.target.value,
                 })
               }
+              required
+              disabled={!isEditing}
             />
-          </DemoContainer>
-        </LocalizationProvider>
-        <TextField
-          id="minSpending"
-          name="minSpending"
-          label="Minimum Spending Requirement"
-          value={promotionData.minSpending}
-          onChange={(e) =>
-            setPromotionData({ ...promotionData, minSpending: e.target.value })
-          }
-          required
-          disabled={!isEditing}
-        />
-        <TextField
-          id="rate"
-          name="rate"
-          label="Promotional Rate"
-          value={promotionData.rate}
-          onChange={(e) =>
-            setPromotionData({ ...promotionData, rate: e.target.value })
-          }
-          required
-          disabled={!isEditing}
-        />
-        <TextField
-          id="points"
-          name="points"
-          label="Promotional Points"
-          value={promotionData.points}
-          onChange={(e) =>
-            setPromotionData({ ...promotionData, points: e.target.value })
-          }
-          required
-          disabled={!isEditing}
-        />
-      </form>
+            <TextField
+              id="rate"
+              name="rate"
+              label="Promotional Rate"
+              value={promotionData.rate}
+              onChange={(e) =>
+                setPromotionData({ ...promotionData, rate: e.target.value })
+              }
+              disabled={!isEditing}
+            />
+            <TextField
+              id="points"
+              name="points"
+              label="Promotional Points"
+              value={promotionData.points}
+              onChange={(e) =>
+                setPromotionData({ ...promotionData, points: e.target.value })
+              }
+              disabled={!isEditing}
+            />
+          </form>
+        </>
+      )}
     </div>
   );
 }

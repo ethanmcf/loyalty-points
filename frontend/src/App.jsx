@@ -9,6 +9,9 @@ import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
 import { useEffect } from "react";
 import { Event } from "./pages/Events/Event";
+import { Promotions } from "./pages/Promotions/Promotions";
+import { Transactions } from "./pages/Transactions/Transactions";
+import { Promotion } from "./pages/Promotions/Promotion";
 
 function App() {
   return (
@@ -64,7 +67,7 @@ function App() {
               path="/transactions"
               element={
                 <ProtectedRoute>
-                  <div>Transactions Page</div>
+                  <Transactions />
                 </ProtectedRoute>
               }
             />
@@ -72,7 +75,7 @@ function App() {
               path="/promotions"
               element={
                 <ProtectedRoute>
-                  <div>Promotions Page</div>
+                  <Promotions />
                 </ProtectedRoute>
               }
             />
@@ -104,7 +107,7 @@ function App() {
               path="/promotions/:promotionId"
               element={
                 <ProtectedRoute>
-                  <div>Promotion Details Page</div>
+                  <Promotion />
                 </ProtectedRoute>
               }
             />

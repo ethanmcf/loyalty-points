@@ -71,7 +71,6 @@ export function Event() {
   }, []);
 
   const handleSubmit = async (e) => {
-    console.log("HERE");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -98,8 +97,10 @@ export function Event() {
       const res = await patchSingleEvent(
         eventId,
         formJson.name === oldEventData.name ? null : formJson.name,
-        formJson.description,
-        formJson.location,
+        formJson.description === oldEventData.description
+          ? null
+          : formJson.description,
+        formJson.location === oldEventData.location ? null : formJson.location,
         oldStartTime.toISOString() === newStartTime.toISOString()
           ? null
           : isoStartTime,
@@ -140,11 +141,7 @@ export function Event() {
             <div>
               {!error ? null : <Alert severity="error">{error}</Alert>}
               {isEditing ? (
-                <Button
-                  type="submit"
-                  form="event-info-form"
-                  onClick={() => console.log("SAVE BUTTON CLICKED")}
-                >
+                <Button type="submit" form="event-info-form">
                   Save
                 </Button>
               ) : (

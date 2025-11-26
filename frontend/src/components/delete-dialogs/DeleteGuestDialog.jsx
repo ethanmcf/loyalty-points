@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { removeGuest } from "../../apis/EventsApi";
 import Alert from "@mui/material/Alert";
 import { GridDeleteIcon } from "@mui/x-data-grid";
+import IconButton from "@mui/material/IconButton";
 
 export function DeleteGuestDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,9 +52,10 @@ export function DeleteGuestDialog({ userId }) {
 
   return (
     <>
-      <Button size="icon" onClick={handleClickOpen}>
+      <IconButton color="error" onClick={handleClickOpen}>
         <GridDeleteIcon />
-      </Button>
+      </IconButton>
+
       {deletedUser && (
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Delete Confirmation</DialogTitle>
