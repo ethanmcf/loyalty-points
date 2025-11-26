@@ -123,7 +123,10 @@ export function DataTable({ baseURL, role }) {
     let newColumns = [];
     if (baseURL === "/users") {
       newColumns = UserColumns;
-    } else if (baseURL === "/transactions") {
+    } else if (
+      baseURL === "/transactions" ||
+      baseURL === "/transactions?type=event"
+    ) {
       newColumns = TransactionColumns;
     } else if (baseURL === "/events") {
       if (role === "regular" || role === "cashier") {

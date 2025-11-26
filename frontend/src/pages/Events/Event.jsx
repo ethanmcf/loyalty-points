@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Event.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -16,6 +16,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
 import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
+import { DataTable } from "../../components/data-table/DataTable";
+import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 /**
  * I need to be able to
@@ -26,51 +30,26 @@ import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
 export function Event() {
   const { eventId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState("");
-  const [eventData, setEventData] = useState({
-    id: 1,
-    name: "Event 1",
-    description: "A simple event",
-    location: "BA 2250",
-    startTime: "2025-11-10T09:00:00Z",
-    endTime: "2025-11-10T17:00:00Z",
-    capacity: 200,
-    pointsRemain: 500,
-    pointsAwarded: 0,
-    published: false,
-    organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
-  });
-  const [oldEventData, setOldEventData] = useState({
-    id: 1,
-    name: "Event 1",
-    description: "A simple event",
-    location: "BA 2250",
-    startTime: "2025-11-10T09:00:00Z",
-    endTime: "2025-11-10T17:00:00Z",
-    capacity: 200,
-    pointsRemain: 500,
-    pointsAwarded: 0,
-    published: false,
-    organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
-  });
+  const [error, setError] = useState();
+  const [eventData, setEventData] = useState();
+  const [oldEventData, setOldEventData] = useState();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
-      const res = await getSingleEvent(eventId, localStorage.token);
-      console.log(res);
+      const res = await getSingleEvent(Number(eventId), localStorage.token);
+      setEventData(res);
+      setOldEventData(res);
     } catch (error) {
-      console.error("error");
+      setError(error.message);
     }
   };
+
   useEffect(() => {
-    console.log(eventId);
     fetchData();
   }, []);
 
   const handleSubmit = async (e) => {
-    console.log("HERE");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -97,8 +76,10 @@ export function Event() {
       const res = await patchSingleEvent(
         eventId,
         formJson.name === oldEventData.name ? null : formJson.name,
-        formJson.description,
-        formJson.location,
+        formJson.description === oldEventData.description
+          ? null
+          : formJson.description,
+        formJson.location === oldEventData.location ? null : formJson.location,
         oldStartTime.toISOString() === newStartTime.toISOString()
           ? null
           : isoStartTime,
@@ -131,19 +112,24 @@ export function Event() {
 
   return (
     <div id="event-details-page">
+      <div className="header">
+        <div className="title">
+          <IconButton onClick={() => navigate("/events")}>
+            <ArrowBackIcon />
+          </IconButton>
+          <h2>Events Details Page</h2>
+        </div>
+        <DeleteEventsDialog id={Number(eventId)} />
+      </div>
       <h2>Event Details page</h2>
-      {eventData && (
+      {eventData && eventData !== null && (
         <>
           <div className="header">
             <h3>General Data</h3>
             <div>
               {!error ? null : <Alert severity="error">{error}</Alert>}
               {isEditing ? (
-                <Button
-                  type="submit"
-                  form="event-info-form"
-                  onClick={() => console.log("SAVE BUTTON CLICKED")}
-                >
+                <Button type="submit" form="event-info-form">
                   Save
                 </Button>
               ) : (
@@ -256,10 +242,10 @@ export function Event() {
           <AddOrganizerInput />
           <SimpleTable type={"organizers"} data={eventData.organizers} />
           <h3>Guests</h3>
-          <AddGuestInput guestList={eventData.guests} />
+          <AddGuestInput guestList={eventData.guests} /> <AwardAllGuestButton />
           <SimpleTable type={"guests"} data={eventData.guests} />
           <h3>Transactions</h3>
-          <p> add table that lists transaction history here</p>
+          <DataTable baseURL="/transactions?type=event" />
         </>
       )}
     </div>

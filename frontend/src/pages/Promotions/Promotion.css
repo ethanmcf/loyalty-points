@@ -1,4 +1,4 @@
-#event-details-page {
+#promotion-details-page {
   margin: 3rem;
   background-color: white;
   padding: 2rem;
@@ -41,7 +41,7 @@
   margin: 0.5rem 0;
 }
 
-.event-form {
+#promotion-info-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
