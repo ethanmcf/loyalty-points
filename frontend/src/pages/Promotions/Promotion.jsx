@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getPromotionById, updatePromotion } from "../../apis/promotionsApis";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -9,11 +9,14 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import "./Promotion.css";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { DeletePromotionsDialog } from "../../components/delete-dialogs/DeletePromotionsDialog";
 
 export function Promotion() {
   const { promotionId } = useParams();
@@ -21,6 +24,7 @@ export function Promotion() {
   const [error, setError] = useState();
   const [promotionData, setPromotionData] = useState();
   const [oldPromotionData, setOldPromotionData] = useState();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -104,11 +108,19 @@ export function Promotion() {
   };
   return (
     <div id="promotion-details-page">
-      <h2>Promotion Details Page</h2>
+      <div className="header">
+        <div className="title">
+          <IconButton onClick={() => navigate("/promotions")}>
+            <ArrowBackIcon />
+          </IconButton>
+          <h2>Promotion Details Page</h2>
+        </div>
+        <DeletePromotionsDialog id={promotionId} />
+      </div>
       {!error ? null : <Alert severity="error">{error}</Alert>}
       {promotionData && (
         <>
-          <div className="header">
+          <div className="general-header">
             <h3>General Data</h3>
             {isEditing ? (
               <Button type="submit" form="promotion-info-form">

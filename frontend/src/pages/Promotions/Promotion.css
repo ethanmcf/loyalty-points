@@ -21,7 +21,24 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin: 1rem 0;
+  border-bottom: 1px #f1efef solid;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+}
+
+.general-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0;
 }
 
 #promotion-info-form {

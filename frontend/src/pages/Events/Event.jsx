@@ -17,6 +17,9 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
 import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
 import { DataTable } from "../../components/data-table/DataTable";
+import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 /**
  * I need to be able to
@@ -27,35 +30,9 @@ import { DataTable } from "../../components/data-table/DataTable";
 export function Event() {
   const { eventId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState("");
-  const [eventData, setEventData] = useState({
-    id: 1,
-    name: "Event 1",
-    description: "A simple event",
-    location: "BA 2250",
-    startTime: "2025-11-10T09:00:00Z",
-    endTime: "2025-11-10T17:00:00Z",
-    capacity: 200,
-    pointsRemain: 500,
-    pointsAwarded: 0,
-    published: false,
-    organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
-  });
-  const [oldEventData, setOldEventData] = useState({
-    id: 1,
-    name: "Event 1",
-    description: "A simple event",
-    location: "BA 2250",
-    startTime: "2025-11-10T09:00:00Z",
-    endTime: "2025-11-10T17:00:00Z",
-    capacity: 200,
-    pointsRemain: 500,
-    pointsAwarded: 0,
-    published: false,
-    organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
-  });
+  const [error, setError] = useState();
+  const [eventData, setEventData] = useState();
+  const [oldEventData, setOldEventData] = useState();
 
   const fetchData = async () => {
     try {
@@ -133,7 +110,17 @@ export function Event() {
 
   return (
     <div id="event-details-page">
+      <div className="header">
+        <div className="title">
+          <IconButton onClick={() => navigate("/events")}>
+            <ArrowBackIcon />
+          </IconButton>
+          <h2>Events Details Page</h2>
+        </div>
+        <DeleteEventsDialog id={Number(eventId)} />
+      </div>
       <h2>Event Details page</h2>
+      {!error ? null : <Alert severity="error">{error}</Alert>}
       {eventData && (
         <>
           <div className="header">
@@ -254,11 +241,10 @@ export function Event() {
           <AddOrganizerInput />
           <SimpleTable type={"organizers"} data={eventData.organizers} />
           <h3>Guests</h3>
-          <AddGuestInput guestList={eventData.guests} />
+          <AddGuestInput guestList={eventData.guests} /> <AwardAllGuestButton />
           <SimpleTable type={"guests"} data={eventData.guests} />
           <h3>Transactions</h3>
           <DataTable baseURL="/transactions?type=event" />
-          <p> add table that lists transaction history here</p>
         </>
       )}
     </div>
