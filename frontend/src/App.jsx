@@ -11,6 +11,7 @@ import { Event } from "./pages/Events/Event";
 import { Promotions } from "./pages/Promotions/Promotions";
 import { Transactions } from "./pages/Transactions/Transactions";
 import { Promotion } from "./pages/Promotions/Promotion";
+import { Events } from "./pages/Events/Events"
 
 function App() {
   return (
@@ -58,7 +59,7 @@ function App() {
               path="/events"
               element={
                 <ProtectedRoute>
-                  <div>Events Page</div>
+                  <Events />
                 </ProtectedRoute>
               }
             />
