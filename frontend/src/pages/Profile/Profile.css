@@ -4,10 +4,10 @@
   justify-content: flex-start;
   padding: 1rem 2rem 3rem 2rem;
   text-align: left;
+  margin-bottom: 3rem;
   background-color: white;
   border-radius: 12px;
   gap: 4rem;
-  margin-bottom: 5rem;
 }
 .info-container {
   text-align: left;
@@ -34,8 +34,7 @@
   height: 128px;
 }
 .content-container {
-  margin: 3rem;
-  margin-top: -3rem;
+  margin: 0rem 3rem 3rem 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;

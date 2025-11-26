@@ -73,6 +73,7 @@ export const UserProvider = ({ children }) => {
   const updateInterfaceType = (type) => {
     setInterfaceType(type);
   };
+
   return (
     <UserContext.Provider
       value={{

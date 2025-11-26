@@ -1,0 +1,13 @@
+#transactions-page {
+  margin: 3rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.table-page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}

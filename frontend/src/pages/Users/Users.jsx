@@ -1,5 +1,5 @@
 import { useUser } from "../../contexts/UserContext";
-import { DataTable } from "../../components/data-table-mui/DataTable";
+import { DataTable } from "../../components/data-table/DataTable";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -32,7 +32,7 @@ export function Users() {
           }}
         >
           <AddUserDialog />
-          <FormControl>
+          {/* <FormControl>
             <InputLabel id="demo-simple-select-label">Role View</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -46,7 +46,7 @@ export function Users() {
               <MenuItem value={"manager"}>Manager</MenuItem>
               <MenuItem value={"superuser"}>SuperUser</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
         </div>
       </div>
       <DataTable baseURL="/users" role={roleView} />

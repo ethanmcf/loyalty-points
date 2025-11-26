@@ -10,15 +10,10 @@ import {
   PromotionsRegularColumns,
   TransactionColumns,
   UserColumns,
+  UserTransactionsColumns,
 } from "./DataTableConstants";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-/**
- * @typedef {"/transactions" | "/users" | "/transactions" | "/promotions"} overviewURL The baseURLS that the table supports 
- * @typedef {"regular" | "cashier" | "manager" | "superuser"} roleType
- *
-
 /**
  *
  * @typedef {Object} DataTableProps
@@ -27,15 +22,12 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  */
 
 /**
- *
+ * This Table uses server side filtering and pagination
  * @param {DataTableProps} props
  * @returns A table with filters and sorting
  *  * @reference https://mui.com/x/api/data-grid/data-grid/
  */
 export function DataTable({ baseURL, role }) {
-  // UserContext
-  const { user } = useUser();
-
   // Use State Values
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
@@ -134,7 +126,7 @@ export function DataTable({ baseURL, role }) {
     } else if (baseURL === "/transactions") {
       newColumns = TransactionColumns;
     } else if (baseURL === "/events") {
-      if (user.role === "regular" || user.role === "cashier") {
+      if (role === "regular" || role === "cashier") {
         // Type 1: Regular User
         newColumns = EventRegularColumns;
       } else {
@@ -142,15 +134,17 @@ export function DataTable({ baseURL, role }) {
         newColumns = EventManagerColumns;
       }
     } else if (baseURL === "/promotions") {
-      if (user.role === "regular" || user.role === "cashier") {
+      if (role === "regular" || role === "cashier") {
         // Type 1: Regular User
         newColumns = PromotionsRegularColumns;
       } else {
         // Type 2: Manager and higher
         newColumns = PromotionsManagerColumns;
       }
+    } else if (baseURL === "/users/me/transactions") {
+      newColumns = UserTransactionsColumns;
     } else {
-      console.error("Cannot recognize type: ", type);
+      console.error("Cannot recognize type: ", baseURL);
       return;
     }
 
