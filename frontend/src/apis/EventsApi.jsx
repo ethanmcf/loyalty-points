@@ -163,18 +163,14 @@ export async function getSingleEvent(eventId, authToken) {
     },
   };
   const url = `${baseURL}/events/${eventId}`;
-  try {
-    const allEventsResponse = await fetch(url, requestOptions);
-
-    if (!allEventsResponse.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
-    }
-
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
-  } catch (error) {
-    console.error("Error: ", error);
+  const allEventsResponse = await fetch(url, requestOptions);
+  const eventsJSON = await allEventsResponse.json();
+  if (!allEventsResponse.ok) {
+    console.error("Error occured: ", eventsJSON.error);
+    throw new Error(eventsJSON.error);
   }
+
+  return eventsJSON;
 }
 
 export async function patchSingleEvent(

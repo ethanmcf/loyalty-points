@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Event.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -33,17 +33,19 @@ export function Event() {
   const [error, setError] = useState();
   const [eventData, setEventData] = useState();
   const [oldEventData, setOldEventData] = useState();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
-      const res = await getSingleEvent(eventId, localStorage.token);
-      console.log(res);
+      const res = await getSingleEvent(Number(eventId), localStorage.token);
+      setEventData(res);
+      setOldEventData(res);
     } catch (error) {
-      console.error("error");
+      setError(error.message);
     }
   };
+
   useEffect(() => {
-    console.log(eventId);
     fetchData();
   }, []);
 
@@ -120,8 +122,7 @@ export function Event() {
         <DeleteEventsDialog id={Number(eventId)} />
       </div>
       <h2>Event Details page</h2>
-      {!error ? null : <Alert severity="error">{error}</Alert>}
-      {eventData && (
+      {eventData && eventData !== null && (
         <>
           <div className="header">
             <h3>General Data</h3>
