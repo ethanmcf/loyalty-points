@@ -56,7 +56,7 @@ export function AddEventDialog() {
         formJson.endTime,
         capacity,
         points,
-        user.token
+        localStorage.token
       );
 
       setCreatedEvent(res);
