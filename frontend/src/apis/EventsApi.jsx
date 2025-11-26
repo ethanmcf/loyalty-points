@@ -346,8 +346,8 @@ export async function joinEventLoggedIn(authToken, eventId) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
-    throw new Error(error.Error);
+    console.log("Error: ", error.error);
+    throw new Error(error.error);
   }
 
   return res.json();
@@ -365,8 +365,8 @@ export async function leaveEvent(authToken, eventId) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
-    throw new Error(error.Error);
+    console.log("Error: ", error.error);
+    throw new Error(error.error);
   }
 
   return;
@@ -384,8 +384,8 @@ export async function removeGuest(authToken, eventId, userId) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
-    throw new Error(error.Error);
+    console.log("Error: ", error.error);
+    throw new Error(error.error);
   }
 
   return;
@@ -404,7 +404,7 @@ export async function createEventTransaction(authToken, eventId, eventData) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
+    console.log("Error: ", error.error);
     throw new Error(error.error);
   }
 
