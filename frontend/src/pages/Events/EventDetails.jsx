@@ -20,6 +20,7 @@ import { DataTable } from "../../components/data-table/DataTable";
 import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useUser } from "../../contexts/UserContext";
 
 /**
  * I need to be able to
@@ -29,10 +30,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export function EventDetails() {
   const { eventId } = useParams();
+  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState();
   const [eventData, setEventData] = useState();
   const [oldEventData, setOldEventData] = useState();
+  const [canEdit, setCanEdit] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -40,6 +43,17 @@ export function EventDetails() {
       const res = await getSingleEvent(Number(eventId), localStorage.token);
       setEventData(res);
       setOldEventData(res);
+
+      // set editting permissions
+      if (user.role === "manager" || user.role === "superuser") {
+        setCanEdit(true);
+      } else {
+        if (res.organizers.find((organizer) => organizer.id === user.id)) {
+          setCanEdit(true);
+        } else {
+          setCanEdit(false);
+        }
+      }
     } catch (error) {
       setError(error.message);
     }
@@ -126,18 +140,20 @@ export function EventDetails() {
         <>
           <div className="header">
             <h3>General Data</h3>
-            <div>
-              {!error ? null : <Alert severity="error">{error}</Alert>}
-              {isEditing ? (
-                <Button type="submit" form="event-info-form">
-                  Save
-                </Button>
-              ) : (
-                <Button type="button" form="" onClick={handleSetToEdit}>
-                  Edit
-                </Button>
-              )}
-            </div>
+            {canEdit && (
+              <div>
+                {!error ? null : <Alert severity="error">{error}</Alert>}
+                {isEditing ? (
+                  <Button type="submit" form="event-info-form">
+                    Save
+                  </Button>
+                ) : (
+                  <Button type="button" form="" onClick={handleSetToEdit}>
+                    Edit
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
           <form
             onSubmit={handleSubmit}
@@ -239,13 +255,16 @@ export function EventDetails() {
             />
           </form>
           <h3>Organizers</h3>
+          <h4>Organizer Count: {eventData.organizers.length}</h4>
           <AddOrganizerInput />
           <SimpleTable type={"organizers"} data={eventData.organizers} />
           <h3>Guests</h3>
-          <AddGuestInput guestList={eventData.guests} /> <AwardAllGuestButton />
-          <SimpleTable type={"guests"} data={eventData.guests} />
-          <h3>Transactions</h3>
-          <DataTable baseURL="/transactions?type=event" />
+          <h4>
+            Guest Count:
+            {eventData.guests ? eventData.guests.length : eventData.numGuests}
+          </h4>
+          <AddGuestInput guestList={eventData.guests ?? []} canEdit={canEdit} />
+          {canEdit && <SimpleTable type={"guests"} data={eventData.guests} />}
         </>
       )}
     </div>

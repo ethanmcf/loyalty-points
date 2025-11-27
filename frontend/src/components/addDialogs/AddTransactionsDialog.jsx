@@ -71,6 +71,7 @@ export function AddTransactionDialog() {
 
     try {
       // The createNewTransaction API function expects separate arguments:
+      console.log(promotionIds);
       const res = await createNewTransaction(
         localStorage.token,
         formJson.utorid,
