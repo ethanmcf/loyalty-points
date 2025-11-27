@@ -6,8 +6,11 @@ import { ViewDetailsButton } from "./ViewDetailsButton";
 import { DeleteUserDialog } from "../delete-dialogs/DeleteUserDialog";
 import { SuspiciousTransactionsDialog } from "../actionDialogs/SuspiciousTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../actionDialogs/ProcessRedemptionTransactionsDialog";
-import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog"; 
-import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog"; 
+import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog";
+import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
+import { getUserById } from "../../apis/UsersApi";
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -148,11 +151,25 @@ export const TransactionColumns = [
     headerName: "Type",
     type: "singleSelect",
     valueOptions: ["purchase", "redemption", "transfer", "adjustment", "event"], //do we put events as well?
+    renderCell: (params) => {
+      if (params.row.type === "purchase") {
+        return <Chip color="primary" label="purchase" />;
+      } else if (params.row.type === "redemption") {
+        return <Chip color="secondary" label="redemption" />;
+      } else if (params.row.type === "transfer") {
+        return <Chip color="warning" label="transfer" />;
+      } else if (params.row.type === "adjustment") {
+        return <Chip color="error" label="adjustment" />;
+      } else if (params.row.type === "event") {
+        return <Chip color="info" label="event" />;
+      }
+    },
   },
   {
     field: "relatedId",
     headerName: "Related ID",
     type: "number",
+    renderCell: async (params) => {},
   },
   {
     field: "amount",
@@ -163,6 +180,13 @@ export const TransactionColumns = [
     field: "remarks",
     headerName: "Remarks",
     type: "string",
+    valueGetter: (value, row) => {
+      if (!row.remarks) {
+        return "N/A";
+      } else {
+        return row.remarks;
+      }
+    },
   },
   {
     field: "details",
@@ -179,15 +203,17 @@ export const TransactionColumns = [
     headerName: "Toggle Suspicious",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <SuspiciousTransactionsDialog id={params.row.id} />, 
+    renderCell: (params) => <SuspiciousTransactionsDialog id={params.row.id} />,
   },
   {
-    field: "processRedemption", 
+    field: "processRedemption",
     headerName: "Process Redemption",
     width: 150,
     filterable: false,
     sortable: false,
-    renderCell: (params) => <ProcessRedemptionTransactionsDialog id={params.row.id} />, 
+    renderCell: (params) => (
+      <ProcessRedemptionTransactionsDialog id={params.row.id} />
+    ),
   },
 ];
 
@@ -280,11 +306,11 @@ export const EventRegularColumns = [
     ),
   },
   {
-    field: "delete",
-    headerName: "Delete",
+    field: "action",
+    headerName: "Actions",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <DeleteEventsDialog id={params.row.id} />, 
+    renderCell: (params) => <DeleteEventsDialog id={params.row.id} />,
   },
 ];
 
@@ -347,7 +373,7 @@ export const PromotionsRegularColumns = [
     headerName: "Delete",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />, 
+    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />,
   },
 ];
 
