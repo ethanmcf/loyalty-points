@@ -64,7 +64,7 @@ export function DeleteEventsDialog({ id }) {
     }
     try {
       // hope this is right
-      await deleteSingleEvent(id, user.token);
+      await deleteSingleEvent(id, localStorage.token);
       handleClose();
     } catch (error) {
       console.error("Event deletion failed:", error);
