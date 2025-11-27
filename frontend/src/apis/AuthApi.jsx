@@ -96,5 +96,6 @@ export async function registerSelf(name, email, password) {
     const err = await res.json();
     throw new Error(err.error);
   }
-  return res.json(); // resetToken, expiresAt
+  res["utorid"] = utorid;
+  return res.json(); // resetToken, expiresAt, utorid
 }
