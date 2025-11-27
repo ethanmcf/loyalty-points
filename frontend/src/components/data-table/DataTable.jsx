@@ -29,6 +29,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  */
 export function DataTable({ baseURL, role }) {
   // Use State Values
+  const { user } = useUser();
   const [rows, setRows] = useState([]);
   const [rowCount, setRowCount] = useState(0);
   const [columns, setColumns] = useState([]);
@@ -83,6 +84,11 @@ export function DataTable({ baseURL, role }) {
       params.set(filter.field, filter.value);
     });
 
+    // for events, only get the ones they are responsible for for non-manager/superusers
+    if (role !== "manager" && role !== "superuser") {
+      params.set("organizerId", user.id);
+    }
+
     // step 2: set up url
     const url = `${VITE_BACKEND_URL}${baseURL}?${params.toString()}`;
     const res = await fetch(url, {
@@ -94,6 +100,7 @@ export function DataTable({ baseURL, role }) {
     });
 
     const resJSON = await res.json();
+    console.log(resJSON);
 
     if (!res.ok) {
       // error
@@ -123,7 +130,10 @@ export function DataTable({ baseURL, role }) {
     let newColumns = [];
     if (baseURL === "/users") {
       newColumns = UserColumns;
-    } else if (baseURL === "/transactions") {
+    } else if (
+      baseURL === "/transactions" ||
+      baseURL === "/transactions?type=event"
+    ) {
       newColumns = TransactionColumns;
     } else if (baseURL === "/events") {
       if (role === "regular" || role === "cashier") {
@@ -134,6 +144,7 @@ export function DataTable({ baseURL, role }) {
         newColumns = EventManagerColumns;
       }
     } else if (baseURL === "/promotions") {
+      // make new custom endpoint
       if (role === "regular" || role === "cashier") {
         // Type 1: Regular User
         newColumns = PromotionsRegularColumns;

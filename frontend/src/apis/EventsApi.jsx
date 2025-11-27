@@ -163,18 +163,14 @@ export async function getSingleEvent(eventId, authToken) {
     },
   };
   const url = `${baseURL}/events/${eventId}`;
-  try {
-    const allEventsResponse = await fetch(url, requestOptions);
-
-    if (!allEventsResponse.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
-    }
-
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
-  } catch (error) {
-    console.error("Error: ", error);
+  const allEventsResponse = await fetch(url, requestOptions);
+  const eventsJSON = await allEventsResponse.json();
+  if (!allEventsResponse.ok) {
+    console.error("Error occured: ", eventsJSON.error);
+    throw new Error(eventsJSON.error);
   }
+
+  return eventsJSON;
 }
 
 export async function patchSingleEvent(
@@ -292,18 +288,14 @@ export async function deleteOrganizerFromEvent(eventId, userId, authToken) {
     },
   };
   const url = `${baseURL}/events/${eventId}/organizers/${userId}`;
-  try {
-    const res = await fetch(url, requestOptions);
+  const res = await fetch(url, requestOptions);
 
-    const eventsJSON = await res.json();
-    if (!res.ok) {
-      console.error("Error occured: ", eventsJSON.error);
-    }
-
-    return eventsJSON; // expected should be no content
-  } catch (error) {
-    console.error("Error: ", error);
+  const eventsJSON = await res.json();
+  if (!res.ok) {
+    throw new Error(eventsJSON.error);
   }
+
+  return eventsJSON; // expected should be no content
 }
 
 /**
@@ -346,8 +338,8 @@ export async function joinEventLoggedIn(authToken, eventId) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
-    throw new Error(error.Error);
+    console.log("Error: ", error.error);
+    throw new Error(error.error);
   }
 
   return res.json();
@@ -365,11 +357,11 @@ export async function leaveEvent(authToken, eventId) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
-    throw new Error(error.Error);
+    console.log("Error: ", error.error);
+    throw new Error(error.error);
   }
 
-  return;
+  return; // expected should be no content
 }
 
 // Delete a user from an event
@@ -384,11 +376,11 @@ export async function removeGuest(authToken, eventId, userId) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
-    throw new Error(error.Error);
+    console.log("Error: ", error.error);
+    throw new Error(error.error);
   }
 
-  return;
+  return; // expected should be no content
 }
 
 // Create a new reward transaction for an event
@@ -404,7 +396,7 @@ export async function createEventTransaction(authToken, eventId, eventData) {
 
   if (!res.ok) {
     const error = await res.json();
-    console.log(error.error);
+    console.log("Error: ", error.error);
     throw new Error(error.error);
   }
 

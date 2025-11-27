@@ -1,0 +1,47 @@
+#promotion-details-page {
+  margin: 3rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: left;
+}
+
+.adding-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px #f1efef solid;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+}
+
+.general-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+#promotion-info-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}

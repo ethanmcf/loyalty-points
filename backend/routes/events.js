@@ -1247,6 +1247,27 @@ router.get(
       }
     }
 
+    // NEW!
+    if ("organizerId" in req.query && req.query.organizerId !== null) {
+      if (
+        !Number.isInteger(Number(req.query.organizerId)) ||
+        Number(req.query.organizerId) <= 0
+      ) {
+        return res.status(404).json({ error: "Not Found" });
+      }
+
+      // see if user exists
+      const organizerUser = await prisma.user.findFirst({
+        where: { id: Number(req.query.organizerId) },
+      });
+
+      if (!organizerUser) {
+        return res
+          .status(404)
+          .json({ error: "Not found - Organizer user not found" });
+      }
+    }
+
     let page;
 
     // set default value
@@ -1357,6 +1378,16 @@ router.get(
         events = events.filter((event) => event.published === false);
       }
     }
+
+    // filter by if theyre an organizer
+    if (req.query.organizerId) {
+      events = events.filter((event) =>
+        event.organizers.find(
+          (organizer) => organizer.id === req.query.organizerId
+        )
+      );
+    }
+
     const totalEventCount = events.length;
 
     // perform pagination

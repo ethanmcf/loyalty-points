@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
-import { createPromotion } from "../../apis/promotionsApi";
+import { createPromotion } from "../../apis/promotionsApis";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
@@ -19,11 +19,11 @@ export function AddPromotionDialog() {
   const [error, setError] = useState();
 
   // Only Managers and Superusers can use this dialog
-  const canAdd = user?.role === 'manager' || user?.role === 'superuser';
+  const canAdd = user?.role === "manager" || user?.role === "superuser";
 
   const handleClickOpen = () => {
     if (canAdd) {
-        setIsOpen(true);
+      setIsOpen(true);
     }
   };
 
@@ -33,38 +33,36 @@ export function AddPromotionDialog() {
     setIsCreated(false);
     setError(null);
     // TODO: find out state management
-    window.location.reload(); 
+    window.location.reload();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    console.log(formJson);    
+    console.log(formJson);
     // ?? Not sure if we should do this but I converted necessary fields to numbers, using undefined or null if not applicable/zero.
     // The backend handles undefined/null correctly, it but expects positive numbers for these.
     const payload = {
-        name: formJson.name,
-        description: formJson.description,
-        type: formJson.type,
-        startTime: formJson.startTime,
-        endTime: formJson.endTime,
-        minSpending: formJson.minSpending ? Number(formJson.minSpending) : undefined,
-        rate: formJson.rate ? Number(formJson.rate) : undefined,
-        points: formJson.points ? Number(formJson.points) : undefined,
+      name: formJson.name,
+      description: formJson.description,
+      type: formJson.type,
+      startTime: formJson.startTime,
+      endTime: formJson.endTime,
+      minSpending: formJson.minSpending
+        ? Number(formJson.minSpending)
+        : undefined,
+      rate: formJson.rate ? Number(formJson.rate) : undefined,
+      points: formJson.points ? Number(formJson.points) : undefined,
     };
-    
+
     // The createPromotion function we defined takes a single payload object
     try {
-      const res = await createPromotion(
-        user.token, 
-        payload
-    );
+      const res = await createPromotion(localStorage.token, payload);
 
       setCreatedPromotion(res);
       setIsCreated(true);
-      setError(null); 
-      
+      setError(null);
     } catch (error) {
       setError(error.message);
     }
@@ -72,14 +70,10 @@ export function AddPromotionDialog() {
 
   return (
     <>
-      <Button 
-        variant="outlined" 
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-      >
+      <Button variant="outlined" onClick={handleClickOpen} disabled={!canAdd}>
         Add Promotion
       </Button>
-      
+
       <Dialog open={isOpen} onClose={handleClose}>
         {!isCreated ? (
           <>
@@ -129,7 +123,7 @@ export function AddPromotionDialog() {
                   fullWidth
                   variant="standard" // not sure if the menu items below are ok or if we should replace with something else?
                 >
-                  <MenuItem value="automatic">Automatic</MenuItem> 
+                  <MenuItem value="automatic">Automatic</MenuItem>
                   <MenuItem value="onetime">One-Time</MenuItem>
                 </TextField>
 
@@ -189,7 +183,7 @@ export function AddPromotionDialog() {
                   inputProps={{ min: 0 }}
                 />
               </form>
-              
+
               {!error ? null : <Alert severity="error">{error}</Alert>}
             </DialogContent>
 
@@ -206,19 +200,20 @@ export function AddPromotionDialog() {
             <DialogContent>
               <div>
                 {Object.keys(createdPromotion).map((prop, index) => (
-                    <div key={index}>
-                        <b>{prop}: </b>
-                        {/* formatting date properties for readability */}
-                        {prop === 'startTime' || prop === 'endTime' 
-                        ? new Date(createdPromotion[prop]).toLocaleString()
-                        : createdPromotion[prop].toString()}
-                    </div>
-                  
+                  <div key={index}>
+                    <b>{prop}: </b>
+                    {/* formatting date properties for readability */}
+                    {prop === "startTime" || prop === "endTime"
+                      ? new Date(createdPromotion[prop]).toLocaleString()
+                      : createdPromotion[prop].toString()}
+                  </div>
                 ))}
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} variant="contained">Close</Button>
+              <Button onClick={handleClose} variant="contained">
+                Close
+              </Button>
             </DialogActions>
           </>
         )}

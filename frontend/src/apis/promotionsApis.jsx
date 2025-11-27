@@ -12,8 +12,8 @@ export async function getAllPromotions(authToken) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -31,8 +31,8 @@ export async function getPromotionById(authToken, promotionId) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -40,22 +40,21 @@ export async function getPromotionById(authToken, promotionId) {
 
 // For POST /promotions
 export async function createPromotion(authToken, promotionData) {
-    const res = await fetch(`${baseURL}/promotions`, {
-        method: "POST",
-        headers: { 
-            "Content-Type": "application/json", 
-            Authorization: `Bearer ${authToken}`,
-        },
-        body:JSON.stringify(promotionData),
-    });
+  const res = await fetch(`${baseURL}/promotions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify(promotionData),
+  });
 
-    if (!res.ok) {
-        const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
-    }
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error);
+  }
 
-    return res.json();
+  return res.json();
 }
 
 // For PUT /promotions/:promotionId
@@ -71,8 +70,8 @@ export async function updatePromotion(authToken, promotionId, promotionData) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -90,10 +89,9 @@ export async function deletePromotion(authToken, promotionId) {
 
     if (!res.ok) {
         const error = await res.json();
-        console.log(error.error);
-        throw new Error(error.Error);
+        console.log("Error:", error.error);
+        throw new Error(error.error);
     }
 
     return;
 }
-

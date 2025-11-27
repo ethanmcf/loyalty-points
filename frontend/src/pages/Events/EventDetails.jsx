@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import "./Event.css";
-import { useParams } from "react-router-dom";
+import "./EventDetails.css";
+import { useNavigate, useParams } from "react-router-dom";
 import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -16,6 +16,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
 import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
+import { DataTable } from "../../components/data-table/DataTable";
+import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useUser } from "../../contexts/UserContext";
 
 /**
  * I need to be able to
@@ -23,54 +28,42 @@ import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
  * - view the details about an event
  */
 
-export function Event() {
+export function EventDetails() {
   const { eventId } = useParams();
+  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState("");
-  const [eventData, setEventData] = useState({
-    id: 1,
-    name: "Event 1",
-    description: "A simple event",
-    location: "BA 2250",
-    startTime: "2025-11-10T09:00:00Z",
-    endTime: "2025-11-10T17:00:00Z",
-    capacity: 200,
-    pointsRemain: 500,
-    pointsAwarded: 0,
-    published: false,
-    organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
-  });
-  const [oldEventData, setOldEventData] = useState({
-    id: 1,
-    name: "Event 1",
-    description: "A simple event",
-    location: "BA 2250",
-    startTime: "2025-11-10T09:00:00Z",
-    endTime: "2025-11-10T17:00:00Z",
-    capacity: 200,
-    pointsRemain: 500,
-    pointsAwarded: 0,
-    published: false,
-    organizers: [{ id: 1, utorid: "johndoe1", name: "John Doe" }],
-    guests: [{ id: 2, utorid: "janedoe1", name: "Jane Doe" }],
-  });
+  const [error, setError] = useState();
+  const [eventData, setEventData] = useState();
+  const [oldEventData, setOldEventData] = useState();
+  const [canEdit, setCanEdit] = useState(false);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
-      const res = await getSingleEvent(eventId, localStorage.token);
-      console.log(res);
+      const res = await getSingleEvent(Number(eventId), localStorage.token);
+      setEventData(res);
+      setOldEventData(res);
+
+      // set editting permissions
+      if (user.role === "manager" || user.role === "superuser") {
+        setCanEdit(true);
+      } else {
+        if (res.organizers.find((organizer) => organizer.id === user.id)) {
+          setCanEdit(true);
+        } else {
+          setCanEdit(false);
+        }
+      }
     } catch (error) {
-      console.error("error");
+      setError(error.message);
     }
   };
+
   useEffect(() => {
-    console.log(eventId);
     fetchData();
   }, []);
 
   const handleSubmit = async (e) => {
-    console.log("HERE");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -97,8 +90,10 @@ export function Event() {
       const res = await patchSingleEvent(
         eventId,
         formJson.name === oldEventData.name ? null : formJson.name,
-        formJson.description,
-        formJson.location,
+        formJson.description === oldEventData.description
+          ? null
+          : formJson.description,
+        formJson.location === oldEventData.location ? null : formJson.location,
         oldStartTime.toISOString() === newStartTime.toISOString()
           ? null
           : isoStartTime,
@@ -131,27 +126,34 @@ export function Event() {
 
   return (
     <div id="event-details-page">
+      <div className="header">
+        <div className="title">
+          <IconButton onClick={() => navigate("/events")}>
+            <ArrowBackIcon />
+          </IconButton>
+          <h2>Events Details Page</h2>
+        </div>
+        <DeleteEventsDialog id={Number(eventId)} />
+      </div>
       <h2>Event Details page</h2>
-      {eventData && (
+      {eventData && eventData !== null && (
         <>
           <div className="header">
             <h3>General Data</h3>
-            <div>
-              {!error ? null : <Alert severity="error">{error}</Alert>}
-              {isEditing ? (
-                <Button
-                  type="submit"
-                  form="event-info-form"
-                  onClick={() => console.log("SAVE BUTTON CLICKED")}
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button type="button" form="" onClick={handleSetToEdit}>
-                  Edit
-                </Button>
-              )}
-            </div>
+            {canEdit && (
+              <div>
+                {!error ? null : <Alert severity="error">{error}</Alert>}
+                {isEditing ? (
+                  <Button type="submit" form="event-info-form">
+                    Save
+                  </Button>
+                ) : (
+                  <Button type="button" form="" onClick={handleSetToEdit}>
+                    Edit
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
           <form
             onSubmit={handleSubmit}
@@ -253,13 +255,16 @@ export function Event() {
             />
           </form>
           <h3>Organizers</h3>
+          <h4>Organizer Count: {eventData.organizers.length}</h4>
           <AddOrganizerInput />
           <SimpleTable type={"organizers"} data={eventData.organizers} />
           <h3>Guests</h3>
-          <AddGuestInput guestList={eventData.guests} />
-          <SimpleTable type={"guests"} data={eventData.guests} />
-          <h3>Transactions</h3>
-          <p> add table that lists transaction history here</p>
+          <h4>
+            Guest Count:
+            {eventData.guests ? eventData.guests.length : eventData.numGuests}
+          </h4>
+          <AddGuestInput guestList={eventData.guests ?? []} canEdit={canEdit} />
+          {canEdit && <SimpleTable type={"guests"} data={eventData.guests} />}
         </>
       )}
     </div>

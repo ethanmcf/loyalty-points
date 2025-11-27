@@ -25,7 +25,7 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
   const fetchTransaction = async () => {
     if (!canProcess) return;
     try {
-      const res = await getTransaction(user.token, id);
+      const res = await getTransaction(localStorage.token, id);
       setTransaction(res);
       setError(null);
     } catch (error) {
@@ -58,7 +58,7 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
     if (!transaction || transaction.type !== 'redemption') return;
     
     try {
-      await setTransactionCompleted(user.token, id, true);
+      await setTransactionCompleted(localStorage.token, id, true);
       handleClose();
     } catch (apiError) {
       console.error("Failed to process redemption:", apiError);

@@ -32,14 +32,17 @@ export function Navbar() {
             >
               Dashboard
             </NavLink>
-            <NavLink
-              to="/users"
-              className={({ isActive, isPending }) =>
-                isPending ? "pending" : isActive ? "active" : ""
-              }
-            >
-              Users
-            </NavLink>
+            {user.role === "manager" ||
+              (user.role === "superuser" && (
+                <NavLink
+                  to="/users"
+                  className={({ isActive, isPending }) =>
+                    isPending ? "pending" : isActive ? "active" : ""
+                  }
+                >
+                  Users
+                </NavLink>
+              ))}
             <NavLink
               to="/events"
               className={({ isActive, isPending }) =>
@@ -48,14 +51,16 @@ export function Navbar() {
             >
               Events
             </NavLink>
-            <NavLink
-              to="/transactions"
-              className={({ isActive, isPending }) =>
-                isPending ? "pending" : isActive ? "active" : ""
-              }
-            >
-              Transactions
-            </NavLink>
+            {user.role !== "regular" && (
+              <NavLink
+                to="/transactions"
+                className={({ isActive, isPending }) =>
+                  isPending ? "pending" : isActive ? "active" : ""
+                }
+              >
+                Transactions
+              </NavLink>
+            )}
             <NavLink
               to="/promotions"
               className={({ isActive, isPending }) =>

@@ -7,8 +7,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import { useUser } from "../../contexts/UserContext";
-import { getSingleEvent, deleteSingleEvent } from "../../apis/eventsApi";
-
+import { getSingleEvent, deleteSingleEvent } from "../../apis/EventsApi";
+import DialogContentText from "@mui/material/DialogContentText";
 /**
  * Only works if the event isnt published.
  * @param {object} props - The component props.
@@ -21,17 +21,17 @@ export function DeleteEventsDialog({ id }) {
   const [error, setError] = useState();
 
   // only Managers and Superusers can delete events
-  const canDelete = user?.role === 'manager' || user?.role === 'superuser';
+  const canDelete = user?.role === "manager" || user?.role === "superuser";
 
   const fetchEvent = async () => {
     if (!canDelete) return;
     try {
-      const res = await getSingleEvent(id, user.token);
+      const res = await getSingleEvent(id, localStorage.token);
       setDeletedEvent(res);
     } catch (apiError) {
       console.error(apiError);
       setError("Could not load event details.");
-      setIsOpen(false); 
+      setIsOpen(false);
     }
   };
 
@@ -41,12 +41,12 @@ export function DeleteEventsDialog({ id }) {
 
   const handleClickOpen = () => {
     if (!canDelete || !deletedEvent) {
-        setError("Unauthorized or event details not loaded.");
-        return;
+      setError("Unauthorized or event details not loaded.");
+      return;
     }
     if (deletedEvent.published) {
-        setError(`Cannot delete published event: ${deletedEvent.name}.`);
-        return;
+      setError(`Cannot delete published event: ${deletedEvent.name}.`);
+      return;
     }
     setIsOpen(true);
   };
@@ -54,51 +54,63 @@ export function DeleteEventsDialog({ id }) {
   const handleClose = () => {
     setIsOpen(false);
     // TODO based on state management
-    window.location.reload(); 
+    window.location.reload();
   };
 
   const handleDelete = async () => {
     if (deletedEvent.published) {
-        setError("Deletion prevented: Event is currently published.");
-        return;
+      setError("Deletion prevented: Event is currently published.");
+      return;
     }
     try {
-        // hope this is right
-        await deleteSingleEvent(id, user.token);
-        handleClose();
+      // hope this is right
+      await deleteSingleEvent(id, localStorage.token);
+      handleClose();
     } catch (error) {
-        console.error("Event deletion failed:", error);
-        setError(error.message);
+      console.error("Event deletion failed:", error);
+      setError(error.message);
     }
   };
 
   if (!canDelete || !deletedEvent) {
-      if (error) return <Alert severity="error" size="small">{error}</Alert>;
-      return null;
+    if (error)
+      return (
+        <Alert severity="error" size="small">
+          {error}
+        </Alert>
+      );
+    return null;
   }
-  
+
   const isPublished = deletedEvent.published;
 
   return (
     <>
-      <Button 
-        variant="icon" 
+      <Button
+        variant="icon"
         onClick={handleClickOpen}
         disabled={isPublished} // Disable if published
-        title={isPublished ? "Published events cannot be deleted" : "Delete Event"}
+        title={
+          isPublished ? "Published events cannot be deleted" : "Delete Event"
+        }
       >
         <DeleteIcon color={isPublished ? "disabled" : "error"} />
       </Button>
-      
+
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>Delete Event Confirmation</DialogTitle>
         <DialogContent>
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <DialogContentText>
-            Please confirm that you would like to permanently delete the following unpublished event:
+            Please confirm that you would like to permanently delete the
+            following unpublished event:
           </DialogContentText>
-          
+
           <p>
             <b>Name:</b> {deletedEvent.name}
           </p>
@@ -106,12 +118,13 @@ export function DeleteEventsDialog({ id }) {
             <b>Location:</b> {deletedEvent.location}
           </p>
           <p>
-            <b>Starts:</b> {new Date(deletedEvent.startTime).toLocaleDateString()}
+            <b>Starts:</b>{" "}
+            {new Date(deletedEvent.startTime).toLocaleDateString()}
           </p>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} color="error" variant="contained"> 
+          <Button onClick={handleDelete} color="error" variant="contained">
             Delete Event
           </Button>
         </DialogActions>

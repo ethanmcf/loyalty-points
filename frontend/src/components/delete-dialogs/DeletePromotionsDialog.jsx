@@ -40,7 +40,7 @@ export function DeletePromotionsDialog({ id }) {
   const handleDelete = async () => {
     // adding the delete API call
     try {
-      await deletePromotion(user.token, id);
+      await deletePromotion(localStorage.token, id);
       handleClose();
     } catch (error) {
       console.error("Promotion deletion failed:", error);

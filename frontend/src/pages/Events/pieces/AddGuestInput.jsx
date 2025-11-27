@@ -11,7 +11,7 @@ import {
 import { useUser } from "../../../contexts/UserContext";
 import { AwardAllGuestButton } from "./AwardAllGuestButton";
 
-export function AddGuestInput({ guestList }) {
+export function AddGuestInput({ guestList, canEdit }) {
   const { eventId } = useParams();
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -60,17 +60,21 @@ export function AddGuestInput({ guestList }) {
   return (
     <div className="adding-input">
       {!error ? null : <Alert severity="error">{error}</Alert>}
-      <TextField
-        variant="outlined"
-        value={utorid}
-        onChange={handleUtoridChange}
-        id="utorid"
-        name="utorid"
-        label="UtorID"
-      />
-      <Button variant="contained" onClick={handleAddGuest}>
-        Add Guest
-      </Button>
+      {canEdit && (
+        <>
+          <TextField
+            variant="outlined"
+            value={utorid}
+            onChange={handleUtoridChange}
+            id="utorid"
+            name="utorid"
+            label="UtorID"
+          />
+          <Button variant="contained" onClick={handleAddGuest}>
+            Add Guest
+          </Button>
+        </>
+      )}
       {!isUserGuest ? (
         <Button variant="contained" onClick={handleRSVPme}>
           RSVP Me
@@ -80,7 +84,7 @@ export function AddGuestInput({ guestList }) {
           UnRSVP Me
         </Button>
       )}
-      <AwardAllGuestButton variant="contained" />
+      {canEdit && <AwardAllGuestButton variant="contained" />}
     </div>
   );
 }

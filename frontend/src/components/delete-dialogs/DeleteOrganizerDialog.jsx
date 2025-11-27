@@ -7,10 +7,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { getUserById } from "../../apis/UsersApi";
 import { deleteOrganizerFromEvent } from "../../apis/EventsApi";
 import { useParams } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import { GridDeleteIcon } from "@mui/x-data-grid";
+import IconButton from "@mui/material/IconButton";
 
 export function DeleteOrganizerDialog({ userId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deletedUser, setDeletedUser] = useState();
+  const [error, setError] = useState();
   const { eventId } = useParams();
 
   const fetchUser = async () => {
@@ -27,29 +31,31 @@ export function DeleteOrganizerDialog({ userId }) {
     fetchUser();
   }, [userId]);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (e) => {
     setIsOpen(true);
   };
-  const handleClose = () => {
+
+  const handleClose = (e) => {
+    e.preventDefault();
+    setError(null);
     setIsOpen(false);
   };
 
   const handleDelete = async () => {
-    // u could add a function here
     try {
       await deleteOrganizerFromEvent(eventId, userId, localStorage.token);
       handleClose();
     } catch (error) {
-      console.error(error);
-      setIsOpen(false);
+      setError(error.message);
     }
   };
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Remove Organizer
-      </Button>
+      <IconButton color="error" onClick={handleClickOpen}>
+        <GridDeleteIcon />
+      </IconButton>
+
       {deletedUser && (
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Organizer Removal Confirmation</DialogTitle>
@@ -65,6 +71,7 @@ export function DeleteOrganizerDialog({ userId }) {
             <p>
               <b>Email:</b> {deletedUser.email}
             </p>
+            {!error ? null : <Alert severity="error">{error}</Alert>}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
