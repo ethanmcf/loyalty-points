@@ -8,6 +8,9 @@ import { SuspiciousTransactionsDialog } from "../actionDialogs/SuspiciousTransac
 import { ProcessRedemptionTransactionsDialog } from "../actionDialogs/ProcessRedemptionTransactionsDialog";
 import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog";
 import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
+import { getUserById } from "../../apis/UsersApi";
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -165,11 +168,25 @@ export const TransactionColumns = [
     headerName: "Type",
     type: "singleSelect",
     valueOptions: ["purchase", "redemption", "transfer", "adjustment", "event"], //do we put events as well?
+    renderCell: (params) => {
+      if (params.row.type === "purchase") {
+        return <Chip color="primary" label="purchase" />;
+      } else if (params.row.type === "redemption") {
+        return <Chip color="secondary" label="redemption" />;
+      } else if (params.row.type === "transfer") {
+        return <Chip color="warning" label="transfer" />;
+      } else if (params.row.type === "adjustment") {
+        return <Chip color="error" label="adjustment" />;
+      } else if (params.row.type === "event") {
+        return <Chip color="info" label="event" />;
+      }
+    },
   },
   {
     field: "relatedId",
     headerName: "Related ID",
     type: "number",
+    renderCell: async (params) => {},
   },
   {
     field: "amount",
@@ -180,6 +197,13 @@ export const TransactionColumns = [
     field: "remarks",
     headerName: "Remarks",
     type: "string",
+    valueGetter: (value, row) => {
+      if (!row.remarks) {
+        return "N/A";
+      } else {
+        return row.remarks;
+      }
+    },
   },
   {
     field: "details",
@@ -299,8 +323,8 @@ export const EventRegularColumns = [
     ),
   },
   {
-    field: "delete",
-    headerName: "Delete",
+    field: "action",
+    headerName: "Actions",
     filterable: false,
     sortable: false,
     renderCell: (params) => <DeleteEventsDialog id={params.row.id} />,

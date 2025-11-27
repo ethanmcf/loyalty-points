@@ -7,6 +7,9 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
+import Dashboard from "./pages/Dashboard/Dashboard"
+import { useEffect } from "react";
+
 import { EventDetails } from "./pages/Events/EventDetails";
 import { Promotions } from "./pages/Promotions/Promotions";
 import { Transactions } from "./pages/Transactions/Transactions";
@@ -109,6 +112,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PromotionDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />

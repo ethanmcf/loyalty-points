@@ -25,7 +25,7 @@ export function SuspiciousTransactionsDialog({ id }) {
   const fetchTransaction = async () => {
     if (!canToggle) return;
     try {
-      const res = await getTransaction(user.token, id);
+      const res = await getTransaction(localStorage.token, id);
       setTransaction(res);
     } catch (error) {
       console.error(error);
@@ -55,7 +55,7 @@ export function SuspiciousTransactionsDialog({ id }) {
     const newSuspiciousStatus = !transaction.suspicious;
     
     try {
-      await markTransactionSuspicious(user.token, id, newSuspiciousStatus);
+      await markTransactionSuspicious(localStorage.token, id, newSuspiciousStatus);
       handleClose();
     } catch (apiError) {
       console.error("Failed to toggle suspicious status:", apiError);

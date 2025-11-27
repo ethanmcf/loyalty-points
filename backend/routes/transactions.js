@@ -176,7 +176,7 @@ router.patch(
 // get specific transaction by id (Jennifer Tan)
 router.get(
   "/:transactionId",
-  authorize(["manager", "superuser"]),
+  authorize(["cashier", "manager", "superuser"]),
   async (req, res) => {
     const transactionId = Number(req.params["transactionId"]);
     if (!Number.isInteger(transactionId)) {
@@ -316,22 +316,26 @@ router.post(
       let promoPoints = 0;
       let totalRate = 0.04;
       // check promotional ids
-      for (const promotionalId of promotionIds) {
-        // iterate through promotional ids
 
-        // check if promotion exists
-        const promotion = await prisma.promotion.findFirst({
-          where: { id: Number(promotionalId) },
-        });
+      if (promotionIds) {
+        for (const promotionalId of promotionIds) {
+          // iterate through promotional ids
 
-        // apply each promotion
-        if (promotion.points !== null) {
-          promoPoints += promotion.points;
-        }
-        if (promotion.rate !== null) {
-          totalRate += promotion.rate;
+          // check if promotion exists
+          const promotion = await prisma.promotion.findFirst({
+            where: { id: Number(promotionalId) },
+          });
+
+          // apply each promotion
+          if (promotion.points !== null) {
+            promoPoints += promotion.points;
+          }
+          if (promotion.rate !== null) {
+            totalRate += promotion.rate;
+          }
         }
       }
+
       const totalPoints = Math.round(centsSpent * totalRate) + promoPoints;
       // check if cashier processing is supicious
       let suspicious = false;
@@ -356,15 +360,17 @@ router.post(
       }
 
       // Update one time promotions to used
-      for (const promotionalId of promotionIds) {
-        const promotion = await prisma.promotion.findFirst({
-          where: { id: Number(promotionalId) },
-        });
-        if (promotion.type === "onetime") {
-          const newPromotion = await prisma.promotion.update({
+      if (promotionIds) {
+        for (const promotionalId of promotionIds) {
+          const promotion = await prisma.promotion.findFirst({
             where: { id: Number(promotionalId) },
-            data: { used: true },
           });
+          if (promotion.type === "onetime") {
+            const newPromotion = await prisma.promotion.update({
+              where: { id: Number(promotionalId) },
+              data: { used: true },
+            });
+          }
         }
       }
 
@@ -650,28 +656,32 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
     },
   });
 
-  const outputtedTransactions = transactions.map(async (transaction) => {
-    const userUtorid = await prisma.user.findUnique({
-      where: { id: transaction.userId },
-      select: { utorid: true },
-    });
-    const creatorUtorid = await prisma.user.findUnique({
-      where: { id: transaction.creatorId },
-      select: { utorid: true },
-    });
+  const outputtedTransactions = await Promise.all(
+    transactions.map(async (transaction) => {
+      const userUtorid = await prisma.user.findUnique({
+        where: { id: transaction.userId },
+        select: { utorid: true },
+      });
+      const creatorUtorid = await prisma.user.findUnique({
+        where: { id: transaction.creatorId },
+        select: { utorid: true },
+      });
 
-    return {
-      id: transaction.id,
-      utorid: userUtorid,
-      amount: transaction.amount,
-      type: transaction.type,
-      spent: transaction.spent,
-      promotionIds: transaction.promotionIds,
-      suspicious: transaction.suspicious,
-      remark: transaction.remark,
-      createdBy: creatorUtorid,
-    };
-  });
+      return {
+        id: transaction.id,
+        utorid: userUtorid.utorid,
+        amount: transaction.amount,
+        type: transaction.type,
+        spent: transaction.spent,
+        promotionIds: transaction.promotionIds,
+        suspicious: transaction.suspicious,
+        remark: transaction.remark,
+        createdBy: creatorUtorid.utorid,
+      };
+    })
+  );
+
+  console.log(outputtedTransactions);
 
   return res.status(200).json({
     count: totalCount,

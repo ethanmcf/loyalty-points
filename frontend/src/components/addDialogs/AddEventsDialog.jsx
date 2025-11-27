@@ -11,7 +11,7 @@ import { postNewEvent } from "../../apis/EventsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
-export function AddEventDialog() {
+export function AddEventsDialog() {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
