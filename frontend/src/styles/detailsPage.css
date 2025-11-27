@@ -1,4 +1,4 @@
-#promotion-details-page {
+#details-page {
   margin: 3rem;
   background-color: white;
   padding: 2rem;
@@ -41,7 +41,7 @@
   margin: 0.5rem 0;
 }
 
-#promotion-info-form {
+#info-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }

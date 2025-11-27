@@ -15,6 +15,7 @@ import { Promotions } from "./pages/Promotions/Promotions";
 import { Transactions } from "./pages/Transactions/Transactions";
 import { PromotionDetails } from "./pages/Promotions/PromotionDetails";
 import { Events } from "./pages/Events/Events";
+import { UserDetails } from "./pages/Users/UserDetails";
 
 function App() {
   return (
@@ -86,7 +87,7 @@ function App() {
               path="/users/:userId"
               element={
                 <ProtectedRoute>
-                  <div>User Details Page</div>
+                  <UserDetails />
                 </ProtectedRoute>
               }
             />

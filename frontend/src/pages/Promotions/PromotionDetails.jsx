@@ -11,7 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
-import "./PromotionDetails.css";
+import "../../styles/detailsPage.css";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
@@ -107,7 +107,7 @@ export function PromotionDetails() {
     }
   };
   return (
-    <div id="promotion-details-page">
+    <div id="details-page">
       <div className="header">
         <div className="title">
           <IconButton onClick={() => navigate("/promotions")}>
@@ -123,7 +123,7 @@ export function PromotionDetails() {
           <div className="general-header">
             <h3>General Data</h3>
             {isEditing ? (
-              <Button type="submit" form="promotion-info-form">
+              <Button type="submit" form="info-form">
                 Save
               </Button>
             ) : (
@@ -132,7 +132,7 @@ export function PromotionDetails() {
               </Button>
             )}
           </div>
-          <form id="promotion-info-form" onSubmit={handleSubmit}>
+          <form id="info-form" onSubmit={handleSubmit}>
             <TextField
               id="name"
               name="name"
