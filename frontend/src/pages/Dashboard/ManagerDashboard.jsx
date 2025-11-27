@@ -2,6 +2,8 @@ import "./Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
+import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
+import { AddEventDialog } from "../../components/addDialogs/AddEventsDialog";
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
@@ -9,28 +11,22 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 
+export function ManagerDashboard() {
+    const navigate = useNavigate();
 
-export function RegularDashboard() {
-  const navigate = useNavigate();
+    const { user } = useUser();
+    const [roleView, setRoleView] = useState(user.role);
 
-  // get user info
-  const { user } = useUser();
-  const [roleView, setRoleView] = useState(user.role);
+    const handleRoleChange = (event) => {
+        setRoleView(event.target.value);
+    };
 
-  const handleRoleChange = (event) => {
-    setRoleView(event.target.value);
-  };
-
-  return (
+    return (
     <div>
       <div className="dashboard-container">
         <div className="info-container">
           <div className="table-container">
-            <h3>
-            Recent Transactions
-            </h3>
             <div className="filters">
               <FormControl>
                 <InputLabel id="demo-simple-select-label"></InputLabel>
@@ -49,22 +45,34 @@ export function RegularDashboard() {
               </FormControl>
             </div>
             <div>
-              <DataTable baseURL="/transactions" role={roleView} />
+                <h3>All Events</h3>
+                <DataTable baseURL="/events" role={roleView} />
+                <h3>All Promotions</h3>
+                <DataTable baseURL="/promotions" role={roleView} />
+                <h3>All users</h3>
+                <DataTable baseURL="/users" role={roleView} />
             </div>
           </div>
           <div className="action-container">
-            <h4>
-              Your Points: { user.points }
-            </h4>
             <button className="fill-button" onClick={() => navigate("/profile")}>Your Profile</button>
             <button className="fill-button" onClick={() => navigate("/events")}>Your Events</button>
             <button className="fill-button" onClick={() => navigate("/promotions")}>Your Promotions</button>
             <button className="fill-button" onClick={() => navigate("/transactions")}>Your Transactions</button>
+            <div className="transactions-container">
+                <AddTransactionDialog />
+            </div>
+            <div className="events-container">
+                {/* Have to add event, add guests to event, add organizer, remove guest, award points to guests */}
+                <AddEventDialog />
+            </div>
+            <div className="users-container">
+
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+    );
 }
 
-export default RegularDashboard;
+export default ManagerDashboard;
