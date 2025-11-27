@@ -6,8 +6,8 @@ import { ViewDetailsButton } from "./ViewDetailsButton";
 import { DeleteUserDialog } from "../delete-dialogs/DeleteUserDialog";
 import { SuspiciousTransactionsDialog } from "../actionDialogs/SuspiciousTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../actionDialogs/ProcessRedemptionTransactionsDialog";
-import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog"; 
-import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog"; 
+import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog";
+import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -80,14 +80,31 @@ export const UserColumns = [
   {
     field: "avatarUrl",
     headerName: "Avatar Url",
-    type: "string",
+    type: "String",
     filterable: false,
-    valueGetter: (value, row) => {
-      if (!row.avatarUrl) {
-        return "N/A";
-      }
-
-      return row.avatarUrl;
+    renderCell: (params) => {
+      const src = !params.row.avatarUrl
+        ? "../../../public/default-avatar.png"
+        : `${import.meta.env.VITE_BACKEND_URL}/${params.row.avatarUrl}`;
+      return (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={src}
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          ></img>
+        </div>
+      );
     },
   },
   {
@@ -179,15 +196,17 @@ export const TransactionColumns = [
     headerName: "Toggle Suspicious",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <SuspiciousTransactionsDialog id={params.row.id} />, 
+    renderCell: (params) => <SuspiciousTransactionsDialog id={params.row.id} />,
   },
   {
-    field: "processRedemption", 
+    field: "processRedemption",
     headerName: "Process Redemption",
     width: 150,
     filterable: false,
     sortable: false,
-    renderCell: (params) => <ProcessRedemptionTransactionsDialog id={params.row.id} />, 
+    renderCell: (params) => (
+      <ProcessRedemptionTransactionsDialog id={params.row.id} />
+    ),
   },
 ];
 
@@ -284,7 +303,7 @@ export const EventRegularColumns = [
     headerName: "Delete",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <DeleteEventsDialog id={params.row.id} />, 
+    renderCell: (params) => <DeleteEventsDialog id={params.row.id} />,
   },
 ];
 
@@ -347,7 +366,7 @@ export const PromotionsRegularColumns = [
     headerName: "Delete",
     filterable: false,
     sortable: false,
-    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />, 
+    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />,
   },
 ];
 
