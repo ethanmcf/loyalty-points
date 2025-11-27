@@ -1,6 +1,6 @@
 import { useUser } from "../../contexts/UserContext";
 import { DataTable } from "../../components/data-table/DataTable";
-import { AddEventDialog } from "../../components/addDialogs/AddEventsDialog";
+import { AddEventsDialog } from "../../components/addDialogs/AddEventsDialog";
 import "./Events.css";
 
 export function Events() {
@@ -18,7 +18,7 @@ export function Events() {
             gap: "1rem",
           }}
         >
-          <AddEventDialog />
+          <AddEventsDialog />
         </div>
       </div>
 
