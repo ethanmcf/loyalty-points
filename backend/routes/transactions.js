@@ -176,7 +176,7 @@ router.patch(
 // get specific transaction by id (Jennifer Tan)
 router.get(
   "/:transactionId",
-  authorize(["manager", "superuser"]),
+  authorize(["cashier", "manager", "superuser"]),
   async (req, res) => {
     const transactionId = Number(req.params["transactionId"]);
     if (!Number.isInteger(transactionId)) {
