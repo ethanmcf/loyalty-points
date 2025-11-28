@@ -6,7 +6,7 @@ function Landing() {
   return (
     <>
       <div className="auth-container">
-        <h2>Welcome to Reedma</h2>
+        <h2>Welcome to Redeema</h2>
         <div className="landing-container">
           <NavLink to="/login" className="fill-button">
             log in
