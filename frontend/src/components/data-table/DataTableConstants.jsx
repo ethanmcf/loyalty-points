@@ -11,6 +11,7 @@ import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserById } from "../../apis/UsersApi";
+import { RelatedIdDisplay } from "./pieces/RelatedIdDisplay";
 
 export const UserColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },
@@ -127,8 +128,8 @@ export const TransactionColumns = [
     type: "number",
   },
   {
-    field: "name",
-    headerName: "Name",
+    field: "utorid",
+    headerName: "UtorID",
     type: "string",
   },
   {
@@ -143,8 +144,15 @@ export const TransactionColumns = [
   },
   {
     field: "promotionId",
-    headerName: "Promotion Id",
+    headerName: "Number of Promotion Ids",
     type: "number",
+    valueGetter: (value, row) => {
+      if (row.promotionIds) {
+        return row.promotionIds.length;
+      } else {
+        return 0;
+      }
+    },
   },
   {
     field: "type",
@@ -169,7 +177,12 @@ export const TransactionColumns = [
     field: "relatedId",
     headerName: "Related ID",
     type: "number",
-    renderCell: async (params) => {},
+    renderCell: (params) => {
+      console.log(params.row);
+      return (
+        <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
+      );
+    },
   },
   {
     field: "amount",
@@ -188,16 +201,7 @@ export const TransactionColumns = [
       }
     },
   },
-  {
-    field: "details",
-    headerName: "Details",
-    width: 150,
-    filterable: false,
-    sortable: false,
-    renderCell: (params) => (
-      <ViewDetailsButton url={`/transactions/${params.row.id}`} />
-    ),
-  },
+
   {
     field: "toggleSuspicious",
     headerName: "Toggle Suspicious",
@@ -213,6 +217,16 @@ export const TransactionColumns = [
     sortable: false,
     renderCell: (params) => (
       <ProcessRedemptionTransactionsDialog id={params.row.id} />
+    ),
+  },
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/transactions/${params.row.id}`} />
     ),
   },
 ];
@@ -321,7 +335,7 @@ export const EventManagerColumns = [
   { field: "published", headerName: "Published", type: "boolean" },
 ];
 
-export const PromotionsRegularColumns = [
+const PromotionsColumnsBase = [
   {
     field: "id",
     headerName: "ID",
@@ -337,12 +351,14 @@ export const PromotionsRegularColumns = [
     headerName: "Type",
     type: "singleSelect",
     valueOptions: ["automatic", "one-time"],
+    renderCell: (params) => (
+      <Chip
+        label={params.row.type}
+        color={params.row.type === "automatic" ? "primary" : "secondary"}
+      />
+    ),
   },
-  {
-    field: "endTime",
-    headerName: "End Time",
-    type: "string",
-  },
+
   {
     field: "minSpending",
     headerName: "Minimum Spending Requirement",
@@ -352,11 +368,27 @@ export const PromotionsRegularColumns = [
     field: "rate",
     headerName: "Promotion Rate",
     type: "number",
+    valueGetter: (value, row) => {
+      if (row.rate) {
+        return rate;
+      } else {
+        return "N/A"; // TODO: should this list the base rate instead
+      }
+    },
   },
   {
     field: "points",
     headerName: "Promotion Points",
     type: "number",
+  },
+];
+
+export const PromotionsRegularColumns = [
+  ...PromotionsColumnsBase,
+  {
+    field: "endTime",
+    headerName: "End Time",
+    type: "string",
   },
   {
     field: "details",
@@ -378,10 +410,15 @@ export const PromotionsRegularColumns = [
 ];
 
 export const PromotionsManagerColumns = [
-  ...PromotionsRegularColumns,
+  ...PromotionsColumnsBase,
   {
     field: "startTime",
     headerName: "Start Time",
+    type: "string",
+  },
+  {
+    field: "endTime",
+    headerName: "End Time",
     type: "string",
   },
   {
@@ -409,6 +446,23 @@ export const PromotionsManagerColumns = [
       const endDateTime = new Date(row.endTime);
       return endDateTime <= currentTime;
     },
+  },
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/promotions/${params.row.id}`} />
+    ),
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />,
   },
 ];
 
