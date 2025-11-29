@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerSelf } from "../../apis/AuthApi";
 import Alert from "@mui/material/Alert";
 import "../../styles/auth.css";
+import { sendRegisterEmail } from "../../apis/utils/sendEmail";
 
 function Register() {
   const navigate = useNavigate();
@@ -23,7 +24,8 @@ function Register() {
       return;
     }
     try {
-      await registerSelf(name, email, password); // register no auth token needed
+      const { resetToken, utorid } = await registerSelf(name, email, password); // register no auth token needed
+      await sendRegisterEmail(email, resetToken, utorid);
       setSuccess(true);
       setError("");
       setTimeout(() => {

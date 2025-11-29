@@ -154,7 +154,7 @@ function PersonalIfno() {
   };
   return (
     <div className="profile-container">
-      <div className="info-container">
+      <div className="profile-info-container">
         <h2>My Profile</h2>
         <p>Full name: {user.name}</p>
         <p>Utorid: {user.utorid}</p>

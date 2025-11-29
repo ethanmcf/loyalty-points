@@ -4,6 +4,7 @@ import Alert from "@mui/material/Alert";
 import "./Reset.css";
 import "../../styles/auth.css";
 import { resetPassword, createNewResetToken } from "../../apis/AuthApi";
+import { sendResetEmail } from "../../apis/utils/sendEmail";
 
 function Reset() {
   // Reset password state
@@ -16,6 +17,7 @@ function Reset() {
 
   // Create new auth token reset
   const [tokenUtorid, setTokenUtorid] = useState("");
+  const [tokenEmail, setTokenEmail] = useState("");
   const [tokenError, setTokenError] = useState("");
   const [tokenSuccess, setTokenSuccess] = useState(null);
 
@@ -30,6 +32,7 @@ function Reset() {
         setResetToken("");
         setPassword("");
         setResetToken("");
+        setResetUtorid("");
       }, 2500);
     } catch (error) {
       setResetError(error.message);
@@ -38,12 +41,14 @@ function Reset() {
   };
   const createNewReset = async () => {
     try {
-      await createNewResetToken(tokenUtorid);
+      const { resetToken } = await createNewResetToken(tokenUtorid);
+      await sendResetEmail(tokenEmail, resetToken);
       setTokenSuccess("Successfully sent new reset token to your email!");
       setTokenError("");
       setTimeout(() => {
         setTokenSuccess(null);
         setTokenUtorid("");
+        setTokenEmail("");
       }, 2500);
     } catch (error) {
       setTokenError(error.message);
@@ -114,6 +119,15 @@ function Reset() {
             size="small"
             value={tokenUtorid}
             onChange={(e) => setTokenUtorid(e.target.value)}
+          />
+          <label>Email to send token to</label>
+          <TextField
+            variant="outlined"
+            className="input"
+            placeholder="ie john.doe@mail.utoronto.ca"
+            size="small"
+            value={tokenEmail}
+            onChange={(e) => setTokenEmail(e.target.value)}
           />
           {!tokenError ? null : <Alert severity="error">{tokenError}</Alert>}
 

@@ -84,14 +84,31 @@ export const UserColumns = [
   {
     field: "avatarUrl",
     headerName: "Avatar Url",
-    type: "string",
+    type: "String",
     filterable: false,
-    valueGetter: (value, row) => {
-      if (!row.avatarUrl) {
-        return "N/A";
-      }
-
-      return row.avatarUrl;
+    renderCell: (params) => {
+      const src = !params.row.avatarUrl
+        ? "../../../public/default-avatar.png"
+        : `${import.meta.env.VITE_BACKEND_URL}/${params.row.avatarUrl}`;
+      return (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={src}
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          ></img>
+        </div>
+      );
     },
   },
   {

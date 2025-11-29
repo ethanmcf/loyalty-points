@@ -7,11 +7,15 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
+import Dashboard from "./pages/Dashboard/Dashboard"
+import { useEffect } from "react";
+
 import { EventDetails } from "./pages/Events/EventDetails";
 import { Promotions } from "./pages/Promotions/Promotions";
 import { Transactions } from "./pages/Transactions/Transactions";
 import { PromotionDetails } from "./pages/Promotions/PromotionDetails";
 import { Events } from "./pages/Events/Events";
+import { UserDetails } from "./pages/Users/UserDetails";
 
 function App() {
   return (
@@ -83,7 +87,7 @@ function App() {
               path="/users/:userId"
               element={
                 <ProtectedRoute>
-                  <div>User Details Page</div>
+                  <UserDetails />
                 </ProtectedRoute>
               }
             />
@@ -108,6 +112,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PromotionDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />

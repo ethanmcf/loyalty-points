@@ -25,7 +25,7 @@ export function Navbar() {
         {user ? (
           <div className="links">
             <NavLink
-              to="/"
+              to="/dashboard"
               className={({ isActive, isPending }) =>
                 isPending ? "pending" : isActive ? "active" : ""
               }

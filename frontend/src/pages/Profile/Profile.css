@@ -9,12 +9,19 @@
   border-radius: 12px;
   gap: 4rem;
 }
+
 .info-container {
+  display: flex;
+  flex-direction: column;
   text-align: left;
   max-width: 350px;
   width: 100%;
+  white-space: normal;
 }
-
+.profile-info-container {
+  max-width: 350px;
+  width: 100%;
+}
 .points-container {
   padding-top: 4rem;
   display: flex;
@@ -55,13 +62,13 @@
     gap: 1.5rem;
   }
 
-  p {
-    text-align: left;
-    margin-bottom: -0.7rem;
-  }
   a {
     color: #acacac;
     text-decoration: underline;
     cursor: pointer;
   }
+}
+.update-container p {
+  text-align: left;
+  margin-bottom: -0.7rem;
 }

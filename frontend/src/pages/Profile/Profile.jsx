@@ -15,7 +15,6 @@ import { useState } from "react";
 
 function Profile() {
   const { user } = useUser();
-  const [transactions, setTransactions] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
