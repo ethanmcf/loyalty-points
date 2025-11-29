@@ -48,12 +48,18 @@ export function AddEventsDialog() {
 
     try {
       // the capacity needs to be null if empty and points must be a positive int
+
+      const startTime = new Date(formJson.startTime).toISOString();
+      const endTime = new Date(formJson.endTime).toISOString();
+      console.log(startTime);
+      console.log(endTime);
+
       const res = await postNewEvent(
         formJson.name,
         formJson.description,
         formJson.location,
-        formJson.startTime,
-        formJson.endTime,
+        startTime,
+        endTime,
         capacity,
         points,
         localStorage.token

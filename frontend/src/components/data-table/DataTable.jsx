@@ -91,6 +91,7 @@ export function DataTable({ baseURL, role }) {
 
     // step 2: set up url
     const url = `${VITE_BACKEND_URL}${baseURL}?${params.toString()}`;
+    console.log("url: ", url);
     const res = await fetch(url, {
       method: "GET",
       headers: {

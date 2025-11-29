@@ -248,7 +248,7 @@ export const TransactionColumns = [
   },
 ];
 
-export const EventRegularColumns = [
+const EventColumnsBase = [
   {
     field: "id",
     headerName: "ID",
@@ -325,6 +325,28 @@ export const EventRegularColumns = [
       return row.numGuests === row.capacity;
     },
   },
+];
+
+export const EventRegularColumns = [
+  ...EventColumnsBase,
+  // Reference: https://mui.com/x/react-data-grid/cells/
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/events/${params.row.id}`} />
+    ),
+  },
+];
+
+export const EventManagerColumns = [
+  ...EventColumnsBase,
+  { field: "pointsRemain", headerName: "Points Remaining", type: "number" },
+  { field: "pointsAwarded", headerName: "Points Awarded", type: "number" },
+  { field: "published", headerName: "Published", type: "boolean" },
   // Reference: https://mui.com/x/react-data-grid/cells/
   {
     field: "details",
@@ -343,13 +365,6 @@ export const EventRegularColumns = [
     sortable: false,
     renderCell: (params) => <DeleteEventsDialog id={params.row.id} />,
   },
-];
-
-export const EventManagerColumns = [
-  ...EventRegularColumns,
-  { field: "pointsRemain", headerName: "Points Remaining", type: "number" },
-  { field: "pointsAwarded", headerName: "Points Awarded", type: "number" },
-  { field: "published", headerName: "Published", type: "boolean" },
 ];
 
 const PromotionsColumnsBase = [
