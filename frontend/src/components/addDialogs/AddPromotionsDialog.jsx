@@ -71,7 +71,7 @@ export function AddPromotionDialog() {
   return (
     <>
       <Button variant="outlined" onClick={handleClickOpen} disabled={!canAdd}>
-        Add Promotion
+        Add New Promotion
       </Button>
 
       <Dialog open={isOpen} onClose={handleClose}>
@@ -211,7 +211,7 @@ export function AddPromotionDialog() {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} variant="contained">
+              <Button onClick={handleClose} variant="outlined">
                 Close
               </Button>
             </DialogActions>
