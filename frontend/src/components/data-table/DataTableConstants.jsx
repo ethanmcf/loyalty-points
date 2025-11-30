@@ -224,7 +224,6 @@ export const TransactionColumns = [
     type: "number",
     minWidth: 150,
     renderCell: (params) => {
-      console.log(params.row);
       return (
         <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
       );
@@ -449,7 +448,7 @@ const PromotionsColumnsBase = [
     type: "number",
     valueGetter: (value, row) => {
       if (row.rate) {
-        return rate;
+        return row.rate;
       } else {
         return "N/A"; // TODO: should this list the base rate instead
       }
@@ -599,7 +598,6 @@ export const UserTransactionsColumns = [
     headerName: "Related ID",
     type: "number",
     renderCell: (params) => {
-      console.log(params.row);
       return (
         <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
       );

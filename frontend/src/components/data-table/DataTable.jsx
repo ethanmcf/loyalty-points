@@ -133,7 +133,6 @@ export function DataTable({ baseURL, role, isOpen }) {
       // error
       console.error("Error: ", resJSON.message);
     }
-
     // on success
     setRows(resJSON.results);
     setRowCount(resJSON.count);
@@ -151,7 +150,6 @@ export function DataTable({ baseURL, role, isOpen }) {
     setColumns(newColumns);
 
     // step 2: fetch data
-    console.log("Refetching Data");
     fetchData();
 
     setIsLoading(false);
