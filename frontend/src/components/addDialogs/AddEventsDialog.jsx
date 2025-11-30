@@ -17,7 +17,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-export function AddEventsDialog() {
 export function AddEventsDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
   const [isCreated, setIsCreated] = useState(false);
@@ -41,7 +40,7 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
     setIsCreated(false);
     setError(null);
     setStartTime(null); // Reset date state
-    setEndTime(null);   // Reset date state
+    setEndTime(null); // Reset date state
   };
 
   const handleSubmit = async (e) => {
@@ -69,7 +68,7 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
         formJson.name,
         formJson.description,
         formJson.location,
-        isoStartTime, 
+        isoStartTime,
         isoEndTime,
         capacity,
         points,
@@ -138,26 +137,36 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
                   variant="standard"
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DateTimePicker"]} sx={{ marginTop: '4px', overflow: 'hidden' }}>
-                        <DateTimePicker
-                            name="startTime"
-                            label="Start Time"
-                            value={startTime}
-                            onChange={(newValue) => setStartTime(newValue)}
-                            slotProps={{ textField: { required: true, variant: "standard" } }} 
-                        />
-                    </DemoContainer>
+                  <DemoContainer
+                    components={["DateTimePicker"]}
+                    sx={{ marginTop: "4px", overflow: "hidden" }}
+                  >
+                    <DateTimePicker
+                      name="startTime"
+                      label="Start Time"
+                      value={startTime}
+                      onChange={(newValue) => setStartTime(newValue)}
+                      slotProps={{
+                        textField: { required: true, variant: "standard" },
+                      }}
+                    />
+                  </DemoContainer>
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DateTimePicker"]} sx={{ marginTop: '4px', overflow: 'hidden' }}>
-                        <DateTimePicker
-                            name="endTime"
-                            label="End Time"
-                            value={endTime}
-                            onChange={(newValue) => setEndTime(newValue)}
-                            slotProps={{ textField: { required: true, variant: "standard" } }} 
-                        />
-                    </DemoContainer>
+                  <DemoContainer
+                    components={["DateTimePicker"]}
+                    sx={{ marginTop: "4px", overflow: "hidden" }}
+                  >
+                    <DateTimePicker
+                      name="endTime"
+                      label="End Time"
+                      value={endTime}
+                      onChange={(newValue) => setEndTime(newValue)}
+                      slotProps={{
+                        textField: { required: true, variant: "standard" },
+                      }}
+                    />
+                  </DemoContainer>
                 </LocalizationProvider>
 
                 <TextField
@@ -187,7 +196,7 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
             </DialogContent>
 
             <DialogActions>
-              <Button onClick={handleClose} >Cancel</Button>
+              <Button onClick={handleClose}>Cancel</Button>
               <Button type="submit" form="new-event-form">
                 Create Event
               </Button>

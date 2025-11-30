@@ -61,6 +61,10 @@ function Profile() {
           />
         </Box>
       </div>
+      <div className="content-container">
+        <h2>My Events</h2>
+        <DataTable baseURL="/events/me/guest" roleV={user.role} />
+      </div>
     </>
   );
 }
