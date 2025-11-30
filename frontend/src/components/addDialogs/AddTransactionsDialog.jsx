@@ -14,13 +14,13 @@ import { useUser } from "../../contexts/UserContext";
 /**
  * Create a new Purchase or Adjustment transaction.
  */
-export function AddTransactionDialog({ isOpen, setIsOpen }) {
+export function AddTransactionDialog({ isOpen, setIsOpen, preFilledRelatedId }) {
   const { user } = useUser();
 
   const [isCreated, setIsCreated] = useState(false);
   const [createdTransaction, setCreatedTransaction] = useState();
   const [error, setError] = useState();
-  const [transactionType, setTransactionType] = useState("purchase");
+  const [transactionType, setTransactionType] = preFilledRelatedId ? useState("adjustment") : useState("purchase");
 
   // Only Cashiers, Managers, and Superusers can create transactions
   const canAdd = user?.role !== "regular";
@@ -182,6 +182,8 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
                       fullWidth
                       variant="standard"
                       slotProps={{ input: { min: 1 } }}
+                      value={preFilledRelatedId}
+                      disabled={!!preFilledRelatedId}
                     />
                   </>
                 )}

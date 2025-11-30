@@ -16,6 +16,7 @@ import { Transactions } from "./pages/Transactions/Transactions";
 import { PromotionDetails } from "./pages/Promotions/PromotionDetails";
 import { Events } from "./pages/Events/Events";
 import { UserDetails } from "./pages/Users/UserDetails";
+import { TransactionDetails } from "./pages/Transactions/TransactionsDetails";
 
 function App() {
   return (
@@ -103,7 +104,7 @@ function App() {
               path="/transactions/:transactionId"
               element={
                 <ProtectedRoute>
-                  <div>Transaction Details Page</div>
+                  <TransactionDetails />
                 </ProtectedRoute>
               }
             />
