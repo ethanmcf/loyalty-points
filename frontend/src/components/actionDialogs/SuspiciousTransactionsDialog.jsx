@@ -73,7 +73,7 @@ export function SuspiciousTransactionsDialog({ id }) {
 
   if (!canToggle) return null;
 
-  const actionText = transaction?.suspicious ? "Unmark" : "Mark";
+  const actionText = transaction?.suspicious ? "unmark" : "mark";
   const statusText = transaction?.suspicious ? "suspicious" : "clean";
 
   return (
@@ -88,14 +88,14 @@ export function SuspiciousTransactionsDialog({ id }) {
 
       {transaction && (
         <Dialog open={isOpen} onClose={handleClose}>
-          <DialogTitle>{actionText} Transaction as Suspicious?</DialogTitle>
+          <DialogTitle>{actionText} transaction as suspicious?</DialogTitle>
           <DialogContent>
             {error && <Alert severity="error">{error}</Alert>}
 
             <DialogContentText>
-              Are you sure you want to **{actionText}** the following
+              Are you sure you want to {actionText} the following
               transaction (ID: {transaction.id})? The transaction is currently
-              marked as **{statusText}**.
+              marked as {statusText}.
             </DialogContentText>
 
             <p>
