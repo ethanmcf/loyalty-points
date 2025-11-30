@@ -16,7 +16,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-export function AddPromotionDialog() {
 export function AddPromotionDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
   const [isCreated, setIsCreated] = useState(false);
@@ -40,7 +39,7 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
     setCreatedPromotion(null);
     setIsCreated(false);
     setError(null);
-    setStartTime(null); 
+    setStartTime(null);
     setEndTime(null);
     // TODO: find out state management
     window.location.reload();
@@ -59,7 +58,7 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
       name: formJson.name,
       description: formJson.description,
       type: formJson.type,
-      startTime: isoStartTime, 
+      startTime: isoStartTime,
       endTime: isoEndTime,
       minSpending: formJson.minSpending
         ? Number(formJson.minSpending)
@@ -135,43 +134,47 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
                   variant="standard" // not sure if the menu items below are ok or if we should replace with something else?
                 >
                   <MenuItem value="automatic">Automatic</MenuItem>
-                  <MenuItem value="onetime">One-Time</MenuItem>
+                  <MenuItem value="one-time">One-Time</MenuItem>
                 </TextField>
 
                 {/* Date/Time Fields */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer 
-                        components={["DateTimePicker"]} 
-                        sx={{ 
-                            marginTop: '4px', 
-                            overflow: 'hidden' 
-                        }}
-                    >
-                        <DateTimePicker
-                            name="startTime"
-                            label="Start Time"
-                            value={startTime}
-                            onChange={(newValue) => setStartTime(newValue)}
-                            slotProps={{ textField: { required: true, variant: "standard" } }} 
-                        />
-                    </DemoContainer>
+                  <DemoContainer
+                    components={["DateTimePicker"]}
+                    sx={{
+                      marginTop: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <DateTimePicker
+                      name="startTime"
+                      label="Start Time"
+                      value={startTime}
+                      onChange={(newValue) => setStartTime(newValue)}
+                      slotProps={{
+                        textField: { required: true, variant: "standard" },
+                      }}
+                    />
+                  </DemoContainer>
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer 
-                        components={["DateTimePicker"]} 
-                        sx={{ 
-                            marginTop: '4px',
-                            overflow: 'hidden'
-                        }}
-                    >
-                        <DateTimePicker
-                            name="endTime"
-                            label="End Time"
-                            value={endTime}
-                            onChange={(newValue) => setEndTime(newValue)}
-                            slotProps={{ textField: { required: true, variant: "standard" } }} 
-                        />
-                    </DemoContainer>
+                  <DemoContainer
+                    components={["DateTimePicker"]}
+                    sx={{
+                      marginTop: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <DateTimePicker
+                      name="endTime"
+                      label="End Time"
+                      value={endTime}
+                      onChange={(newValue) => setEndTime(newValue)}
+                      slotProps={{
+                        textField: { required: true, variant: "standard" },
+                      }}
+                    />
+                  </DemoContainer>
                 </LocalizationProvider>
 
                 {/* Optional Numeric Fields */}

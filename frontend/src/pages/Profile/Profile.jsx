@@ -38,7 +38,7 @@ function Profile() {
       <UpdateInfo />
       <div className="content-container">
         <h2>My transactions</h2>
-        <DataTable baseURL="/users/me/transactions" roleV={user.role} />
+        <DataTable baseURL="/users/me/transactions" role={user.role} />
       </div>
       <div className="content-container">
         <h2>My promotions</h2>
@@ -60,6 +60,10 @@ function Profile() {
             onPaginationModelChange={setPaginationModel}
           />
         </Box>
+      </div>
+      <div className="content-container">
+        <h2>My Events (as a Guest)</h2>
+        <DataTable baseURL="/events/me/guest" role={user.role} />
       </div>
     </>
   );
