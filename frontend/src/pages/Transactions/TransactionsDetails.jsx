@@ -9,16 +9,18 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import "../../styles/detailsPage.css";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { DeletePromotionsDialog } from "../../components/delete-dialogs/DeletePromotionsDialog";
 import { getTransaction } from "../../apis/transactionsApi";
 import { useUser } from "../../contexts/UserContext";
+import { markTransactionSuspicious } from "../../apis/transactionsApi";
+import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
+import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
 
 /**
  * The Transactions Details page, which displays more information about the transactions
@@ -31,6 +33,7 @@ export function TransactionDetails() {
     const [error, setError] = useState();
     const [transaction, setTransaction] = useState();
     const [oldTransaction, setOldTransaction] = useState();
+    const [openAddDialog, setOpenAddDialog] = useState(false);
     const navigate = useNavigate();
 
     const handleSetToEdit = (e) => {
@@ -52,16 +55,46 @@ export function TransactionDetails() {
         fetchData();
     }, []);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const formJson = Object.fromEntries(formData.entries());
+
+        const newSuspicious = formJson.suspicious === "true";
+
+        const suspiciousChanged = transaction.suspicious !== newSuspicious;
+
+        if (suspiciousChanged) {
+            // only call the api if user has changed the value
+            try {
+                const res = await markTransactionSuspicious(localStorage.token, transaction.id, newSuspicious);
+                setTransaction(res);
+                setError(null);
+                setIsEditing(false);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+                setIsEditing(false);
+            }
+        }
+    };
+
     return (
         <div id="details-page">
             <div className="header">
                 <div className="title">
-                    <IconButton onClick={() => navigate("/dashboard")}>
+                    {user.role === 'regular' ? (
+                        <IconButton onClick={() => navigate("/dashboard")}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                ) : (
+                    <IconButton onClick={() => navigate("/transactions")}>
                         <ArrowBackIcon />
                     </IconButton>
+                )}
                     <h2>Transactions Details Page</h2>
                 </div>
-                {/* TODO: Dialog for deleting transactions */}
+                <AddTransactionDialog isOpen={openAddDialog} setIsOpen={setOpenAddDialog} preFilledRelatedId={Number(transactionId)} />
             </div>
             {!error ? null : <Alert severity="error">{error}</Alert>}
             {transaction && (
@@ -80,7 +113,7 @@ export function TransactionDetails() {
                             )
                         )}
                     </div>
-                    <form id="info-form">
+                    <form id="info-form" onSubmit={handleSubmit}>
                         <TextField
                             id="name"
                             name="name"
@@ -136,9 +169,13 @@ export function TransactionDetails() {
                             id="suspicious"
                             name="suspicious"
                             label="Suspicious?"
-                            value={transaction.suspicious}
+                            select
+                            value={transaction.suspicious ? "true" : "false"}
                             required
                             disabled={!isEditing}
+                            onChange={(e) =>
+                                setTransaction({ ...transaction, suspicious: e.target.value })
+                            }
                         >
                             <MenuItem value="true">True</MenuItem>
                             <MenuItem value="false">False</MenuItem>
@@ -159,6 +196,13 @@ export function TransactionDetails() {
                             required
                             disabled={true}
                         />
+                        <div className="redemption">
+                        {transaction.type === 'redemption' && 
+                            <p>Redeemed?</p>}
+                        {transaction.type === 'redemption' && 
+                            <ProcessRedemptionTransactionsDialog id={Number(transactionId)} />
+                        }
+                    </div>
                     </form>
                 </>
             )}
