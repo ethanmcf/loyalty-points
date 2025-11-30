@@ -2,6 +2,7 @@ import "./Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
+import { AddRedemptionTransactionDialog } from "../../components/addDialogs/AddRedemptionTransactionDialog";
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
@@ -34,32 +35,20 @@ export function RegularDashboard() {
             <div className="filters">
               <FormControl>
                 <InputLabel id="demo-simple-select-label"></InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={roleView}
-                  label="Role View"
-                  onChange={handleRoleChange}
-                >
-                  <MenuItem value={"regular"}>Regular</MenuItem>
-                  <MenuItem value={"cashier"}>Cashier</MenuItem>
-                  <MenuItem value={"manager"}>Manager</MenuItem>
-                  <MenuItem value={"superuser"}>SuperUser</MenuItem>
-                </Select>
               </FormControl>
+              <AddRedemptionTransactionDialog />
             </div>
             <div>
-              <DataTable baseURL="/transactions" role={roleView} />
+              <DataTable baseURL="/users/me/transactions" role={roleView} />
             </div>
           </div>
           <div className="action-container">
             <h4>
               Your Points: { user.points }
             </h4>
-            <button className="fill-button" onClick={() => navigate("/profile")}>Your Profile</button>
-            <button className="fill-button" onClick={() => navigate("/events")}>Your Events</button>
-            <button className="fill-button" onClick={() => navigate("/promotions")}>Your Promotions</button>
-            <button className="fill-button" onClick={() => navigate("/transactions")}>Your Transactions</button>
+            <button className="fill-button" onClick={() => navigate("/profile")}>YOUR PROFILE</button>
+            <button className="fill-button" onClick={() => navigate("/events")}>YOUR EVENTS</button>
+            <button className="fill-button" onClick={() => navigate("/promotions")}>YOUR PROFILE</button>
           </div>
         </div>
       </div>
