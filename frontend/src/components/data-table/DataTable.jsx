@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
+import { CustomToolBar } from "./pieces/CustomToolBar";
 
 import {
   EventManagerColumns,
@@ -12,12 +13,23 @@ import {
   UserColumns,
   UserTransactionsColumns,
 } from "./DataTableConstants";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const baseUrlTypes = [
+  "/users",
+  "/transactions",
+  "/transactions?type=event",
+  "/events",
+  "/promotions",
+  "/users/me/transactions",
+  "/events/me/guest",
+];
 /**
  *
  * @typedef {Object} DataTableProps
- * @property {string} baseURL The type of table we are using this for (i.e. events, users, etc.)
+ * @property {"/users" | "/transactions" | "/transactions?type=event" | "/events" | "/promotions" | "/users/me/transactions" | "/events/me/guest"} baseURL The type of table we are using this for (i.e. events, users, etc.)
  * @property {roleType} role
  */
 
@@ -25,7 +37,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  * This Table uses server side filtering and pagination
  * @param {DataTableProps} props
  * @returns A table with filters and sorting
- *  * @reference https://mui.com/x/api/data-grid/data-grid/
+ *  @reference https://mui.com/x/api/data-grid/data-grid/
  */
 export function DataTable({ baseURL, role }) {
   // Use State Values
@@ -34,6 +46,7 @@ export function DataTable({ baseURL, role }) {
   const [rowCount, setRowCount] = useState(0);
   const [columns, setColumns] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0, // default is 1 (when we call the api, we are going to add one)
@@ -43,6 +56,14 @@ export function DataTable({ baseURL, role }) {
     items: [],
   });
 
+  /* ======== MultiSelect Functionality ============= */
+  // Multiselect functions: https://mui.com/x/react-data-grid/row-selection/
+  const [rowSelectionModel, setRowSelectionModel] = useState({
+    type: "include",
+    ids: new Set(),
+  });
+
+  /* ========= Fetching Data ========================== */
   // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   const fetchData = async () => {
     setIsLoading(true);
@@ -89,9 +110,13 @@ export function DataTable({ baseURL, role }) {
       params.set("organizerId", user.id);
     }
 
+    // for viewing personal events
+    if (baseURL === "/events/me/guest") {
+      params.set("guestId", user.id);
+    }
+
     // step 2: set up url
     const url = `${VITE_BACKEND_URL}${baseURL}?${params.toString()}`;
-    console.log("url: ", url);
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -101,7 +126,6 @@ export function DataTable({ baseURL, role }) {
     });
 
     const resJSON = await res.json();
-    console.log(resJSON);
 
     if (!res.ok) {
       // error
@@ -114,7 +138,11 @@ export function DataTable({ baseURL, role }) {
   };
 
   useEffect(() => {
-    // TODO: verify the baseURL isnt empty and is valid
+    if (!baseUrlTypes.includes(baseURL)) {
+      setError("Invalid baseURL.");
+    } else {
+      setError(null);
+    }
 
     // step 1: generate columns
     const newColumns = generateColumns();
@@ -136,7 +164,7 @@ export function DataTable({ baseURL, role }) {
       baseURL === "/transactions?type=event"
     ) {
       newColumns = TransactionColumns;
-    } else if (baseURL === "/events") {
+    } else if (baseURL === "/events" || baseURL === "/events/me/guest") {
       if (role === "regular" || role === "cashier") {
         // Type 1: Regular User
         newColumns = EventRegularColumns;
@@ -165,7 +193,21 @@ export function DataTable({ baseURL, role }) {
 
   return (
     <Box sx={{ width: "100%" }}>
+      {error && <Alert severity="error">{error}</Alert>}
+
       <DataGrid
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelectionModel(newRowSelectionModel);
+        }}
+        disableRowSelectionExcludeModel
+        slots={{ toolbar: CustomToolBar }}
+        slotProps={{ toolbar: { rowSelectionModel, baseURL } }}
+        rowSelectionModel={rowSelectionModel}
+        checkboxSelection={
+          baseURL === "/events" ||
+          baseURL === "/events/me/guest" ||
+          baseURL === "/promotions"
+        }
         showToolbar
         rows={rows}
         columns={columns}
