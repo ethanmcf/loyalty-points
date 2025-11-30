@@ -80,7 +80,7 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen} disabled={!canAdd}>
+      <Button onClick={handleClickOpen} disabled={!canAdd}>
         Add New Promotion
       </Button>
 
