@@ -9,8 +9,7 @@ import { registerUser } from "../../apis/UsersApi";
 import { useState } from "react";
 import Alert from "@mui/material/Alert";
 
-export function AddUserDialog() {
-  const [isOpen, setIsOpen] = useState(false);
+export function AddUserDialog({ isOpen, setIsOpen }) {
   const [isCreated, setIsCreated] = useState(false);
   const [createdUser, setCreatedUser] = useState();
   const [error, setError] = useState();
@@ -24,7 +23,6 @@ export function AddUserDialog() {
     setCreatedUser(null);
     setIsCreated(false);
     setError(null);
-    window.location.reload(); // TODO: this is temp, i wanna remove this when i figure out the state management
   };
 
   const handleSubmit = async (e) => {
@@ -49,7 +47,7 @@ export function AddUserDialog() {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="text" onClick={handleClickOpen}>
         Add New User
       </Button>
       <Dialog open={isOpen} onClose={handleClose}>
@@ -111,7 +109,7 @@ export function AddUserDialog() {
           </>
         ) : (
           <>
-            <DialogTitle style={{}}>User Created</DialogTitle>
+            <DialogTitle>User Created</DialogTitle>
             <DialogContent>
               <div>
                 {Object.keys(createdUser).map((userProperty, index) => (

@@ -18,8 +18,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 export function AddEventsDialog() {
+export function AddEventsDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [createdEvent, setCreatedEvent] = useState();
   const [error, setError] = useState();
@@ -42,8 +42,6 @@ export function AddEventsDialog() {
     setError(null);
     setStartTime(null); // Reset date state
     setEndTime(null);   // Reset date state
-    // TODO based on state management
-    window.location.reload();
   };
 
   const handleSubmit = async (e) => {
@@ -61,6 +59,12 @@ export function AddEventsDialog() {
 
     try {
       // the capacity needs to be null if empty and points must be a positive int
+
+      const startTime = new Date(formJson.startTime).toISOString();
+      const endTime = new Date(formJson.endTime).toISOString();
+      console.log(startTime);
+      console.log(endTime);
+
       const res = await postNewEvent(
         formJson.name,
         formJson.description,
@@ -81,11 +85,7 @@ export function AddEventsDialog() {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-      >
+      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
         Add New Event
       </Button>
 
