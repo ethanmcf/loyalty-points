@@ -435,8 +435,15 @@ const PromotionsColumnsBase = [
 
   {
     field: "minSpending",
-    headerName: "Minimum Spending Requirement",
+    headerName: "Min. Spending Requirement ($)",
     type: "number",
+    valueGetter: (value, row) => {
+      if (row.minSpending) {
+        return row.minSpending;
+      } else {
+        return "0";
+      }
+    },
   },
   {
     field: "rate",
@@ -446,7 +453,7 @@ const PromotionsColumnsBase = [
       if (row.rate) {
         return row.rate;
       } else {
-        return "N/A"; // TODO: should this list the base rate instead
+        return "0.25";
       }
     },
   },

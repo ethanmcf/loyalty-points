@@ -70,3 +70,21 @@ a {
 .outline-button:hover {
   transform: scale(0.985);
 }
+
+/* overriding mui css */
+.MuiButton-contained {
+  background-color: rgb(57, 57, 57) !important;
+}
+
+.MuiButton-contained:hover {
+  background-color: rgb(37, 37, 37) !important;
+}
+
+.MuiButton-text {
+  color: black !important;
+}
+
+.MuiButton-text:hover {
+  background-color: white !important;
+  text-decoration: underline !important;
+}
