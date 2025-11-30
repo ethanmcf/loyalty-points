@@ -31,6 +31,7 @@ const baseUrlTypes = [
  * @typedef {Object} DataTableProps
  * @property {"/users" | "/transactions" | "/transactions?type=event" | "/events" | "/promotions" | "/users/me/transactions" | "/events/me/guest"} baseURL The type of table we are using this for (i.e. events, users, etc.)
  * @property {roleType} role
+ * @property {boolean} isOpen // the variable controlling dialog for refetching data related to adding dialogs
  */
 
 /**
@@ -39,7 +40,7 @@ const baseUrlTypes = [
  * @returns A table with filters and sorting
  *  @reference https://mui.com/x/api/data-grid/data-grid/
  */
-export function DataTable({ baseURL, role }) {
+export function DataTable({ baseURL, role, isOpen }) {
   // Use State Values
   const { user } = useUser();
   const [rows, setRows] = useState([]);
@@ -149,10 +150,11 @@ export function DataTable({ baseURL, role }) {
     setColumns(newColumns);
 
     // step 2: fetch data
+    console.log("Refetching Data");
     fetchData();
 
     setIsLoading(false);
-  }, [baseURL, paginationModel, filterModel]);
+  }, [baseURL, paginationModel, filterModel, isOpen]);
 
   // generates the columns to match MUI expected structure
   function generateColumns() {

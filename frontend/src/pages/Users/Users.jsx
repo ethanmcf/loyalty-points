@@ -1,55 +1,32 @@
 import { useUser } from "../../contexts/UserContext";
 import { DataTable } from "../../components/data-table/DataTable";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import { useState } from "react";
-
-import "./User.css";
-import Button from "@mui/material/Button";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
+import "../../styles/tablesPage.css";
 import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
+import Tooltip from "@mui/material/Tooltip";
+
+// Table page listing out all the users
 export function Users() {
   const { user } = useUser();
-  const [roleView, setRoleView] = useState(user.role);
-
-  const handleRoleChange = (event) => {
-    setRoleView(event.target.value);
-  };
-
-  const handleAddUser = () => {};
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div id="user-page">
+    <div id="user-page" className="page">
       <div className="table-page-header">
-        <h2>Users</h2>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "1rem",
-          }}
-        >
-          <AddUserDialog />
-          {/* <FormControl>
-            <InputLabel id="demo-simple-select-label">Role View</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={roleView}
-              label="Role View"
-              onChange={handleRoleChange}
-            >
-              <MenuItem value={"regular"}>Regular</MenuItem>
-              <MenuItem value={"cashier"}>Cashier</MenuItem>
-              <MenuItem value={"manager"}>Manager</MenuItem>
-              <MenuItem value={"superuser"}>SuperUser</MenuItem>
-            </Select>
-          </FormControl> */}
+        <div className="table-page-title">
+          <h2>Users</h2>
+          <Tooltip
+            title={
+              "Below displays the list of users currently in the system. You can edit and manage each user's data by pressing the View Details button."
+            }
+          >
+            <InfoOutlineIcon />
+          </Tooltip>
         </div>
+        <AddUserDialog isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
-      <DataTable baseURL="/users" role={roleView} />
+      <DataTable baseURL="/users" role={user.role} isOpen={isOpen} />
     </div>
   );
 }
