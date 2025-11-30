@@ -11,7 +11,6 @@ import { createPromotion } from "../../apis/promotionsApis";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
-import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -69,7 +68,6 @@ export function AddPromotionDialog() {
       points: formJson.points ? Number(formJson.points) : undefined,
     };
 
-    // The createPromotion function we defined takes a single payload object
     try {
       const res = await createPromotion(localStorage.token, payload);
 
