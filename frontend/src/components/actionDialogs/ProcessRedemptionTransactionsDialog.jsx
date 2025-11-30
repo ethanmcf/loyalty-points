@@ -20,7 +20,7 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
   const [transaction, setTransaction] = useState();
   const [error, setError] = useState();
 
-  const canProcess = user?.role === 'manager' || user?.role === 'superuser';
+  const canProcess = user?.role === 'cashier' || user?.role === 'manager' || user?.role === 'superuser';
 
   const fetchTransaction = async () => {
     if (!canProcess) return;

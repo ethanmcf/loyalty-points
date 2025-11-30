@@ -224,7 +224,7 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
               <Button
                 type="submit"
                 form="new-transaction-form"
-                variant="contained"
+                
               >
                 Create{" "}
                 {transactionType.charAt(0).toUpperCase() +
@@ -248,7 +248,7 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Close</Button>
+              <Button onClick={handleClose} variant="outlined">Close</Button>
             </DialogActions>
           </>
         )}

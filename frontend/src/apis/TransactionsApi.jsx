@@ -16,7 +16,7 @@ export async function markTransactionSuspicious(authToken, transactionId, suspic
     if (!res.ok) {
         const error = await res.json();
         console.log("Error:", error.error);
-        throw new Error(err.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -39,7 +39,7 @@ export async function setTransactionCompleted(authToken, transactionsId, process
     if (!res.ok) {
         const error = await res.json();
         console.log("Error:", error.error);
-        throw new Error(err.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -59,7 +59,7 @@ export async function getTransaction(authToken, transactionId) {
     if (!res.ok) {
         const error = await res.json();
         console.log("Error:", error.error);
-        throw new Error(err.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -81,7 +81,7 @@ export async function createNewTransaction(authToken, utorid, type, spent, amoun
     if (!res.ok) {
         const error = await res.json();
         console.log("Error:", error.error);
-        throw new Error(err.error);
+        throw new Error(error.error);
     }
 
     return res.json();
@@ -101,7 +101,7 @@ export async function getTransactions(authToken, name, createdBy, suspicious, pr
     if (!res.ok) {
         const error = await res.json();
         console.log("Error:", error.error);
-        throw new Error(err.error);
+        throw new Error(error.error);
     }
 
     return res.json();
