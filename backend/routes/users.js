@@ -317,6 +317,7 @@ router.get(
         minSpending: true,
         rate: true,
         points: true,
+        type: true,
       },
     });
     user["promotions"] = promotions;

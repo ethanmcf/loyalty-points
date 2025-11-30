@@ -9,7 +9,7 @@ import {
 import { DataTable } from "../../components/data-table/DataTable";
 import PersonalIfno from "./PersonalIfno";
 import UpdateInfo from "./UpdateInfo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Profile() {
   const { user } = useUser();
@@ -17,6 +17,9 @@ function Profile() {
     page: 0,
     pageSize: 10,
   });
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   return (
     <>
