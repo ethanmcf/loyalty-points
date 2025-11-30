@@ -14,9 +14,9 @@ import { useUser } from "../../contexts/UserContext";
 /**
  * Create a new Purchase or Adjustment transaction.
  */
-export function AddTransactionDialog() {
+export function AddTransactionDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
+
   const [isCreated, setIsCreated] = useState(false);
   const [createdTransaction, setCreatedTransaction] = useState();
   const [error, setError] = useState();
@@ -37,8 +37,6 @@ export function AddTransactionDialog() {
     setIsCreated(false);
     setError(null);
     setTransactionType("purchase"); // Reset type to default
-    // TODO based on state management
-    window.location.reload();
   };
 
   const handleTypeChange = (e) => {
@@ -92,7 +90,7 @@ export function AddTransactionDialog() {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen} disabled={!canAdd}>
+      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
         Add New Transaction
       </Button>
 
@@ -226,7 +224,7 @@ export function AddTransactionDialog() {
               <Button
                 type="submit"
                 form="new-transaction-form"
-                variant="contained"
+                
               >
                 Create{" "}
                 {transactionType.charAt(0).toUpperCase() +
@@ -250,7 +248,7 @@ export function AddTransactionDialog() {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Close</Button>
+              <Button onClick={handleClose} variant="outlined">Close</Button>
             </DialogActions>
           </>
         )}

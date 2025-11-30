@@ -653,6 +653,7 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
       suspicious: true,
       remark: true,
       creatorId: true,
+      relatedId: true,
     },
   });
 
@@ -672,6 +673,7 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
         utorid: userUtorid.utorid,
         amount: transaction.amount,
         type: transaction.type,
+        relatedId: transaction.relatedId,
         spent: transaction.spent,
         promotionIds: transaction.promotionIds,
         suspicious: transaction.suspicious,

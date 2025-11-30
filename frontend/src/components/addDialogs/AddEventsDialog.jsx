@@ -11,13 +11,20 @@ import { postNewEvent } from "../../apis/EventsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
-export function AddEventsDialog() {
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
+export function AddEventsDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [createdEvent, setCreatedEvent] = useState();
   const [error, setError] = useState();
 
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   // only Managers and Superusers can create events
   const canAdd = user?.role === "manager" || user?.role === "superuser";
 
@@ -32,8 +39,8 @@ export function AddEventsDialog() {
     setCreatedEvent(null);
     setIsCreated(false);
     setError(null);
-    // TODO based on state management
-    window.location.reload();
+    setStartTime(null); // Reset date state
+    setEndTime(null); // Reset date state
   };
 
   const handleSubmit = async (e) => {
@@ -46,14 +53,23 @@ export function AddEventsDialog() {
     const capacity = formJson.capacity ? Number(formJson.capacity) : null;
     const points = Number(formJson.points);
 
+    const isoStartTime = startTime ? startTime.toISOString() : null;
+    const isoEndTime = endTime ? endTime.toISOString() : null;
+
     try {
       // the capacity needs to be null if empty and points must be a positive int
+
+      const startTime = new Date(formJson.startTime).toISOString();
+      const endTime = new Date(formJson.endTime).toISOString();
+      console.log(startTime);
+      console.log(endTime);
+
       const res = await postNewEvent(
         formJson.name,
         formJson.description,
         formJson.location,
-        formJson.startTime,
-        formJson.endTime,
+        isoStartTime,
+        isoEndTime,
         capacity,
         points,
         localStorage.token
@@ -68,13 +84,8 @@ export function AddEventsDialog() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-        startIcon={<AddIcon />}
-      >
-        Create New Event
+      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
+        Add New Event
       </Button>
 
       <Dialog open={isOpen} onClose={handleClose}>
@@ -125,28 +136,38 @@ export function AddEventsDialog() {
                   fullWidth
                   variant="standard"
                 />
-                <TextField
-                  required
-                  margin="dense"
-                  id="startTime"
-                  name="startTime"
-                  label="Start Time"
-                  type="datetime-local"
-                  fullWidth
-                  variant="standard"
-                  InputLabelProps={{ shrink: true }}
-                />
-                <TextField
-                  required
-                  margin="dense"
-                  id="endTime"
-                  name="endTime"
-                  label="End Time"
-                  type="datetime-local"
-                  fullWidth
-                  variant="standard"
-                  InputLabelProps={{ shrink: true }}
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["DateTimePicker"]}
+                    sx={{ marginTop: "4px", overflow: "hidden" }}
+                  >
+                    <DateTimePicker
+                      name="startTime"
+                      label="Start Time"
+                      value={startTime}
+                      onChange={(newValue) => setStartTime(newValue)}
+                      slotProps={{
+                        textField: { required: true, variant: "standard" },
+                      }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["DateTimePicker"]}
+                    sx={{ marginTop: "4px", overflow: "hidden" }}
+                  >
+                    <DateTimePicker
+                      name="endTime"
+                      label="End Time"
+                      value={endTime}
+                      onChange={(newValue) => setEndTime(newValue)}
+                      slotProps={{
+                        textField: { required: true, variant: "standard" },
+                      }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
 
                 <TextField
                   margin="dense"
@@ -176,7 +197,7 @@ export function AddEventsDialog() {
 
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit" form="new-event-form" variant="contained">
+              <Button type="submit" form="new-event-form">
                 Create Event
               </Button>
             </DialogActions>
@@ -202,7 +223,7 @@ export function AddEventsDialog() {
               )}
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} variant="contained">
+              <Button onClick={handleClose} variant="outlined">
                 Close
               </Button>
             </DialogActions>
