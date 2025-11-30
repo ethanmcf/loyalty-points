@@ -134,7 +134,7 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
                   variant="standard" // not sure if the menu items below are ok or if we should replace with something else?
                 >
                   <MenuItem value="automatic">Automatic</MenuItem>
-                  <MenuItem value="onetime">One-Time</MenuItem>
+                  <MenuItem value="one-time">One-Time</MenuItem>
                 </TextField>
 
                 {/* Date/Time Fields */}
