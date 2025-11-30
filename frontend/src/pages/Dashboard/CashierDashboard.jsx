@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
-import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
+import { ApplyRedemptionTransactionDialog } from "../../components/actionDialogs/ApplyRedemptionTransactionDialog";
+
 
 export function CashierDashboard() {
     const navigate = useNavigate();
@@ -12,20 +13,16 @@ export function CashierDashboard() {
     const { user } = useUser();
     const [roleView, setRoleView] = useState(user.role);
 
-    const handleRoleChange = (event) => {
-        setRoleView(event.target.value);
-    };
-
     return (
         <div>
             <div className="dashboard-container">
-                <div className="info-container">
-                <div className="action-container">
-                    <AddUserDialog />
-                    <AddTransactionDialog />
-                    <ProcessRedemptionTransactionsDialog id='1'/>
-                    <button className="fill-button" onClick={() => navigate("/transactions")}>Process a Redemption Request</button>
-                </div>
+                <div className="main-container">
+                    <h3>User Management</h3>
+                    <div className="user-container">
+                        <AddUserDialog />
+                        <AddTransactionDialog />
+                        <ApplyRedemptionTransactionDialog />
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { AddEventsDialog } from "../../components/addDialogs/AddEventsDialog";
+import { MarkTransactionSuspicious } from "../../components/actionDialogs/MarkTransactionSuspicious";
+import { AddOrganizerToEventDialog } from "../../components/addDialogs/AddOrganizerToEventDialog";
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
@@ -11,6 +13,10 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { AddGuestToEventDialog } from "../../components/addDialogs/AddGuestToEventDialog";
+import { VerifyUserDialog } from "../../components/actionDialogs/VerifyUserDialog";
+import { MarkCashierSuspiciousDialog } from "../../components/actionDialogs/MarkCashierSuspiciousDialog";
+import { PromoteUserDialog } from "../../components/actionDialogs/PromoteUserDialog";
 
 export function ManagerDashboard() {
   const navigate = useNavigate();
@@ -26,23 +32,26 @@ export function ManagerDashboard() {
     <div>
       <div className="dashboard-container">
         <div className="info-container">
+          <div className="user-management gray">
+            <h3>User Management</h3>
+            <div className="user-container">
+                {/* mark transaction as suspicious */}
+                <MarkTransactionSuspicious />
+                {/* add event organizers */}
+                <AddOrganizerToEventDialog />
+                {/* add guests to an event */}
+                <AddGuestToEventDialog />
+                {/* remove guests from an event */}
+                {/* Verify a user */}
+                <VerifyUserDialog />
+                {/* make a cashier suspicious */}
+                <MarkCashierSuspiciousDialog />
+                {/* promote/demote users */}
+                <PromoteUserDialog />
+            </div>
+          </div>
           <div className="table-container">
             <div className="filters">
-              <FormControl>
-                <InputLabel id="demo-simple-select-label"></InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={roleView}
-                  label="Role View"
-                  onChange={handleRoleChange}
-                >
-                  <MenuItem value={"regular"}>Regular</MenuItem>
-                  <MenuItem value={"cashier"}>Cashier</MenuItem>
-                  <MenuItem value={"manager"}>Manager</MenuItem>
-                  <MenuItem value={"superuser"}>SuperUser</MenuItem>
-                </Select>
-              </FormControl>
             </div>
             <div>
               <h3>All Events</h3>
@@ -52,37 +61,6 @@ export function ManagerDashboard() {
               <h3>All users</h3>
               <DataTable baseURL="/users" role={roleView} />
             </div>
-          </div>
-          <div className="action-container">
-            <button
-              className="fill-button"
-              onClick={() => navigate("/profile")}
-            >
-              Your Profile
-            </button>
-            <button className="fill-button" onClick={() => navigate("/events")}>
-              Your Events
-            </button>
-            <button
-              className="fill-button"
-              onClick={() => navigate("/promotions")}
-            >
-              Your Promotions
-            </button>
-            <button
-              className="fill-button"
-              onClick={() => navigate("/transactions")}
-            >
-              Your Transactions
-            </button>
-            <div className="transactions-container">
-              <AddTransactionDialog />
-            </div>
-            <div className="events-container">
-              {/* Have to add event, add guests to event, add organizer, remove guest, award points to guests */}
-              <AddEventsDialog />
-            </div>
-            <div className="users-container"></div>
           </div>
         </div>
       </div>
