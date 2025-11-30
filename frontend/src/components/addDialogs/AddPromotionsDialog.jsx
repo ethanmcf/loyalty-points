@@ -11,9 +11,8 @@ import { createPromotion } from "../../apis/promotionsApis";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
-export function AddPromotionDialog() {
+export function AddPromotionDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [createdPromotion, setCreatedPromotion] = useState();
   const [error, setError] = useState();
@@ -70,7 +69,7 @@ export function AddPromotionDialog() {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen} disabled={!canAdd}>
+      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
         Add Promotion
       </Button>
 

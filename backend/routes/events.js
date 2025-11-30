@@ -1080,9 +1080,9 @@ router.post("/", authorize(["manager", "superuser"]), async (req, res) => {
 
   // check time
   if (!checkISO8601Format(startTime) || !checkISO8601Format(endTime)) {
-    return res
-      .status(400)
-      .json({ error: "Bad Request - Invalid StartTime/EndTime Payload" });
+    return res.status(400).json({
+      error: "Bad Request - Invalid StartTime/EndTime Payload : ISO Format",
+    });
   }
 
   const capacityValidity =
@@ -1268,6 +1268,27 @@ router.get(
       }
     }
 
+    // filter by guestId
+    if ("guestId" in req.query && req.query.guestId !== null) {
+      if (
+        !Number.isInteger(Number(req.query.guestId)) ||
+        Number(req.query.guestId) <= 0
+      ) {
+        return res.status(404).json({ error: "Not Found" });
+      }
+
+      // see if user exists
+      const guestUser = await prisma.user.findFirst({
+        where: { id: Number(req.query.guestId) },
+      });
+
+      if (!guestUser) {
+        return res
+          .status(404)
+          .json({ error: "Not found - Organizer user not found" });
+      }
+    }
+
     let page;
 
     // set default value
@@ -1381,11 +1402,20 @@ router.get(
 
     // filter by if theyre an organizer
     if (req.query.organizerId) {
-      events = events.filter((event) =>
+      events = events.filter((event) => {
         event.organizers.find(
-          (organizer) => organizer.id === req.query.organizerId
-        )
-      );
+          (organizer) => Number(organizer.id) === Number(req.query.organizerId)
+        );
+      });
+    }
+
+    // filter by if theyre a guest
+    if (req.query.guestId) {
+      events = events.filter((event) => {
+        event.guests.find(
+          (guest) => Number(guest.id) === Number(req.query.guestId)
+        );
+      });
     }
 
     const totalEventCount = events.length;

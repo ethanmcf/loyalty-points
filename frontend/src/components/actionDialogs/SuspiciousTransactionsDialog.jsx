@@ -4,9 +4,13 @@ import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-import ReportIcon from '@mui/icons-material/Report';
+import ReportIcon from "@mui/icons-material/Report";
 import { useUser } from "../../contexts/UserContext";
-import { getTransaction, markTransactionSuspicious } from "../../apis/transactionsApi";
+import {
+  getTransaction,
+  markTransactionSuspicious,
+} from "../../apis/transactionsApi";
+import DialogContentText from "@mui/material/DialogContentText";
 
 /**
  * Dialog component for toggling the suspicious flag on a transaction.
@@ -20,7 +24,7 @@ export function SuspiciousTransactionsDialog({ id }) {
   const [error, setError] = useState();
 
   // Only Managers and Superusers can use this
-  const canToggle = user?.role === 'manager' || user?.role === 'superuser';
+  const canToggle = user?.role === "manager" || user?.role === "superuser";
 
   const fetchTransaction = async () => {
     if (!canToggle) return;
@@ -43,19 +47,23 @@ export function SuspiciousTransactionsDialog({ id }) {
       setIsOpen(true);
     }
   };
-  
+
   const handleClose = () => {
     setIsOpen(false);
     // TODO based on state management
-    window.location.reload(); 
+    window.location.reload();
   };
 
   const handleToggleSuspicious = async () => {
     if (!transaction) return;
     const newSuspiciousStatus = !transaction.suspicious;
-    
+
     try {
-      await markTransactionSuspicious(localStorage.token, id, newSuspiciousStatus);
+      await markTransactionSuspicious(
+        localStorage.token,
+        id,
+        newSuspiciousStatus
+      );
       handleClose();
     } catch (apiError) {
       console.error("Failed to toggle suspicious status:", apiError);
@@ -63,32 +71,33 @@ export function SuspiciousTransactionsDialog({ id }) {
     }
   };
 
-  if (!canToggle) return null; 
+  if (!canToggle) return null;
 
   const actionText = transaction?.suspicious ? "Unmark" : "Mark";
   const statusText = transaction?.suspicious ? "suspicious" : "clean";
 
   return (
     <>
-      <Button 
-        variant="icon" 
+      <Button
+        variant="icon"
         onClick={handleClickOpen}
         disabled={!transaction} // Disable button if details haven't loaded
       >
         <ReportIcon color={transaction?.suspicious ? "error" : "primary"} />
       </Button>
-      
+
       {transaction && (
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>{actionText} Transaction as Suspicious?</DialogTitle>
           <DialogContent>
             {error && <Alert severity="error">{error}</Alert>}
-            
+
             <DialogContentText>
-              Are you sure you want to **{actionText}** the following transaction (ID: {transaction.id})?
-              The transaction is currently marked as **{statusText}**.
+              Are you sure you want to **{actionText}** the following
+              transaction (ID: {transaction.id})? The transaction is currently
+              marked as **{statusText}**.
             </DialogContentText>
-            
+
             <p>
               <b>Affected User:</b> {transaction.utorid}
             </p>
@@ -101,11 +110,11 @@ export function SuspiciousTransactionsDialog({ id }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button 
-              onClick={handleToggleSuspicious} 
-              color={transaction.suspicious ? "primary" : "error"} 
+            <Button
+              onClick={handleToggleSuspicious}
+              color={transaction.suspicious ? "primary" : "error"}
               variant="contained"
-            > 
+            >
               {actionText} as Suspicious
             </Button>
           </DialogActions>

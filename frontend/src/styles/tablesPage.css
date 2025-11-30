@@ -1,4 +1,4 @@
-#events-page {
+.page {
   margin: 3rem;
   background-color: white;
   padding: 2rem;
@@ -10,4 +10,12 @@
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+}
+
+.table-page-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
 }

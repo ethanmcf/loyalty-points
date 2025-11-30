@@ -11,9 +11,8 @@ import { postNewEvent } from "../../apis/EventsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
-export function AddEventsDialog() {
+export function AddEventsDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [createdEvent, setCreatedEvent] = useState();
   const [error, setError] = useState();
@@ -32,8 +31,6 @@ export function AddEventsDialog() {
     setCreatedEvent(null);
     setIsCreated(false);
     setError(null);
-    // TODO based on state management
-    window.location.reload();
   };
 
   const handleSubmit = async (e) => {
@@ -48,12 +45,18 @@ export function AddEventsDialog() {
 
     try {
       // the capacity needs to be null if empty and points must be a positive int
+
+      const startTime = new Date(formJson.startTime).toISOString();
+      const endTime = new Date(formJson.endTime).toISOString();
+      console.log(startTime);
+      console.log(endTime);
+
       const res = await postNewEvent(
         formJson.name,
         formJson.description,
         formJson.location,
-        formJson.startTime,
-        formJson.endTime,
+        startTime,
+        endTime,
         capacity,
         points,
         localStorage.token
@@ -68,13 +71,8 @@ export function AddEventsDialog() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-        startIcon={<AddIcon />}
-      >
-        Create New Event
+      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
+        Add New Event
       </Button>
 
       <Dialog open={isOpen} onClose={handleClose}>

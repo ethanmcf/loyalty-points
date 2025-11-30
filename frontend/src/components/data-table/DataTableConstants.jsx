@@ -11,18 +11,28 @@ import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserById } from "../../apis/UsersApi";
+import { RelatedIdDisplay } from "./pieces/RelatedIdDisplay";
+import { NavigatingText } from "./pieces/NavigatingText";
 
 export const UserColumns = [
-  { field: "id", headerName: "ID", type: "number", filterable: false },
+  {
+    field: "id",
+    headerName: "ID",
+    type: "number",
+    width: 100,
+    filterable: false,
+  },
   {
     field: "name",
     headerName: "Name",
     type: "string",
+    flex: 1,
   },
   {
     field: "utorid",
     headerName: "UtorID",
     type: "string",
+    flex: 1,
     filterable: false,
   },
   {
@@ -48,7 +58,22 @@ export const UserColumns = [
     field: "role",
     headerName: "Role",
     type: "singleSelect",
+    minWidth: 150,
     valueOptions: ["regular", "cashier", "manager", "superuser"],
+    renderCell: (params) => (
+      <Chip
+        label={params.row.role}
+        color={
+          params.row.role === "regular"
+            ? "primary"
+            : params.row.role === "cashier"
+            ? "secondary"
+            : params.row.role === "manager"
+            ? "success"
+            : "warning"
+        }
+      />
+    ),
   },
   {
     field: "points",
@@ -141,17 +166,20 @@ export const TransactionColumns = [
   {
     field: "id",
     headerName: "ID",
+    width: 100,
     type: "number",
   },
   {
-    field: "name",
-    headerName: "Name",
+    field: "utorid",
+    headerName: "UtorID",
     type: "string",
+    flex: 1,
   },
   {
     field: "createdBy",
     headerName: "Created By",
     type: "string",
+    flex: 1,
   },
   {
     field: "suspicious",
@@ -160,13 +188,21 @@ export const TransactionColumns = [
   },
   {
     field: "promotionId",
-    headerName: "Promotion Id",
+    headerName: "Number of Promotion Ids",
     type: "number",
+    valueGetter: (value, row) => {
+      if (row.promotionIds) {
+        return row.promotionIds.length;
+      } else {
+        return 0;
+      }
+    },
   },
   {
     field: "type",
     headerName: "Type",
     type: "singleSelect",
+    minWidth: 150,
     valueOptions: ["purchase", "redemption", "transfer", "adjustment", "event"], //do we put events as well?
     renderCell: (params) => {
       if (params.row.type === "purchase") {
@@ -186,7 +222,13 @@ export const TransactionColumns = [
     field: "relatedId",
     headerName: "Related ID",
     type: "number",
-    renderCell: async (params) => {},
+    minWidth: 150,
+    renderCell: (params) => {
+      console.log(params.row);
+      return (
+        <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
+      );
+    },
   },
   {
     field: "amount",
@@ -197,6 +239,7 @@ export const TransactionColumns = [
     field: "remarks",
     headerName: "Remarks",
     type: "string",
+    flex: 1,
     valueGetter: (value, row) => {
       if (!row.remarks) {
         return "N/A";
@@ -205,16 +248,7 @@ export const TransactionColumns = [
       }
     },
   },
-  {
-    field: "details",
-    headerName: "Details",
-    width: 150,
-    filterable: false,
-    sortable: false,
-    renderCell: (params) => (
-      <ViewDetailsButton url={`/transactions/${params.row.id}`} />
-    ),
-  },
+
   {
     field: "toggleSuspicious",
     headerName: "Toggle Suspicious",
@@ -232,33 +266,50 @@ export const TransactionColumns = [
       <ProcessRedemptionTransactionsDialog id={params.row.id} />
     ),
   },
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/transactions/${params.row.id}`} />
+    ),
+  },
 ];
 
-export const EventRegularColumns = [
+const EventColumnsBase = [
   {
     field: "id",
     headerName: "ID",
     type: "number",
+    width: 100,
   },
   {
     field: "name",
     headerName: "Name",
     type: "string",
+    minWidth: 150,
+    flex: 1,
   },
   {
     field: "location",
     headerName: "Location",
     type: "string",
+    flex: 1,
+    minWidth: 150,
   },
   {
     field: "startTime",
     headerName: "Start Time",
     type: "string",
+    minWidth: 150,
   },
   {
     field: "endTime",
     headerName: "End Time",
     type: "string",
+    minWidth: 150,
   },
   {
     field: "started",
@@ -290,6 +341,13 @@ export const EventRegularColumns = [
     field: "capacity",
     headerName: "Capacity",
     type: "number",
+    valueGetter: (value, row) => {
+      if (!row.capacity) {
+        return "N/A";
+      } else {
+        return row.capacity;
+      }
+    },
   },
   {
     field: "numGuests",
@@ -311,6 +369,28 @@ export const EventRegularColumns = [
       return row.numGuests === row.capacity;
     },
   },
+];
+
+export const EventRegularColumns = [
+  ...EventColumnsBase,
+  // Reference: https://mui.com/x/react-data-grid/cells/
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/events/${params.row.id}`} />
+    ),
+  },
+];
+
+export const EventManagerColumns = [
+  ...EventColumnsBase,
+  { field: "pointsRemain", headerName: "Points Remaining", type: "number" },
+  { field: "pointsAwarded", headerName: "Points Awarded", type: "number" },
+  { field: "published", headerName: "Published", type: "boolean" },
   // Reference: https://mui.com/x/react-data-grid/cells/
   {
     field: "details",
@@ -331,35 +411,33 @@ export const EventRegularColumns = [
   },
 ];
 
-export const EventManagerColumns = [
-  ...EventRegularColumns,
-  { field: "pointsRemain", headerName: "Points Remaining", type: "number" },
-  { field: "pointsAwarded", headerName: "Points Awarded", type: "number" },
-  { field: "published", headerName: "Published", type: "boolean" },
-];
-
-export const PromotionsRegularColumns = [
+const PromotionsColumnsBase = [
   {
     field: "id",
     headerName: "ID",
     type: "number",
+    width: 100,
   },
   {
     field: "name",
     headerName: "Name",
     type: "string",
+    flex: 1,
   },
   {
     field: "type",
     headerName: "Type",
     type: "singleSelect",
     valueOptions: ["automatic", "one-time"],
+    minWidth: 150,
+    renderCell: (params) => (
+      <Chip
+        label={params.row.type}
+        color={params.row.type === "automatic" ? "primary" : "secondary"}
+      />
+    ),
   },
-  {
-    field: "endTime",
-    headerName: "End Time",
-    type: "string",
-  },
+
   {
     field: "minSpending",
     headerName: "Minimum Spending Requirement",
@@ -369,11 +447,27 @@ export const PromotionsRegularColumns = [
     field: "rate",
     headerName: "Promotion Rate",
     type: "number",
+    valueGetter: (value, row) => {
+      if (row.rate) {
+        return rate;
+      } else {
+        return "N/A"; // TODO: should this list the base rate instead
+      }
+    },
   },
   {
     field: "points",
     headerName: "Promotion Points",
     type: "number",
+  },
+];
+
+export const PromotionsRegularColumns = [
+  ...PromotionsColumnsBase,
+  {
+    field: "endTime",
+    headerName: "End Time",
+    type: "string",
   },
   {
     field: "details",
@@ -395,10 +489,15 @@ export const PromotionsRegularColumns = [
 ];
 
 export const PromotionsManagerColumns = [
-  ...PromotionsRegularColumns,
+  ...PromotionsColumnsBase,
   {
     field: "startTime",
     headerName: "Start Time",
+    type: "string",
+  },
+  {
+    field: "endTime",
+    headerName: "End Time",
     type: "string",
   },
   {
@@ -427,6 +526,23 @@ export const PromotionsManagerColumns = [
       return endDateTime <= currentTime;
     },
   },
+  {
+    field: "details",
+    headerName: "Details",
+    width: 150,
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => (
+      <ViewDetailsButton url={`/promotions/${params.row.id}`} />
+    ),
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    filterable: false,
+    sortable: false,
+    renderCell: (params) => <DeletePromotionsDialog id={params.row.id} />,
+  },
 ];
 
 export const UserTransactionsColumns = [
@@ -436,25 +552,58 @@ export const UserTransactionsColumns = [
     type: "number",
   },
   {
-    field: "name",
-    headerName: "Name",
+    field: "createdBy",
+    headerName: "Created By",
     type: "string",
+    flex: 1,
+  },
+  {
+    field: "suspicious",
+    headerName: "Suspicious",
+    type: "boolean",
   },
   {
     field: "promotionId",
-    headerName: "Promotion Id",
+    headerName: "Number of Promotion Ids",
     type: "number",
+    valueGetter: (value, row) => {
+      if (row.promotionIds) {
+        return row.promotionIds.length;
+      } else {
+        return 0;
+      }
+    },
   },
   {
     field: "type",
     headerName: "Type",
     type: "singleSelect",
-    valueOptions: ["purchase", "redemption", "transfer", "adjustment"],
+    minWidth: 150,
+    valueOptions: ["purchase", "redemption", "transfer", "adjustment", "event"], //do we put events as well?
+    renderCell: (params) => {
+      if (params.row.type === "purchase") {
+        return <Chip color="primary" label="purchase" />;
+      } else if (params.row.type === "redemption") {
+        return <Chip color="secondary" label="redemption" />;
+      } else if (params.row.type === "transfer") {
+        return <Chip color="warning" label="transfer" />;
+      } else if (params.row.type === "adjustment") {
+        return <Chip color="error" label="adjustment" />;
+      } else if (params.row.type === "event") {
+        return <Chip color="info" label="event" />;
+      }
+    },
   },
   {
     field: "relatedId",
     headerName: "Related ID",
     type: "number",
+    renderCell: (params) => {
+      console.log(params.row);
+      return (
+        <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
+      );
+    },
   },
   {
     field: "amount",
@@ -465,11 +614,13 @@ export const UserTransactionsColumns = [
     field: "remarks",
     headerName: "Remarks",
     type: "string",
-  },
-  {
-    field: "createdBy",
-    headerName: "Created By",
-    type: "string",
+    valueGetter: (value, row) => {
+      if (!row.remarks) {
+        return "N/A";
+      } else {
+        return row.remarks;
+      }
+    },
   },
   {
     field: "details",

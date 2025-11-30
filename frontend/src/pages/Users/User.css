@@ -11,3 +11,11 @@
   justify-content: space-between;
   width: 100%;
 }
+
+.table-page-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
+}
