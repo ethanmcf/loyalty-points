@@ -39,7 +39,7 @@ export function RegularDashboard() {
               <AddRedemptionTransactionDialog />
             </div>
             <div>
-              <DataTable baseURL="/users/me/transactions" role={roleView} />
+              <DataTable baseURL="/users/me/transactions" role="regular" />
             </div>
           </div>
           <div className="action-container">
