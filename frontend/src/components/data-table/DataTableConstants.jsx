@@ -2,7 +2,7 @@
  * Filterable: If this is false, then its NOT used as a filter
  * ValueGetter: If this exists, then this is not in the original API response or has a conditional render
  */
-import { ViewDetailsButton } from "./ViewDetailsButton";
+import { ViewDetailsButton } from "./pieces/ViewDetailsButton";
 import { SuspiciousTransactionsDialog } from "../actionDialogs/SuspiciousTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../actionDialogs/ProcessRedemptionTransactionsDialog";
 import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog";
