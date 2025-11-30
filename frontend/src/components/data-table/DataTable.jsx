@@ -114,6 +114,7 @@ export function DataTable({ baseURL, role, isOpen }) {
     // for viewing personal events
     if (baseURL === "/events/me/guest") {
       params.set("guestId", user.id);
+      baseURL = "/events";
     }
 
     // step 2: set up url
@@ -132,7 +133,6 @@ export function DataTable({ baseURL, role, isOpen }) {
       // error
       console.error("Error: ", resJSON.message);
     }
-
     // on success
     setRows(resJSON.results);
     setRowCount(resJSON.count);
@@ -150,7 +150,6 @@ export function DataTable({ baseURL, role, isOpen }) {
     setColumns(newColumns);
 
     // step 2: fetch data
-    console.log("Refetching Data");
     fetchData();
 
     setIsLoading(false);
