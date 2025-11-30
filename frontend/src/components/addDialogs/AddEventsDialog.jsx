@@ -11,9 +11,8 @@ import { postNewEvent } from "../../apis/EventsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
-export function AddEventsDialog() {
+export function AddEventsDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [createdEvent, setCreatedEvent] = useState();
   const [error, setError] = useState();
@@ -32,8 +31,6 @@ export function AddEventsDialog() {
     setCreatedEvent(null);
     setIsCreated(false);
     setError(null);
-    // TODO based on state management
-    window.location.reload();
   };
 
   const handleSubmit = async (e) => {
@@ -74,12 +71,7 @@ export function AddEventsDialog() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-        startIcon={<AddIcon />}
-      >
+      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
         Create New Event
       </Button>
 
