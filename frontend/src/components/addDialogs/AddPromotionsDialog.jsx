@@ -11,12 +11,21 @@ import { createPromotion } from "../../apis/promotionsApis";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
 export function AddPromotionDialog() {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [createdPromotion, setCreatedPromotion] = useState();
   const [error, setError] = useState();
+
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   // Only Managers and Superusers can use this dialog
   const canAdd = user?.role === "manager" || user?.role === "superuser";
@@ -32,6 +41,8 @@ export function AddPromotionDialog() {
     setCreatedPromotion(null);
     setIsCreated(false);
     setError(null);
+    setStartTime(null); 
+    setEndTime(null);
     // TODO: find out state management
     window.location.reload();
   };
@@ -40,6 +51,8 @@ export function AddPromotionDialog() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
+    const isoStartTime = startTime ? startTime.toISOString() : null;
+    const isoEndTime = endTime ? endTime.toISOString() : null;
     console.log(formJson);
     // ?? Not sure if we should do this but I converted necessary fields to numbers, using undefined or null if not applicable/zero.
     // The backend handles undefined/null correctly, it but expects positive numbers for these.
@@ -47,8 +60,8 @@ export function AddPromotionDialog() {
       name: formJson.name,
       description: formJson.description,
       type: formJson.type,
-      startTime: formJson.startTime,
-      endTime: formJson.endTime,
+      startTime: isoStartTime, 
+      endTime: isoEndTime,
       minSpending: formJson.minSpending
         ? Number(formJson.minSpending)
         : undefined,
@@ -128,28 +141,40 @@ export function AddPromotionDialog() {
                 </TextField>
 
                 {/* Date/Time Fields */}
-                <TextField
-                  required
-                  margin="dense"
-                  id="startTime"
-                  name="startTime"
-                  label="Start Time"
-                  type="datetime-local"
-                  fullWidth
-                  variant="standard"
-                  InputLabelProps={{ shrink: true }}
-                />
-                <TextField
-                  required
-                  margin="dense"
-                  id="endTime"
-                  name="endTime"
-                  label="End Time"
-                  type="datetime-local"
-                  fullWidth
-                  variant="standard"
-                  InputLabelProps={{ shrink: true }}
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer 
+                        components={["DateTimePicker"]} 
+                        sx={{ 
+                            marginTop: '4px', 
+                            overflow: 'hidden' 
+                        }}
+                    >
+                        <DateTimePicker
+                            name="startTime"
+                            label="Start Time"
+                            value={startTime}
+                            onChange={(newValue) => setStartTime(newValue)}
+                            slotProps={{ textField: { required: true, variant: "standard" } }} 
+                        />
+                    </DemoContainer>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer 
+                        components={["DateTimePicker"]} 
+                        sx={{ 
+                            marginTop: '4px',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        <DateTimePicker
+                            name="endTime"
+                            label="End Time"
+                            value={endTime}
+                            onChange={(newValue) => setEndTime(newValue)}
+                            slotProps={{ textField: { required: true, variant: "standard" } }} 
+                        />
+                    </DemoContainer>
+                </LocalizationProvider>
 
                 {/* Optional Numeric Fields */}
                 <TextField
