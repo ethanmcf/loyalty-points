@@ -9,8 +9,6 @@ import {
 import { DataTable } from "../../components/data-table/DataTable";
 import PersonalIfno from "./PersonalIfno";
 import UpdateInfo from "./UpdateInfo";
-import { useEffect } from "react";
-import { getMyTransactions } from "../../apis/UsersApi";
 import { useState } from "react";
 
 function Profile() {
@@ -20,25 +18,13 @@ function Profile() {
     pageSize: 10,
   });
 
-  useEffect(() => {
-    const loadTransactions = async () => {
-      try {
-        const myTrans = await getMyTransactions(localStorage.getItem("token"));
-        setTransactions(myTrans);
-      } catch {
-        setTransactions([]);
-      }
-    };
-    loadTransactions();
-  }, []);
-
   return (
     <>
       <PersonalIfno />
       <UpdateInfo />
       <div className="content-container">
         <h2>My transactions</h2>
-        <DataTable baseURL="/users/me/transactions" roleV={user.role} />
+        <DataTable baseURL="/users/me/transactions" role={user.role} />
       </div>
       <div className="content-container">
         <h2>My promotions</h2>
@@ -63,7 +49,7 @@ function Profile() {
       </div>
       <div className="content-container">
         <h2>My Events</h2>
-        <DataTable baseURL="/events/me/guest" roleV={user.role} />
+        <DataTable baseURL="/events/me/guest" role={user.role} />
       </div>
     </>
   );
