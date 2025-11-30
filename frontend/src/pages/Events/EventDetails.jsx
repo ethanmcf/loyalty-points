@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import "./EventDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
+import {
+  getSingleEvent,
+  patchSingleEvent,
+  postOrganizerToEvent,
+} from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -58,10 +62,6 @@ export function EventDetails() {
       setError(error.message);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -123,6 +123,11 @@ export function EventDetails() {
     e.preventDefault();
     setIsEditing(true);
   };
+
+  // fetching data
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div id="event-details-page">
@@ -256,7 +261,7 @@ export function EventDetails() {
           </form>
           <h3>Organizers</h3>
           <h4>Organizer Count: {eventData.organizers.length}</h4>
-          <AddOrganizerInput />
+          <AddOrganizerInput fetchData={fetchData} />
           <SimpleTable type={"organizers"} data={eventData.organizers} />
           <h3>Guests</h3>
           <h4>

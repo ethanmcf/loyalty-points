@@ -105,72 +105,78 @@ router.delete(
 );
 
 // Join as a guest (Veda Kesarwani)
-router.post("/:eventId/guests/me", authorize(["regular"]), async (req, res) => {
-  const eventId = parseInt(req.params.eventId);
+router.post(
+  "/:eventId/guests/me",
+  authorize(["regular", "cashier", "manager", "superuser"]),
+  async (req, res) => {
+    const eventId = parseInt(req.params.eventId);
 
-  const loggedUser = await prisma.user.findFirst({
-    where: { utorid: req.user.utorid },
-  });
+    const loggedUser = await prisma.user.findFirst({
+      where: { utorid: req.user.utorid },
+    });
 
-  if (!loggedUser) {
-    return res.status(404).json({ error: "Not Found" });
+    if (!loggedUser) {
+      return res.status(404).json({ error: "Not Found" });
+    }
+
+    if (isNaN(eventId)) {
+      return res
+        .status(400)
+        .json({ error: "Bad Request - eventId is invalid" });
+    }
+
+    // Get event
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      include: { guests: true },
+    });
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    // Check if event ended
+    const now = new Date();
+    if (new Date(event.endTime) < now) {
+      return res.status(410).json({ error: "Event has ended" });
+    }
+
+    // Check if full
+    if (event.capacity && event.guests.length >= event.capacity) {
+      return res.status(410).json({ error: "Event is full" });
+    }
+
+    // Check if user already in guest list
+    const alreadyGuest = event.guests.some((g) => g.id === loggedUser.id);
+    if (alreadyGuest) {
+      return res.status(400).json({ error: "User already on guest list" });
+    }
+
+    // Add user to event guest list
+    const updated = await prisma.event.update({
+      where: { id: eventId },
+      data: {
+        guests: { connect: { id: loggedUser.id } },
+      },
+      include: {
+        guests: true,
+      },
+    });
+
+    // Get full event info for response
+    const numGuests = updated.guests.length;
+    return res.status(201).json({
+      id: updated.id,
+      name: updated.name,
+      location: updated.location,
+      guestAdded: {
+        id: req.user.id,
+        utorid: req.user.utorid,
+        name: req.user.name,
+      },
+      numGuests,
+    });
   }
-
-  if (isNaN(eventId)) {
-    return res.status(400).json({ error: "Bad Request - eventId is invalid" });
-  }
-
-  // Get event
-  const event = await prisma.event.findUnique({
-    where: { id: eventId },
-    include: { guests: true },
-  });
-  if (!event) {
-    return res.status(404).json({ error: "Event not found" });
-  }
-
-  // Check if event ended
-  const now = new Date();
-  if (new Date(event.endTime) < now) {
-    return res.status(410).json({ error: "Event has ended" });
-  }
-
-  // Check if full
-  if (event.capacity && event.guests.length >= event.capacity) {
-    return res.status(410).json({ error: "Event is full" });
-  }
-
-  // Check if user already in guest list
-  const alreadyGuest = event.guests.some((g) => g.id === loggedUser.id);
-  if (alreadyGuest) {
-    return res.status(400).json({ error: "User already on guest list" });
-  }
-
-  // Add user to event guest list
-  const updated = await prisma.event.update({
-    where: { id: eventId },
-    data: {
-      guests: { connect: { id: loggedUser.id } },
-    },
-    include: {
-      guests: true,
-    },
-  });
-
-  // Get full event info for response
-  const numGuests = updated.guests.length;
-  return res.status(201).json({
-    id: updated.id,
-    name: updated.name,
-    location: updated.location,
-    guestAdded: {
-      id: req.user.id,
-      utorid: req.user.utorid,
-      name: req.user.name,
-    },
-    numGuests,
-  });
-});
+);
 
 // delete a organizer user from an event (Jennifer Tan)
 router.delete(
@@ -1402,20 +1408,22 @@ router.get(
 
     // filter by if theyre an organizer
     if (req.query.organizerId) {
-      events = events.filter((event) => {
+      events = events.filter((event) =>
         event.organizers.find(
           (organizer) => Number(organizer.id) === Number(req.query.organizerId)
-        );
-      });
+        )
+      );
     }
+
+    console.log("guestId", req.query.guestId);
 
     // filter by if theyre a guest
     if (req.query.guestId) {
-      events = events.filter((event) => {
+      events = events.filter((event) =>
         event.guests.find(
           (guest) => Number(guest.id) === Number(req.query.guestId)
-        );
-      });
+        )
+      );
     }
 
     const totalEventCount = events.length;

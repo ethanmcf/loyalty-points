@@ -8,7 +8,6 @@ import { postOrganizerToEvent } from "../../../apis/EventsApi";
 
 export function AddOrganizerInput() {
   const { eventId } = useParams();
-  const [isOpen, setIsOpen] = useState(false);
   const [utorid, setUtorid] = useState("");
   const [error, setError] = useState("");
 
