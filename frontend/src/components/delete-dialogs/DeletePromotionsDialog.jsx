@@ -12,11 +12,20 @@ export function DeletePromotionsDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [deletedPromotion, setDeletedPromotion] = useState();
-
+  const [canDelete, setCanDelete] = useState(
+    user.role === "manager" || user.role === "superuser"
+  );
   const fetchPromotion = async () => {
     try {
       const res = await getPromotionById(localStorage.getItem("token"), id);
       setDeletedPromotion(res);
+      const currentTime = new Date();
+      const startDateTime = new Date(res.startTime);
+      const endDateTime = new Date(res.endTime);
+
+      if (startDateTime <= currentTime || endDateTime <= currentTime) {
+        setCanDelete(false);
+      }
     } catch (error) {
       console.error(error);
       setIsOpen(false);
@@ -50,8 +59,8 @@ export function DeletePromotionsDialog({ id }) {
 
   return (
     <>
-      <Button variant="icon" onClick={handleClickOpen}>
-        <DeleteIcon color="error" />
+      <Button variant="icon" onClick={handleClickOpen} disabled={!canDelete}>
+        <DeleteIcon color={canDelete ? "error" : "disabled"} />
       </Button>
       {deletedPromotion && (
         <Dialog open={isOpen} onClose={handleClose}>
@@ -66,7 +75,7 @@ export function DeletePromotionsDialog({ id }) {
               <b>Type:</b> {deletedPromotion.type}
             </p>
             <p>
-              <b>Starts:</b>{" "}
+              <b>Starts:</b>
               {new Date(deletedPromotion.startTime).toLocaleDateString()}
             </p>
           </DialogContent>

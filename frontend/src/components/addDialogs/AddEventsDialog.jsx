@@ -72,7 +72,7 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
   return (
     <>
       <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
-        Create New Event
+        Add New Event
       </Button>
 
       <Dialog open={isOpen} onClose={handleClose}>

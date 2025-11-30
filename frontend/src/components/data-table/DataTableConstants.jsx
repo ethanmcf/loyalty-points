@@ -12,6 +12,7 @@ import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserById } from "../../apis/UsersApi";
 import { RelatedIdDisplay } from "./pieces/RelatedIdDisplay";
+import { NavigatingText } from "./pieces/NavigatingText";
 
 export const UserColumns = [
   {
@@ -340,6 +341,13 @@ const EventColumnsBase = [
     field: "capacity",
     headerName: "Capacity",
     type: "number",
+    valueGetter: (value, row) => {
+      if (!row.capacity) {
+        return "N/A";
+      } else {
+        return row.capacity;
+      }
+    },
   },
   {
     field: "numGuests",
