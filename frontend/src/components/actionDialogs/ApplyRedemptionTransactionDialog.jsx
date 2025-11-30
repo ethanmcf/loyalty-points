@@ -6,7 +6,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useUser } from "../../contexts/UserContext";
 import { getTransaction, setTransactionCompleted } from "../../apis/transactionsApi";
 import DialogActions from "@mui/material/DialogActions";
