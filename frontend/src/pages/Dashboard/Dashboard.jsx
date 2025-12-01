@@ -6,6 +6,8 @@ import { NavLink } from "react-router-dom";
 import RegularDashboard from "./RegularDashboard";
 import ManagerDashboard from "./ManagerDashboard";
 import CashierDashboard from "./CashierDashboard";
+import { getMyTransactions } from "../../apis/UsersApi";
+import { LoadData } from './LoadData'; 
 
 // // Table-related imports
 // import { DataTable } from "../../components/data-table-mui/DataTable";
@@ -36,21 +38,8 @@ export function Dashboard() {
             Hi { user.name }!
           </h3>
         </div>
-        {user.role === "superuser" && (
-          <ManagerDashboard />
-        )}
-
-        {user.role === "manager" && (
-          <ManagerDashboard />
-        )}
-
-        {user.role === "regular" && (
-          <RegularDashboard />
-        )}
-
-        {user.role === "cashier" && (
-          <CashierDashboard />
-        )}
+        <LoadData />
+      
       </div>
     </div>
   );
