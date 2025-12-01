@@ -18,7 +18,6 @@ import { AddGuestToEventDialog } from "../../components/addDialogs/AddGuestToEve
 import { VerifyUserDialog } from "../../components/actionDialogs/VerifyUserDialog";
 import { MarkCashierSuspiciousDialog } from "../../components/actionDialogs/MarkCashierSuspiciousDialog";
 import { PromoteUserDialog } from "../../components/actionDialogs/PromoteUserDialog";
-import { TypeHistory } from "./VisualizationData";
 
 export function ManagerDashboard({transactions}) {
   const navigate = useNavigate();
