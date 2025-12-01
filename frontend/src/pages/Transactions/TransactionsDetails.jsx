@@ -1,14 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { getPromotionById, updatePromotion } from "../../apis/promotionsApis";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import "../../styles/detailsPage.css";
@@ -21,6 +12,7 @@ import { useUser } from "../../contexts/UserContext";
 import { markTransactionSuspicious } from "../../apis/transactionsApi";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
+import { TransactionQRCode } from "../../components/actionDialogs/TransactionQRCode";
 
 /**
  * The Transactions Details page, which displays more information about the transactions
@@ -98,6 +90,7 @@ export function TransactionDetails() {
             </div>
             {!error ? null : <Alert severity="error">{error}</Alert>}
             {transaction && (
+                
                 <>
                     <div className="general-header">
                         <h3>General Data</h3>
@@ -113,6 +106,12 @@ export function TransactionDetails() {
                             )
                         )}
                     </div>
+                    {/* QR Code */}
+                    {transaction.type === 'redemption' && !transaction.processed && (
+                        <div className="qrcode-and-redemption-container">
+                            <TransactionQRCode transaction={transaction} />
+                        </div>
+                    )}
                     <form id="info-form" onSubmit={handleSubmit}>
                         <TextField
                             id="name"
