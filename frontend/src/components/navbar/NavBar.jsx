@@ -56,86 +56,85 @@ export function NavBar() {
               <b>Redeema</b>
             </Link>
           </Box>
+          {user && (
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton onClick={handleOpenMenu}>
+                <MenuIcon />
+              </IconButton>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton onClick={handleOpenMenu}>
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              sx={{ mt: "45px", display: { xs: "flex", md: "none" } }}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              keepMounted
-              open={isMenuOpen}
-              onClose={handleCloseMenu}
-            >
-              {user && (
-                <>
-                  <MenuItem>
-                    <NavLink
-                      to="/dashboard"
-                      className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "active" : ""
-                      }
-                    >
-                      Dashboard
-                    </NavLink>
-                  </MenuItem>
-                  {user.role === "manager" ||
-                    (user.role === "superuser" && (
-                      <MenuItem>
-                        <NavLink
-                          to="/users"
-                          className={({ isActive, isPending }) =>
-                            isPending ? "pending" : isActive ? "active" : ""
-                          }
-                        >
-                          Users
-                        </NavLink>
-                      </MenuItem>
-                    ))}
-                  <MenuItem>
-                    <NavLink
-                      to="/events"
-                      className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "active" : ""
-                      }
-                    >
-                      Events
-                    </NavLink>
-                  </MenuItem>
-                  {user.role !== "regular" && (
+              <Menu
+                sx={{ mt: "45px", display: { xs: "flex", md: "none" } }}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                keepMounted
+                open={isMenuOpen}
+                onClose={handleCloseMenu}
+              >
+                <MenuItem>
+                  <NavLink
+                    to="/dashboard"
+                    className={({ isActive, isPending }) =>
+                      isPending ? "pending" : isActive ? "active" : ""
+                    }
+                  >
+                    Dashboard
+                  </NavLink>
+                </MenuItem>
+                {user.role === "manager" ||
+                  (user.role === "superuser" && (
                     <MenuItem>
                       <NavLink
-                        to="/transactions"
+                        to="/users"
                         className={({ isActive, isPending }) =>
                           isPending ? "pending" : isActive ? "active" : ""
                         }
                       >
-                        Transactions
+                        Users
                       </NavLink>
                     </MenuItem>
-                  )}
+                  ))}
+                <MenuItem>
+                  <NavLink
+                    to="/events"
+                    className={({ isActive, isPending }) =>
+                      isPending ? "pending" : isActive ? "active" : ""
+                    }
+                  >
+                    Events
+                  </NavLink>
+                </MenuItem>
+                {user.role !== "regular" && (
                   <MenuItem>
                     <NavLink
-                      to="/promotions"
+                      to="/transactions"
                       className={({ isActive, isPending }) =>
                         isPending ? "pending" : isActive ? "active" : ""
                       }
                     >
-                      Promotions
+                      Transactions
                     </NavLink>
                   </MenuItem>
-                </>
-              )}
-            </Menu>
-          </Box>
+                )}
+                <MenuItem>
+                  <NavLink
+                    to="/promotions"
+                    className={({ isActive, isPending }) =>
+                      isPending ? "pending" : isActive ? "active" : ""
+                    }
+                  >
+                    Promotions
+                  </NavLink>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {user && (
               <div className="links">
@@ -190,7 +189,7 @@ export function NavBar() {
           {/* Profile */}
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
             {user ? (
-              <>
+              <div>
                 <IconButton onClick={handleOpenUserMenu}>
                   {user.suspicious ? (
                     <Badge badgeContent={"!"} color="error">
@@ -230,7 +229,7 @@ export function NavBar() {
                     </NavLink>
                   </MenuItem>
                 </Menu>
-              </>
+              </div>
             ) : (
               <div className="links">
                 <NavLink to="/login" className="outline-button nav-button">

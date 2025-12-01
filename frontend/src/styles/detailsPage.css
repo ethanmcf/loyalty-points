@@ -1,4 +1,4 @@
-#details-page {
+.details-page {
   margin: 3rem;
   background-color: white;
   padding: 2rem;
@@ -41,9 +41,16 @@
   margin: 0.5rem 0;
 }
 
-#info-form {
+.info-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+  .info-form {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .redemption {

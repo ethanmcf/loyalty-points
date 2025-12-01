@@ -8,6 +8,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { registerUser } from "../../apis/UsersApi";
 import { useState } from "react";
 import Alert from "@mui/material/Alert";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
 
 export function AddUserDialog({ isOpen, setIsOpen }) {
   const [isCreated, setIsCreated] = useState(false);
@@ -47,7 +49,14 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <Button variant="text" onClick={handleClickOpen}>
+      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+        <AddIcon onClick={handleClickOpen} />
+      </IconButton>
+      <Button
+        sx={{ display: { xs: "none", md: "flex" } }}
+        variant="text"
+        onClick={handleClickOpen}
+      >
         Add New User
       </Button>
       <Dialog open={isOpen} onClose={handleClose}>
