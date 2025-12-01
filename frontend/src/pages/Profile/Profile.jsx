@@ -11,6 +11,8 @@ import PersonalIfno from "./PersonalIfno";
 import UpdateInfo from "./UpdateInfo";
 import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
+import Tooltip from "@mui/material/Tooltip";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 
 function Profile() {
   const { user } = useUser();
@@ -65,7 +67,21 @@ function Profile() {
         </Box>
       </div>
       <div className="content-container">
-        <h2>My Events</h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <h2>My Events</h2>
+          <Tooltip title="Events I am Attending as a Guest">
+            <InfoOutlineIcon />
+          </Tooltip>
+        </div>
+
         <DataTable baseURL="/events/me/guest" role={user.role} />
       </div>
     </>
