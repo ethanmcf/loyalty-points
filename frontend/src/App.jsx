@@ -7,7 +7,7 @@ import { Layout } from "./components/layout/Layout";
 import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
-import Dashboard from "./pages/Dashboard/Dashboard"
+import Dashboard from "./pages/Dashboard/Dashboard";
 import { useEffect } from "react";
 
 import { EventDetails } from "./pages/Events/EventDetails";
