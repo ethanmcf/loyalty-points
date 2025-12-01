@@ -31,7 +31,7 @@ function Profile() {
           sx={{ marginLeft: "3rem", marginRight: "3rem", marginBottom: 2 }}
         >
           ALERT: Your account has been designated as <b>suspicious</b>. If you
-          think this is an error, please contact
+          think this is an error, please contact{" "}
           <a href="mailto:superuser@mail.utoronto.ca">
             superuser@mail.utoronto.ca
           </a>
