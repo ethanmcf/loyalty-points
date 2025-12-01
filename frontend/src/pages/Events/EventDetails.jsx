@@ -140,7 +140,6 @@ export function EventDetails() {
         </div>
         <DeleteEventsDialog id={Number(eventId)} />
       </div>
-      <h2>Event Details page</h2>
       {eventData && eventData !== null && (
         <>
           <div className="header">
