@@ -299,6 +299,7 @@ router.get(
         email: true,
         birthday: true,
         role: true,
+        suspicious: true,
         createdAt: true,
         lastLogin: true,
         avatarUrl: true,

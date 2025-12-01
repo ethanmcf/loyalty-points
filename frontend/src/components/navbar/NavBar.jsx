@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
 import "./NavBar.css";
+import Badge from "@mui/material/Badge";
 
 export function Navbar() {
   const { user, logout } = useUser();
@@ -75,7 +76,13 @@ export function Navbar() {
                 isPending ? "pending" : isActive ? "active" : ""
               }
             >
-              <img src={avatar} className="profile-avatar" />
+              {user.suspicious ? (
+                <Badge badgeContent={"!"} color="error">
+                  <img src={avatar} className="profile-avatar" />
+                </Badge>
+              ) : (
+                <img src={avatar} className="profile-avatar" />
+              )}
             </NavLink>
             <NavLink to="/" onClick={() => logout()}>
               Logout
