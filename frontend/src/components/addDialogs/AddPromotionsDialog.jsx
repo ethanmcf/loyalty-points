@@ -15,7 +15,8 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
 export function AddPromotionDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
   const [isCreated, setIsCreated] = useState(false);
@@ -80,7 +81,14 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <Button onClick={handleClickOpen} disabled={!canAdd}>
+      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+        <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
+      </IconButton>
+      <Button
+        sx={{ display: { xs: "none", md: "flex" } }}
+        onClick={handleClickOpen}
+        disabled={!canAdd}
+      >
         Add New Promotion
       </Button>
 

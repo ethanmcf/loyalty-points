@@ -123,7 +123,7 @@ export function PromotionDetails() {
           <div className="general-header">
             <h3>General Data</h3>
             {isEditing ? (
-              <Button type="submit" form="info-form">
+              <Button type="submit" form="promotion-info-form">
                 Save
               </Button>
             ) : (
@@ -132,7 +132,11 @@ export function PromotionDetails() {
               </Button>
             )}
           </div>
-          <form id="info-form" onSubmit={handleSubmit}>
+          <form
+            id="promotion-info-form"
+            onSubmit={handleSubmit}
+            className="info-form"
+          >
             <TextField
               id="name"
               name="name"
