@@ -10,6 +10,7 @@ import { DataTable } from "../../components/data-table/DataTable";
 import PersonalIfno from "./PersonalIfno";
 import UpdateInfo from "./UpdateInfo";
 import { useEffect, useState } from "react";
+import Alert from "@mui/material/Alert";
 
 function Profile() {
   const { user } = useUser();
@@ -17,12 +18,25 @@ function Profile() {
     page: 0,
     pageSize: 10,
   });
+  const [isSuspicious, setIsSuspicious] = useState(user.suspicious);
   useEffect(() => {
     console.log(user);
   }, []);
 
   return (
     <>
+      {isSuspicious && (
+        <Alert
+          severity="error"
+          sx={{ marginLeft: "3rem", marginRight: "3rem", marginBottom: 2 }}
+        >
+          ALERT: Your account has been designated as <b>suspicious</b>. If you
+          think this is an error, please contact
+          <a href="mailto:superuser@mail.utoronto.ca">
+            superuser@mail.utoronto.ca
+          </a>
+        </Alert>
+      )}
       <PersonalIfno />
       <UpdateInfo />
       <div className="content-container">
