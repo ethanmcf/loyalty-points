@@ -7,9 +7,11 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getTransaction } from "../../apis/transactionsApi";
+import {
+  getTransaction,
+  markTransactionSuspicious,
+} from "../../apis/transactionsApi";
 import { useUser } from "../../contexts/UserContext";
-import { markTransactionSuspicious } from "../../apis/transactionsApi";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
 import { TransactionQRCode } from "../../components/actionDialogs/TransactionQRCode";
@@ -206,7 +208,9 @@ export function TransactionDetails() {
               disabled={true}
             />
             <div className="redemption">
-              {transaction.type === 'redemption' && user.role !== "regular" && <p>Redeemed?</p>}
+              {transaction.type === "redemption" && user.role !== "regular" && (
+                <p>Redeemed?</p>
+              )}
               {transaction.type === "redemption" && (
                 <ProcessRedemptionTransactionsDialog
                   id={Number(transactionId)}
