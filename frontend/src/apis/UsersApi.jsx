@@ -227,16 +227,27 @@ export async function getUserTier(
   }
 
   const data = await res.json();
-  console.log("User data from /me:", data);
+
+  let tier;
+  let pointsToNext;
 
   if (data.points >= 10000) {
-    // User is a platinum member
-    return { "tier": "platinum" };
+    tier = "platinum";
+    pointsToNext = 0; // Already at max tier
   } else if (data.points >= 6000) {
-    return { "tier": "gold" };;
+    tier = "gold";
+    pointsToNext = 10000 - data.points; // Points needed for platinum
   } else if (data.points >= 2000) {
-    return { "tier": "silver" };
+    tier = "silver";
+    pointsToNext = 6000 - data.points; // Points needed for gold
   } else {
-    return { "tier": "bronze" };
+    tier = "bronze";
+    pointsToNext = 2000 - data.points; // Points needed for silver
   }
+
+  return { 
+    tier, 
+    pointsToNext,
+    currentPoints: data.points 
+  };
 }
