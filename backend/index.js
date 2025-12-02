@@ -5,8 +5,8 @@
 const dotenv = require("dotenv");
 
 // load shared root env
-// dotenv.config({ path: "../.env" });
-dotenv.config({ path: ".env" });
+dotenv.config({ path: "../.env" });
+// dotenv.config({ path: ".env" });
 
 const express = require("express");
 const app = express();
@@ -18,7 +18,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Use cors
 const cors = require("cors");
 const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-console.log(frontendUrl);
 app.use(
   cors({
     origin: frontendUrl,
