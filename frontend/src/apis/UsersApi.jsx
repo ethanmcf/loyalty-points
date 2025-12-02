@@ -205,3 +205,49 @@ export async function updateUserById(
   }
   return res.json(); // User and updated fields
 }
+
+/**
+ * This function is used for the extra feature, the membership tierlist system. 
+ * It returns the tier of the current user.
+ */
+export async function getUserTier(
+  authToken
+) {
+  const res = await fetch(`${baseURL}/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error);
+  }
+
+  const data = await res.json();
+
+  let tier;
+  let pointsToNext;
+
+  if (data.points >= 10000) {
+    tier = "platinum";
+    pointsToNext = 0; // Already at max tier
+  } else if (data.points >= 6000) {
+    tier = "gold";
+    pointsToNext = 10000 - data.points; // Points needed for platinum
+  } else if (data.points >= 2000) {
+    tier = "silver";
+    pointsToNext = 6000 - data.points; // Points needed for gold
+  } else {
+    tier = "bronze";
+    pointsToNext = 2000 - data.points; // Points needed for silver
+  }
+
+  return { 
+    tier, 
+    pointsToNext,
+    currentPoints: data.points 
+  };
+}
