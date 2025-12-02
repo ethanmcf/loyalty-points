@@ -1,15 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { getPromotionById, updatePromotion } from "../../apis/promotionsApis";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import "../../styles/detailsPage.css";
 import Button from "@mui/material/Button";
@@ -24,7 +15,6 @@ import { ProcessRedemptionTransactionsDialog } from "../../components/actionDial
 
 /**
  * The Transactions Details page, which displays more information about the transactions
- * Visible to ??
  */
 export function TransactionDetails() {
     const { user } = useUser();
