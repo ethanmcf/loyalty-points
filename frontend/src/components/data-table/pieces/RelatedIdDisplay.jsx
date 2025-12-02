@@ -50,8 +50,12 @@ export function RelatedIdDisplay({ type, id }) {
     } else if (type === "transfer") {
       // related id is the id of the reciever
       try {
-        const user = await getUserById(localStorage.token, Number(id));
-        setRelatedData(user.utorid);
+        if (user.role === "regular") {
+          setRelatedData(id);
+        } else {
+          const transUser = await getUserById(localStorage.token, Number(id));
+          setRelatedData(transUser.utorid);
+        }
         setTooltipMessage("The utorid if the reciever of the transfer");
       } catch (error) {
         console.error(error);

@@ -20,14 +20,10 @@ function Profile() {
     page: 0,
     pageSize: 10,
   });
-  const [isSuspicious, setIsSuspicious] = useState(user.suspicious);
-  useEffect(() => {
-    console.log(user);
-  }, []);
 
   return (
     <>
-      {isSuspicious && (
+      {user.suspicious && (
         <Alert
           severity="error"
           sx={{ marginLeft: "3rem", marginRight: "3rem", marginBottom: 2 }}
