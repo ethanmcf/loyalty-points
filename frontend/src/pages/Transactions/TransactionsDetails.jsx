@@ -7,10 +7,10 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {
-  getTransaction,
-  markTransactionSuspicious,
-} from "../../apis/transactionsApi.jsx";
+// import {
+//   getTransaction,
+//   markTransactionSuspicious,
+// } from "../../apis/transactionsApi.jsx";
 import { useUser } from "../../contexts/UserContext";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
@@ -36,10 +36,10 @@ export function TransactionDetails() {
 
   const fetchData = async () => {
     try {
-      const res = await getTransaction(
-        localStorage.token,
-        Number(transactionId)
-      );
+      // const res = await getTransaction(
+      //   localStorage.token,
+      //   Number(transactionId)
+      // );
       setTransaction(res);
       setOldTransaction(res);
     } catch (error) {
@@ -63,11 +63,11 @@ export function TransactionDetails() {
     if (suspiciousChanged) {
       // only call the api if user has changed the value
       try {
-        const res = await markTransactionSuspicious(
-          localStorage.token,
-          transaction.id,
-          newSuspicious
-        );
+        // const res = await markTransactionSuspicious(
+        //   localStorage.token,
+        //   transaction.id,
+        //   newSuspicious
+        // );
         setTransaction(res);
         setError(null);
         setIsEditing(false);
