@@ -10,17 +10,24 @@ import MenuItem from "@mui/material/MenuItem";
 import { createNewTransaction } from "../../apis/transactionsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
 /**
  * Create a new Purchase or Adjustment transaction.
  */
-export function AddTransactionDialog({ isOpen, setIsOpen }) {
+export function AddTransactionDialog({
+  isOpen,
+  setIsOpen,
+  preFilledRelatedId,
+}) {
   const { user } = useUser();
 
   const [isCreated, setIsCreated] = useState(false);
   const [createdTransaction, setCreatedTransaction] = useState();
   const [error, setError] = useState();
-  const [transactionType, setTransactionType] = useState("purchase");
+  const [transactionType, setTransactionType] = preFilledRelatedId
+    ? useState("adjustment")
+    : useState("purchase");
 
   // Only Cashiers, Managers, and Superusers can create transactions
   const canAdd = user?.role !== "regular";
@@ -90,7 +97,15 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
+      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+        <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
+      </IconButton>
+      <Button
+        sx={{ display: { xs: "none", md: "flex" } }}
+        variant="text"
+        onClick={handleClickOpen}
+        disabled={!canAdd}
+      >
         Add New Transaction
       </Button>
 
@@ -182,6 +197,8 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
                       fullWidth
                       variant="standard"
                       slotProps={{ input: { min: 1 } }}
+                      value={preFilledRelatedId}
+                      disabled={!!preFilledRelatedId}
                     />
                   </>
                 )}
@@ -221,11 +238,7 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
 
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button
-                type="submit"
-                form="new-transaction-form"
-                
-              >
+              <Button type="submit" form="new-transaction-form">
                 Create{" "}
                 {transactionType.charAt(0).toUpperCase() +
                   transactionType.slice(1)}
@@ -248,7 +261,9 @@ export function AddTransactionDialog({ isOpen, setIsOpen }) {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} variant="outlined">Close</Button>
+              <Button onClick={handleClose} variant="outlined">
+                Close
+              </Button>
             </DialogActions>
           </>
         )}

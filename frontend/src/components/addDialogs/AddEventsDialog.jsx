@@ -6,16 +6,15 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
-import AddIcon from "@mui/icons-material/Add";
 import { postNewEvent } from "../../apis/EventsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-
-import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
 
 export function AddEventsDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
@@ -84,7 +83,15 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <Button variant="text" onClick={handleClickOpen} disabled={!canAdd}>
+      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+        <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
+      </IconButton>
+      <Button
+        sx={{ display: { xs: "none", md: "flex" } }}
+        variant="text"
+        onClick={handleClickOpen}
+        disabled={!canAdd}
+      >
         Add New Event
       </Button>
 

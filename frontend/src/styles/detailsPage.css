@@ -1,4 +1,4 @@
-#details-page {
+.details-page {
   margin: 3rem;
   background-color: white;
   padding: 2rem;
@@ -41,7 +41,34 @@
   margin: 0.5rem 0;
 }
 
-#info-form {
+.info-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+  .info-form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.redemption {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+/* QR code for redemptions */
+.qrcode-and-redemption-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.qrcode-container img {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
