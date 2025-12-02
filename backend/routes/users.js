@@ -187,6 +187,9 @@ router.get(
         relatedId: transaction.relatedId || undefined,
         remark: transaction.remark || "",
         createdBy: transaction.creator?.utorid || "",
+        suspicious: transaction.suspicious,
+        processedBy: transaction.processedBy,
+        processed: transaction.processed
       })),
     });
   }

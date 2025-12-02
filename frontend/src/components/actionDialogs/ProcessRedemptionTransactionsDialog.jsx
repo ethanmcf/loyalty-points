@@ -8,6 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DialogActions from "@mui/material/DialogActions";
 import { useUser } from "../../contexts/UserContext";
 import { getTransaction, setTransactionCompleted } from "../../apis/transactionsApi";
+import Alert from "@mui/material/Alert";
 
 /**
  * Dialog component for marking a redemption transaction as processed.
