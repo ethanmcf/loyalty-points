@@ -206,7 +206,7 @@ export function TransactionDetails() {
               disabled={true}
             />
             <div className="redemption">
-              {transaction.type === "redemption" && <p>Redeemed?</p>}
+              {transaction.type === 'redemption' && user.role !== "regular" && <p>Redeemed?</p>}
               {transaction.type === "redemption" && (
                 <ProcessRedemptionTransactionsDialog
                   id={Number(transactionId)}
