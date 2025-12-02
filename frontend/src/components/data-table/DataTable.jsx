@@ -164,27 +164,6 @@ export function DataTable({ baseURL, role, isOpen }) {
     setIsLoading(false);
   }, [baseURL, paginationModel, filterModel, isOpen]);
 
-  const fetchSavedFilter = async (baseURL, params) => {
-    const url = `${VITE_BACKEND_URL}${baseURL}?${params}`;
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.token}`,
-      },
-    });
-
-    const resJSON = await res.json();
-
-    if (!res.ok) {
-      // error
-      console.error("Error: ", resJSON.message);
-    }
-    // on success
-    setRows(resJSON.results);
-    setRowCount(resJSON.count);
-  };
-
   // generates the columns to match MUI expected structure
   function generateColumns() {
     let newColumns = [];
@@ -224,9 +203,8 @@ export function DataTable({ baseURL, role, isOpen }) {
 
   /* =============== HANDLING FILTERS =================== */
   const handleBookmarkFilter = () => {
-    const generatedParams = generateParams();
     const newSavedFilters = [...savedFilters];
-    newSavedFilters.push(generatedParams);
+    newSavedFilters.push(JSON.stringify(filterModel.items));
     setSavedFilters(newSavedFilters);
     localStorage.setItem(baseURL, JSON.stringify(newSavedFilters));
     console.log(localStorage);
@@ -247,7 +225,7 @@ export function DataTable({ baseURL, role, isOpen }) {
             rowSelectionModel,
             baseURL,
             handleBookmarkFilter,
-            fetchSavedFilter,
+            setFilterModel,
           },
         }}
         rowSelectionModel={rowSelectionModel}

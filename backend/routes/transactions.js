@@ -525,7 +525,7 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
       req.query.type === "redemption" ||
       req.query.type === "event"
     ) {
-      filter.type = type;
+      filter.type = req.query.type;
     } else {
       return res.status(400).json({ error: "Bad Request - Type is Invalid" });
     }

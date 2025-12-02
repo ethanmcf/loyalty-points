@@ -30,7 +30,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Chip from "@mui/material/Chip";
 // Reference: https://mui.com/x/react-data-grid/components/toolbar/
 export function CustomToolBar(props) {
-  const { rowSelectionModel, baseURL, handleBookmarkFilter, fetchSavedFilter } =
+  const { rowSelectionModel, baseURL, handleBookmarkFilter, setFilterModel } =
     props;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState();
@@ -47,7 +47,7 @@ export function CustomToolBar(props) {
   };
 
   const handleLoadFilterList = (params) => {
-    fetchSavedFilter(baseURL, params);
+    setFilterModel({ items: params });
   };
 
   useEffect(() => {
@@ -94,6 +94,7 @@ export function CustomToolBar(props) {
   };
 
   // Reference: https://mui.com/material-ui/react-menu/
+  console.log(JSON.parse(JSON.parse(localStorage[baseURL])[0]));
   return (
     <>
       <Toolbar>
@@ -123,11 +124,12 @@ export function CustomToolBar(props) {
             {JSON.parse(localStorage[baseURL]).map((params, menuItemIndex) => (
               <MenuItem
                 key={menuItemIndex}
-                onClick={() => handleLoadFilterList(params)}
+                onClick={() => handleLoadFilterList(JSON.parse(params))}
               >
-                {params.split("&").map((param, paramIndex) => (
+                meow
+                {/* {params.split("&").map((param, paramIndex) => (
                   <Chip key={paramIndex} label={param} sx={{ margin: 1 }} />
-                ))}
+                ))} */}
               </MenuItem>
             ))}
           </Menu>
