@@ -3,7 +3,6 @@ const dotenv = require("dotenv");
 
 // load shared root env
 dotenv.config({ path: "../.env" });
-// dotenv.config({ path: ".env" });
 
 const jwt = require("jsonwebtoken");
 
