@@ -28,6 +28,7 @@ export function RegularDashboard({ transactions }) {
   return (
     <div>
       <div className="dashboard-container">
+        <ActivityOverview transactions={transactions} /> 
         <div className="info-container">
             <div style={{ flex: 1, minWidth: '300px' }} className="gray">
                 <div style={{ padding: '16px', background: '#fff', borderRadius: '8px' }}>
