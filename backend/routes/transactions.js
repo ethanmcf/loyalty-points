@@ -477,11 +477,11 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
   const filter = {};
   // note: query can only be string
   if (req.query.name) {
-    filter.name = req.query.name;
+    filter.name = { contains: req.query.name };
   }
 
   if (req.query.createdBy) {
-    filter.createdBy = req.query.createdBy;
+    filter.createdBy = { contains: req.query.createdBy };
   }
 
   // check if suspicious

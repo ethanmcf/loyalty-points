@@ -56,6 +56,7 @@ export const UserProvider = ({ children }) => {
     setUser(null);
     setInterfaceType(null);
     localStorage.removeItem("token");
+    localStorage.clear(); // for clearing filters
     navigate("/");
   };
 

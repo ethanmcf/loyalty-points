@@ -29,7 +29,7 @@ const baseUrlTypes = [
 /**
  *
  * @typedef {Object} DataTableProps
- * @property {"/users" | "/transactions" | "/transactions?type=event" | "/events" | "/promotions" | "/users/me/transactions" | "/events/me/guest"} baseURL The type of table we are using this for (i.e. events, users, etc.)
+ * @property {"/users" | "/transactions" | "/transactions?type=event" | "/events" | "/promotions" | "/users/me/transactions" | "/events/me/guest" } baseURL The type of table we are using this for (i.e. events, users, etc.)
  * @property {roleType} role
  * @property {boolean} isOpen // the variable controlling dialog for refetching data related to adding dialogs
  */
@@ -48,6 +48,9 @@ export function DataTable({ baseURL, role, isOpen }) {
   const [columns, setColumns] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [savedFilters, setSavedFilters] = useState(
+    JSON.parse(localStorage.getItem(baseURL)) ?? []
+  );
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0, // default is 1 (when we call the api, we are going to add one)
@@ -64,13 +67,8 @@ export function DataTable({ baseURL, role, isOpen }) {
     ids: new Set(),
   });
 
-  /* ========= Fetching Data ========================== */
-  // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  const fetchData = async () => {
-    setIsLoading(true);
-
-    // step 1: get the filters and pagination
-
+  /* ============= GENERATE PARAMS ==================== */
+  const generateParams = () => {
     // Reference: https://mui.com/x/react-data-grid/filtering/server-side/
     const filters = filterModel.items; // this is a list
 
@@ -117,8 +115,19 @@ export function DataTable({ baseURL, role, isOpen }) {
       baseURL = "/events";
     }
 
+    return params.toString();
+  };
+
+  /* ========= Fetching Data ========================== */
+  // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  const fetchData = async () => {
+    setIsLoading(true);
+
+    // step 1: get the filters and pagination
+    const generatedParams = generateParams();
+
     // step 2: set up url
-    const url = `${VITE_BACKEND_URL}${baseURL}?${params.toString()}`;
+    const url = `${VITE_BACKEND_URL}${baseURL}?${generatedParams}`;
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -154,6 +163,27 @@ export function DataTable({ baseURL, role, isOpen }) {
 
     setIsLoading(false);
   }, [baseURL, paginationModel, filterModel, isOpen]);
+
+  const fetchSavedFilter = async (baseURL, params) => {
+    const url = `${VITE_BACKEND_URL}${baseURL}?${params}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+    });
+
+    const resJSON = await res.json();
+
+    if (!res.ok) {
+      // error
+      console.error("Error: ", resJSON.message);
+    }
+    // on success
+    setRows(resJSON.results);
+    setRowCount(resJSON.count);
+  };
 
   // generates the columns to match MUI expected structure
   function generateColumns() {
@@ -192,6 +222,16 @@ export function DataTable({ baseURL, role, isOpen }) {
     return newColumns;
   }
 
+  /* =============== HANDLING FILTERS =================== */
+  const handleBookmarkFilter = () => {
+    const generatedParams = generateParams();
+    const newSavedFilters = [...savedFilters];
+    newSavedFilters.push(generatedParams);
+    setSavedFilters(newSavedFilters);
+    localStorage.setItem(baseURL, JSON.stringify(newSavedFilters));
+    console.log(localStorage);
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       {error && <Alert severity="error">{error}</Alert>}
@@ -202,7 +242,14 @@ export function DataTable({ baseURL, role, isOpen }) {
         }}
         disableRowSelectionExcludeModel
         slots={{ toolbar: CustomToolBar }}
-        slotProps={{ toolbar: { rowSelectionModel, baseURL } }}
+        slotProps={{
+          toolbar: {
+            rowSelectionModel,
+            baseURL,
+            handleBookmarkFilter,
+            fetchSavedFilter,
+          },
+        }}
         rowSelectionModel={rowSelectionModel}
         checkboxSelection={
           baseURL === "/events" ||
