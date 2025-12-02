@@ -35,7 +35,7 @@ export function MarkTransactionSuspicious() {
     const handleClose = () => {
         setIsOpen(false);
         setTransaction(null);
-        window.location.reload();
+        //window.location.reload();
     };
 
     const handleSuspicious = (e) => {
@@ -56,7 +56,7 @@ export function MarkTransactionSuspicious() {
 
         try {
             const res = await getTransaction(localStorage.token, id);
-            if (!res || res.type) {
+            if (!res) {
                 setError("Transaction Id invalid");
                 return;
             }
@@ -131,10 +131,10 @@ export function MarkTransactionSuspicious() {
                     </>
                 ) : (
                     <>
-                    <dialogTitle> Success! </dialogTitle>
+                    <dialogTitle></dialogTitle>
                     <DialogContent>
                         <Alert severity="success" sx={{ mb: 2 }}>
-                            Transaction with id {transaction.id} has been marked as suspicious.
+                            Transaction with id {transaction.id} has been marked as suspicious/not suspicious.
                         </Alert>
                     </DialogContent>
                     <DialogActions>

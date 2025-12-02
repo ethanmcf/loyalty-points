@@ -77,7 +77,7 @@ export function ApplyRedemptionTransactionDialog() {
                     <DialogTitle>Process a Redemption Transaction</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Insert Context text here
+                            Enter Id of Transaction you would like to process
                         </DialogContentText>
                     
                     <form

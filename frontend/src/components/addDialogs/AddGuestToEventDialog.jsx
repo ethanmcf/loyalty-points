@@ -6,7 +6,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useUser } from "../../contexts/UserContext";
 import DialogActions from "@mui/material/DialogActions";
 import Alert from "@mui/material/Alert";
@@ -49,7 +48,7 @@ export function AddGuestToEventDialog() {
         if (!canProcess) return;
 
         try {
-            const res = await getSingleEvent(localStorage.token, eventId);
+            const res = await getSingleEvent(eventId, localStorage.token);
             if (!res) {
                 setError("Invalid Event Id");
                 return;

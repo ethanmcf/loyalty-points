@@ -35,7 +35,7 @@ export function AddOrganizerToEventDialog() {
         setIsOpen(false);
         setEvent(null);
         setOrganizer(null);
-        window.location.reload();
+        //window.location.reload();
     };
 
     const handleSubmit = async (e) => {
@@ -51,18 +51,17 @@ export function AddOrganizerToEventDialog() {
         if (!canProcess) return;
 
         try {
-            const res = await getSingleEvent(localStorage.token, eventId);
+            const res = await getSingleEvent(eventId, localStorage.token);
             if (!res) {
                 setError("Invalid event Id");
                 return;
             }
-            await postOrganizerToEvent(localStorage.token, eventId, utorid);
+            await postOrganizerToEvent(eventId, utorid, localStorage.token);
             setEvent(res);
             setError(null);
         } catch (error) {
             console.error(error);
             setError(error.message);
-            setIsOpen(false);
         }
     };
 
@@ -122,7 +121,7 @@ export function AddOrganizerToEventDialog() {
                         <DialogTitle>Add Event Organizer</DialogTitle>
                         <DialogContent>
                             <Alert severity="success" sx={{ mb: 2 }}>
-                                the user has been added as the organizer to event with id {event.id}.
+                                The user has been added as the organizer to event with id {event.id}.
                             </Alert>
                         </DialogContent>
                         <DialogActions>

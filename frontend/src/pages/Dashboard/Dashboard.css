@@ -126,3 +126,19 @@
   background-color: #1a1a1a;
   color: white;
 }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.user-info h3 {
+  margin: 0;
+}
+
+.membership {
+  display: flex;
+  align-items: center;
+}

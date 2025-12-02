@@ -1,4 +1,3 @@
-import {getSingleEvent, postOrganizerToEvent} from "../../apis/EventsApi";
 import { use, useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
@@ -35,7 +34,7 @@ export function MarkCashierSuspiciousDialog() {
         setIsOpen(false);
         setCashier(null);
         setSuspicious("");
-        window.location.reload();
+        //window.location.reload();
     };
 
     const handleSuspicious = (e) => {
@@ -109,7 +108,7 @@ export function MarkCashierSuspiciousDialog() {
                                 margin="dense"
                                 id="suspicious"
                                 name="suspicious"
-                                label="Mark Transaction as..."
+                                label="Mark Cashier as..."
                                 value={suspicious}
                                 onChange={handleSuspicious}
                                 fullWidth
