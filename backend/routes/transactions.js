@@ -683,8 +683,6 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
     })
   );
 
-  console.log(outputtedTransactions);
-
   return res.status(200).json({
     count: totalCount,
     results: outputtedTransactions,

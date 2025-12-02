@@ -410,53 +410,57 @@ router.post(
   }
 );
 
-router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
-  // Add and verify optional query params
-  const query = {};
-  if (req.query.name) {
-    query["name"] = req.query.name;
+router.get(
+  "/",
+  authorize(["regular", "cashier", "manager", "superuser"]),
+  async (req, res) => {
+    // Add and verify optional query params
+    const query = {};
+    if (req.query.name) {
+      query["name"] = req.query.name;
+    }
+    if (req.query.role) {
+      query["role"] = req.query.role;
+    }
+    if (req.query.verified === "true" || req.query.verified === "false") {
+      query["verified"] = req.query.verified === "true";
+    }
+    if (req.query.activated === "true" || req.query.activated === "false") {
+      query["activated"] = req.query.activated === "true";
+    }
+    // Verify and set default pagination
+    let page = parseInt(req.query.page) || 1;
+    let take = parseInt(req.query.limit) || 10;
+    if (page < 1 || take < 1) {
+      return res.status(400).json({ error: "Page/limit must be positive" });
+    }
+    // Retrieve based on query
+    const skip = (page - 1) * take;
+    const total = await prisma.user.count({ where: query });
+    const users = await prisma.user.findMany({
+      skip,
+      take: take,
+      where: query,
+      select: {
+        id: true,
+        utorid: true,
+        name: true,
+        email: true,
+        birthday: true,
+        role: true,
+        points: true,
+        createdAt: true,
+        lastLogin: true,
+        verified: true,
+        avatarUrl: true,
+      },
+    });
+    return res.status(200).json({
+      count: total,
+      results: users,
+    });
   }
-  if (req.query.role) {
-    query["role"] = req.query.role;
-  }
-  if (req.query.verified === "true" || req.query.verified === "false") {
-    query["verified"] = req.query.verified === "true";
-  }
-  if (req.query.activated === "true" || req.query.activated === "false") {
-    query["activated"] = req.query.activated === "true";
-  }
-  // Verify and set default pagination
-  let page = parseInt(req.query.page) || 1;
-  let take = parseInt(req.query.limit) || 10;
-  if (page < 1 || take < 1) {
-    return res.status(400).json({ error: "Page/limit must be positive" });
-  }
-  // Retrieve based on query
-  const skip = (page - 1) * take;
-  const total = await prisma.user.count({ where: query });
-  const users = await prisma.user.findMany({
-    skip,
-    take: take,
-    where: query,
-    select: {
-      id: true,
-      utorid: true,
-      name: true,
-      email: true,
-      birthday: true,
-      role: true,
-      points: true,
-      createdAt: true,
-      lastLogin: true,
-      verified: true,
-      avatarUrl: true,
-    },
-  });
-  return res.status(200).json({
-    count: total,
-    results: users,
-  });
-});
+);
 
 router.post(
   "/:userId/transactions",

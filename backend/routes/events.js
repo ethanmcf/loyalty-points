@@ -1415,8 +1415,6 @@ router.get(
       );
     }
 
-    console.log("guestId", req.query.guestId);
-
     // filter by if theyre a guest
     if (req.query.guestId) {
       events = events.filter((event) =>

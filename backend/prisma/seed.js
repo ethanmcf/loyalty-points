@@ -384,7 +384,7 @@ async function createTransactions() {
         : type === "transfer"
         ? 0
         : randInt(0, 50);
-    const amount = randInt(5, 120);
+    const amount = randInt(1, user.points);
     const suspicious = Math.random() < 0.3;
     const remark =
       Math.random() < 0.5 ? remarks[randInt(0, remarks.length - 1)] : null;
