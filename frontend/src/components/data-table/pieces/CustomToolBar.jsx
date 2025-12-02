@@ -30,14 +30,21 @@ export function CustomToolBar(props) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState();
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
+  const [filename, setFileName] = useState("");
 
   useEffect(() => {
-    console.log("row selection changed: ", rowSelectionModel);
-  }, [rowSelectionModel]);
-
+    if (baseURL.includes("event")) {
+      setFileName("Events");
+    } else if (baseURL.includes("promotion")) {
+      setFileName("Promotions");
+    } else if (baseURL.includes("transaction")) {
+      setFileName("Transactions");
+    } else if (baseURL.includes("/users")) {
+      setFileName("Users");
+    }
+  }, []);
   const handleClickOpen = () => {
     setOpen(true);
-    console.log("Deleting the IDS: ", rowSelectionModel.ids);
   };
 
   const handleClose = () => {
@@ -112,7 +119,7 @@ export function CustomToolBar(props) {
         </Tooltip>
         <GridToolbarDivider />
         {/* Reference: https://mui.com/x/react-data-grid/components/export/ */}
-        <ExportCsv render={<ToolbarButton />}>
+        <ExportCsv render={<ToolbarButton />} options={{ filename: filename }}>
           <FileDownloadIcon fontSize="small" />
         </ExportCsv>
         <ExportPrint render={<ToolbarButton />}>
