@@ -1,11 +1,12 @@
 import "./Dashboard.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ApplyRedemptionTransactionDialog } from "../../components/actionDialogs/ApplyRedemptionTransactionDialog";
 import { TypeHistory } from "./VisualizationData";
+import { ActivityOverview } from "./DashboardActivity"; 
 
 export function CashierDashboard({transactions}) {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export function CashierDashboard({transactions}) {
   return (
     <div>
       <div className="dashboard-container">
+        <ActivityOverview transactions={transactions} /> 
         <div style={{ flex: 1, minWidth: '300px' }} className="gray">
             <div style={{ padding: '16px', background: '#fff', borderRadius: '8px' }}>
                 <TypeHistory transactions={transactions} />
