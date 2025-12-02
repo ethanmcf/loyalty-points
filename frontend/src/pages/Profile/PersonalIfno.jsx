@@ -14,6 +14,12 @@ import {
 } from "../../apis/UsersApi";
 import { useUser } from "../../contexts/UserContext";
 import { useEffect } from "react";
+import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+
 function PersonalIfno() {
   const { user, interfaceType, updateInterfaceType, updateUser } = useUser();
 
@@ -24,6 +30,15 @@ function PersonalIfno() {
   const [qrData, setQrData] = useState(null);
   const [transferError, setTransferError] = useState(null);
   const [transferSuccess, setTransferSuccess] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsOpen(false);
+  };
 
   // Fetch users to send points to
   useEffect(() => {
@@ -192,9 +207,23 @@ function PersonalIfno() {
           </Alert>
         )}
       </div>
-      <div className="qrcode">
-        <img src={qrData} />
-      </div>
+      {/* Display when screen big */}
+      <Box sx={{ display: { xs: "none", md: "flex" } }}>
+        <div className="qrcode"></div>
+      </Box>
+      {/* Display when screen small */}
+      <Tooltip
+        sx={{ display: { xs: "flex", md: "none" } }}
+        onClick={handleOpenDialog}
+      >
+        <QrCodeScannerIcon />
+      </Tooltip>
+      <Dialog open={isOpen} onClose={handleCloseDialog}>
+        <DialogContent>
+          <img src={qrData} />
+          <p>Please scan the QR code.</p>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

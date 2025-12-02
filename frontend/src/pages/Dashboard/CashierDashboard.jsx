@@ -5,8 +5,9 @@ import { useUser } from "../../contexts/UserContext";
 import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ApplyRedemptionTransactionDialog } from "../../components/actionDialogs/ApplyRedemptionTransactionDialog";
+import { TypeHistory } from "./VisualizationData";
 
-export function CashierDashboard() {
+export function CashierDashboard({transactions}) {
   const navigate = useNavigate();
 
   const { user } = useUser();
@@ -17,6 +18,11 @@ export function CashierDashboard() {
   return (
     <div>
       <div className="dashboard-container">
+        <div style={{ flex: 1, minWidth: '300px' }} className="gray">
+            <div style={{ padding: '16px', background: '#fff', borderRadius: '8px' }}>
+                <TypeHistory transactions={transactions} />
+            </div>
+        </div>
         <div className="main-container">
           <h3>User Management</h3>
           <div className="user-container">

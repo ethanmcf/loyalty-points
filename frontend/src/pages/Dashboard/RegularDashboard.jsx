@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { AddRedemptionTransactionDialog } from "../../components/addDialogs/AddRedemptionTransactionDialog";
+import { TypeHistory } from "./VisualizationData";
 import { getUserTier } from "../../apis/UsersApi";
 
 // Table-related imports
@@ -11,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 
 
-export function RegularDashboard() {
+export function RegularDashboard({ transactions }) {
   const navigate = useNavigate();
 
   // get user info
@@ -33,6 +34,11 @@ export function RegularDashboard() {
     <div>
       <div className="dashboard-container">
         <div className="info-container">
+            <div style={{ flex: 1, minWidth: '300px' }} className="gray">
+                <div style={{ padding: '16px', background: '#fff', borderRadius: '8px' }}>
+                    <TypeHistory transactions={transactions} />
+                </div>
+            </div>
           <div className="table-container">
             <h3>
             Recent Transactions

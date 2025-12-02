@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./EventDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getSingleEvent,
@@ -25,6 +24,7 @@ import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEvents
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useUser } from "../../contexts/UserContext";
+import "../../styles/detailsPage.css";
 
 /**
  * I need to be able to
@@ -130,7 +130,7 @@ export function EventDetails() {
   }, []);
 
   return (
-    <div id="event-details-page">
+    <div id="event-details-page" className="details-page">
       <div className="header">
         <div className="title">
           <IconButton onClick={() => navigate("/events")}>
@@ -140,7 +140,6 @@ export function EventDetails() {
         </div>
         <DeleteEventsDialog id={Number(eventId)} />
       </div>
-      <h2>Event Details page</h2>
       {eventData && eventData !== null && (
         <>
           <div className="header">
@@ -163,7 +162,7 @@ export function EventDetails() {
           <form
             onSubmit={handleSubmit}
             id="event-info-form"
-            className="event-form"
+            className="info-form"
           >
             <TextField
               id="name"

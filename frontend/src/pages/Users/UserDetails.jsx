@@ -80,7 +80,7 @@ export function UserDetails() {
   };
 
   return (
-    <div id="details-page">
+    <div className="details-page" id="users-details-page">
       <div className="header">
         <div className="title">
           <IconButton onClick={() => navigate("/users")}>

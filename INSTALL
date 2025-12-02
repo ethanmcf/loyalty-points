@@ -4,3 +4,29 @@
 
 # 1. All the packages you need to install
 # 2. How to configure various servers (e.g., Nginx, Apache, etc)
+
+# Deployment
+
+# LOCAL SETUP
+## .env setup
+JWT_SECRET=your_jwt_secret
+BACKEND_PORT=3000
+FRONTEND_URL=...
+VITE_BACKEND_URL=...
+VITE_EMAILJS_SERVICE_ID=emailjs_service_key
+VITE_EMAILJS_RESET_TEMPLATE_ID=emailjs_template_key
+VITE_EMAILJS_REGISTER_TEMPLATE_ID=emailjs_template_key
+VITE_EMAILJS_PUBLIC_KEY=emailjs_public_key
+
+## Front end setup
+cd frontend
+npm install
+npm run dev
+
+## Backend setup
+cd backend
+npm install
+npx prisma generate
+npx prisma db push
+node prisma/seed.js
+node index.js
