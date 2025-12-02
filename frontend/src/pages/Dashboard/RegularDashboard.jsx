@@ -1,16 +1,14 @@
 import "./Dashboard.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { AddRedemptionTransactionDialog } from "../../components/addDialogs/AddRedemptionTransactionDialog";
+import { getUserTier } from "../../apis/UsersApi";
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 
 
 export function RegularDashboard() {
@@ -19,6 +17,13 @@ export function RegularDashboard() {
   // get user info
   const { user } = useUser();
   const [roleView, setRoleView] = useState(user.role);
+
+  const tier = async () => {
+    const res = await getUserTier(localStorage.token);
+    return res;
+  }
+
+  const userTier = tier();
 
   const handleRoleChange = (event) => {
     setRoleView(event.target.value);
@@ -48,7 +53,7 @@ export function RegularDashboard() {
             </h4>
             <button className="fill-button" onClick={() => navigate("/profile")}>YOUR PROFILE</button>
             <button className="fill-button" onClick={() => navigate("/events")}>YOUR EVENTS</button>
-            <button className="fill-button" onClick={() => navigate("/promotions")}>YOUR PROFILE</button>
+            <button className="fill-button" onClick={() => navigate("/promotions")}>YOUR PROMOTIONS</button>
           </div>
         </div>
       </div>

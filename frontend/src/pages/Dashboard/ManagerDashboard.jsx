@@ -48,6 +48,8 @@ export function ManagerDashboard() {
                 <MarkCashierSuspiciousDialog />
                 {/* promote/demote users */}
                 <PromoteUserDialog />
+                <button className="fill-button" onClick={() => navigate("/users")}>ALL USERS</button>
+
             </div>
           </div>
           <div className="table-container">
