@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
-import { createNewTransaction } from "../../apis/transactionsApi";
+import { createNewTransaction } from "../../transactionsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import IconButton from "@mui/material/IconButton";
