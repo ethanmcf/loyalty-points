@@ -126,10 +126,13 @@ export function CustomToolBar(props) {
                 key={menuItemIndex}
                 onClick={() => handleLoadFilterList(JSON.parse(params))}
               >
-                meow
-                {/* {params.split("&").map((param, paramIndex) => (
-                  <Chip key={paramIndex} label={param} sx={{ margin: 1 }} />
-                ))} */}
+                {JSON.parse(params).map((param, paramIndex) => (
+                  <Chip
+                    key={paramIndex}
+                    label={`${param.field} = ${param.value}`}
+                    sx={{ margin: 1 }}
+                  />
+                ))}
               </MenuItem>
             ))}
           </Menu>
