@@ -10,10 +10,8 @@ import { useUser } from "../../contexts/UserContext";
 import {
   getTransaction,
   setTransactionCompleted,
-} from "../../apis/transactionsApi";
-import IconButton from "@mui/material/IconButton";
-import Chip from "@mui/material/Chip";
-import Tooltip from "@mui/material/Tooltip";
+} from "../../apis/TransactionsApi";
+import Alert from "@mui/material/Alert";
 
 /**
  * Dialog component for marking a redemption transaction as processed.
@@ -82,23 +80,19 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
 
   // only show the button if it's a redemption and it hasn't been processed yet
   if (transaction?.type !== "redemption" || isProcessed) {
-    return (
-      <Tooltip title="Only Redemptions can be processed">
-        <Chip label="N/A" />
-      </Tooltip>
-    );
+    return null;
   }
 
   return (
     <>
-      <IconButton
+      <Button
+        variant="icon"
         onClick={handleClickOpen}
         disabled={!transaction || isProcessed}
       >
-        <Tooltip title="Process Redemption">
-          <CheckCircleIcon color={"success"} />
-        </Tooltip>
-      </IconButton>
+        <CheckCircleIcon color={"success"} />
+      </Button>
+
       {transaction && (
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Process Redemption (ID: {transaction.id})</DialogTitle>

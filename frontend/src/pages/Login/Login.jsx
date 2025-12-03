@@ -68,7 +68,7 @@ function Login() {
           )}
 
           <div className="btn-container">
-            <button type="submit" className="fill-button">
+            <button type="submit" className="fill-button" disabled={success}>
               log in
             </button>
           </div>

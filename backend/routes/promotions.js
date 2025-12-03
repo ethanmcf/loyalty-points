@@ -368,14 +368,10 @@ router.patch(
       updateData.points = req.body.points;
     }
 
-    console.log("updateData:", updateData);
-
     const updated = await prisma.promotion.update({
       where: { id },
       data: updateData,
     });
-
-    console.log("updated:", updated);
 
     const response = {
       id: updated.id,

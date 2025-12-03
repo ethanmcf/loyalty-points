@@ -169,6 +169,24 @@ function PersonalIfno() {
   };
   return (
     <div className="profile-container">
+      <div className="qr-code-container">
+        <div className="qr-code">
+          <div className="qr-desktop">
+            <img src={qrData} />
+          </div>
+          <div className="qr-mobile">
+            <Tooltip onClick={handleOpenDialog}>
+              <QrCodeScannerIcon />
+            </Tooltip>
+            <Dialog open={isOpen} onClose={handleCloseDialog}>
+              <DialogContent className="qr-code-diaglog-content">
+                <img src={qrData} />
+                <p>Your profile QR code</p>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+      </div>
       <div className="profile-info-container">
         <h2>My Profile</h2>
         <p>Full name: {user.name}</p>
@@ -207,23 +225,6 @@ function PersonalIfno() {
           </Alert>
         )}
       </div>
-      {/* Display when screen big */}
-      <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        <div className="qrcode"></div>
-      </Box>
-      {/* Display when screen small */}
-      <Tooltip
-        sx={{ display: { xs: "flex", md: "none" } }}
-        onClick={handleOpenDialog}
-      >
-        <QrCodeScannerIcon />
-      </Tooltip>
-      <Dialog open={isOpen} onClose={handleCloseDialog}>
-        <DialogContent>
-          <img src={qrData} />
-          <p>Please scan the QR code.</p>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

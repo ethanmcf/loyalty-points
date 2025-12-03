@@ -105,7 +105,7 @@ export function DataTable({ baseURL, role, isOpen }) {
     });
 
     // for events, only get the ones they are responsible for for non-manager/superusers
-    if (role !== "manager" && role !== "superuser") {
+    if (baseURL === "/events" && role !== "manager" && role !== "superuser") {
       params.set("organizerId", user.id);
     }
 
@@ -142,6 +142,7 @@ export function DataTable({ baseURL, role, isOpen }) {
       // error
       console.error("Error: ", resJSON.message);
     }
+
     // on success
     setRows(resJSON.results);
     setRowCount(resJSON.count);

@@ -1417,14 +1417,12 @@ router.get(
       );
     }
 
-    console.log("guestId", req.query.guestId);
-
     // filter by if theyre a guest
     if (req.query.guestId) {
       events = events.filter((event) =>
-        event.guests.find(
-          (guest) => Number(guest.id) === Number(req.query.guestId)
-        )
+        event.guests.find((guest) => {
+          return Number(guest.id) === Number(req.query.guestId);
+        })
       );
     }
 

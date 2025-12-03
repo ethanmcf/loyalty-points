@@ -1,22 +1,23 @@
 import { useNavigate, useParams } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import "../../styles/detailsPage.css";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getTransaction } from "../../apis/transactionsApi";
+import {
+  getTransaction,
+  markTransactionSuspicious,
+} from "../../apis/TransactionsApi";
 import { useUser } from "../../contexts/UserContext";
-import { markTransactionSuspicious } from "../../apis/transactionsApi";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
 import { TransactionQRCode } from "../../components/actionDialogs/TransactionQRCode";
 
 /**
  * The Transactions Details page, which displays more information about the transactions
- * Visible to ??
  */
 export function TransactionDetails() {
   const { user } = useUser();
@@ -207,7 +208,9 @@ export function TransactionDetails() {
               disabled={true}
             />
             <div className="redemption">
-              {transaction.type === "redemption" && <p>Redeemed?</p>}
+              {transaction.type === "redemption" && user.role !== "regular" && (
+                <p>Redeemed?</p>
+              )}
               {transaction.type === "redemption" && (
                 <ProcessRedemptionTransactionsDialog
                   id={Number(transactionId)}

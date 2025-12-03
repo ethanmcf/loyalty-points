@@ -2,10 +2,10 @@ import "./Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
-import { AddEventsDialog } from "../../components/addDialogs/AddEventsDialog";
 import { MarkTransactionSuspicious } from "../../components/actionDialogs/MarkTransactionSuspicious";
 import { AddOrganizerToEventDialog } from "../../components/addDialogs/AddOrganizerToEventDialog";
+import { TypeHistory } from "./VisualizationData";
+import { ActivityOverview } from "./DashboardActivity"; 
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
@@ -18,7 +18,7 @@ import { VerifyUserDialog } from "../../components/actionDialogs/VerifyUserDialo
 import { MarkCashierSuspiciousDialog } from "../../components/actionDialogs/MarkCashierSuspiciousDialog";
 import { PromoteUserDialog } from "../../components/actionDialogs/PromoteUserDialog";
 
-export function ManagerDashboard() {
+export function ManagerDashboard({transactions}) {
   const navigate = useNavigate();
 
   const { user } = useUser();
@@ -31,6 +31,12 @@ export function ManagerDashboard() {
   return (
     <div>
       <div className="dashboard-container">
+        <ActivityOverview transactions={transactions} /> 
+        <div style={{ flex: 1, minWidth: '300px' }} className="gray">
+                <div style={{ padding: '16px', background: '#fff', borderRadius: '8px' }}>
+                    <TypeHistory transactions={transactions} />
+                </div>
+            </div>
         <div className="info-container">
           <div className="user-management gray">
             <h3>User Management</h3>
