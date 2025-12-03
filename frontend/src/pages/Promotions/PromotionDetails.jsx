@@ -107,7 +107,7 @@ export function PromotionDetails() {
     }
   };
   return (
-    <div id="details-page">
+    <div id="promotions-details-page" className="details-page">
       <div className="header">
         <div className="title">
           <IconButton onClick={() => navigate("/promotions")}>

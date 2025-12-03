@@ -1332,19 +1332,21 @@ router.get(
 
     // filter by name
     if (req.query.name) {
-      events = events.filter((event) => event.name === req.query.name);
+      events = events.filter((event) => event.name.includes(req.query.name));
     }
 
     // filter by description
     if (req.query.description) {
-      events = events.filter(
-        (event) => event.description === req.query.description
+      events = events.filter((event) =>
+        event.description.includes(req.query.description)
       );
     }
 
     // filter by location
     if (req.query.location) {
-      events = events.filter((event) => event.location === req.query.location);
+      events = events.filter((event) =>
+        event.location.includes(req.query.location)
+      );
     }
 
     // filter by showFull

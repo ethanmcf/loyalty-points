@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("originalToken");
     localStorage.removeItem("originalRole");
     localStorage.removeItem("role");
-
+    localStorage.clear(); // for clearing filters
     navigate("/");
   };
 

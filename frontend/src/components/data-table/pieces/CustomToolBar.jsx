@@ -23,14 +23,32 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import { deletePromotion } from "../../../apis/promotionsApis";
 import { deleteSingleEvent } from "../../../apis/EventsApi";
-
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import FolderIcon from "@mui/icons-material/Folder";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Chip from "@mui/material/Chip";
 // Reference: https://mui.com/x/react-data-grid/components/toolbar/
 export function CustomToolBar(props) {
-  const { rowSelectionModel, baseURL } = props;
+  const { rowSelectionModel, baseURL, handleBookmarkFilter, setFilterModel } =
+    props;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState();
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
   const [filename, setFileName] = useState("");
+  const [isFilterListOpen, setIsFilterListOpen] = useState(null);
+
+  const handleOpenFilterList = (e) => {
+    setIsFilterListOpen(e.currentTarget);
+  };
+
+  const handleCloseFilterList = () => {
+    setIsFilterListOpen(null);
+  };
+
+  const handleLoadFilterList = (params) => {
+    setFilterModel({ items: params });
+  };
 
   useEffect(() => {
     if (baseURL.includes("event")) {
@@ -74,26 +92,76 @@ export function CustomToolBar(props) {
     setIsErrorDialogOpen(false);
     setError(null);
   };
+
+  // Reference: https://mui.com/material-ui/react-menu/
   return (
     <>
       <Toolbar>
+        <ToolbarButton
+          onClick={handleOpenFilterList}
+          disabled={!localStorage[baseURL]}
+        >
+          <Tooltip title="Open Saved Filters">
+            <FolderIcon />
+          </Tooltip>
+        </ToolbarButton>
+        {localStorage[baseURL] && (
+          <Menu
+            slotProps={{
+              paper: {
+                style: {
+                  maxHeight: 48 * 4.5,
+                  maxWidth: "20ch",
+                  overflow: "scroll",
+                },
+              },
+            }}
+            anchorEl={isFilterListOpen}
+            open={Boolean(isFilterListOpen)}
+            onClose={handleCloseFilterList}
+          >
+            {JSON.parse(localStorage[baseURL]).map((params, menuItemIndex) => (
+              <MenuItem
+                key={menuItemIndex}
+                onClick={() => handleLoadFilterList(JSON.parse(params))}
+              >
+                {JSON.parse(params).map((param, paramIndex) => (
+                  <Chip
+                    key={paramIndex}
+                    label={`${param.field} = ${param.value}`}
+                    sx={{ margin: 1 }}
+                  />
+                ))}
+              </MenuItem>
+            ))}
+          </Menu>
+        )}
+        <ToolbarButton onClick={handleBookmarkFilter}>
+          <Tooltip title="Save Filter for this session.">
+            <BookmarkAddIcon />
+          </Tooltip>
+        </ToolbarButton>
+
         {baseURL !== "/users" &&
           baseURL !== "/transactions" &&
           baseURL !== "/transactions?type=event" &&
           baseURL !== "/users/me/transactions" && (
-            <ToolbarButton
-              onClick={handleClickOpen}
-              disabled={
-                !(
-                  (rowSelectionModel.ids.size > 0 &&
-                    rowSelectionModel.type === "include") ||
-                  (rowSelectionModel.ids.size === 0 &&
-                    rowSelectionModel.type === "exclude")
-                )
-              }
-            >
-              <GridDeleteIcon />
-            </ToolbarButton>
+            <>
+              <GridToolbarDivider />
+              <ToolbarButton
+                onClick={handleClickOpen}
+                disabled={
+                  !(
+                    (rowSelectionModel.ids.size > 0 &&
+                      rowSelectionModel.type === "include") ||
+                    (rowSelectionModel.ids.size === 0 &&
+                      rowSelectionModel.type === "exclude")
+                  )
+                }
+              >
+                <GridDeleteIcon />
+              </ToolbarButton>
+            </>
           )}
         <GridToolbarDivider />
         <Tooltip title="Columns">
@@ -120,10 +188,14 @@ export function CustomToolBar(props) {
         <GridToolbarDivider />
         {/* Reference: https://mui.com/x/react-data-grid/components/export/ */}
         <ExportCsv render={<ToolbarButton />} options={{ filename: filename }}>
-          <FileDownloadIcon fontSize="small" />
+          <Tooltip title="Download as CSV File">
+            <FileDownloadIcon fontSize="small" />
+          </Tooltip>
         </ExportCsv>
         <ExportPrint render={<ToolbarButton />}>
-          <PrintIcon fontSize="small" />
+          <Tooltip title="Print as PDF">
+            <PrintIcon fontSize="small" />
+          </Tooltip>
         </ExportPrint>
       </Toolbar>
       <Dialog open={open} onClose={handleClose}>
