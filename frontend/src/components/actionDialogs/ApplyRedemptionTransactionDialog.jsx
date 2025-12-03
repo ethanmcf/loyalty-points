@@ -10,7 +10,7 @@ import { useUser } from "../../contexts/UserContext";
 import {
   getTransaction,
   setTransactionCompleted,
-} from "../../apis/transactionsApi";
+} from "../apis/transactionsApi";
 import DialogActions from "@mui/material/DialogActions";
 import Alert from "@mui/material/Alert";
 

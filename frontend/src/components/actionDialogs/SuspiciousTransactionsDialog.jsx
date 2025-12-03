@@ -9,7 +9,7 @@ import { useUser } from "../../contexts/UserContext";
 import {
   getTransaction,
   markTransactionSuspicious,
-} from "../../apis/transactionsApi";
+} from "../apis/transactionsApi";
 import DialogContentText from "@mui/material/DialogContentText";
 import Alert from "@mui/material/Alert";
 
