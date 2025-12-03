@@ -7,7 +7,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { useUser } from "../../contexts/UserContext";
-import { getTransaction, setTransactionCompleted } from "../../transactionsApi";
+import {
+  getTransaction,
+  setTransactionCompleted,
+} from "../../apis/transactionsApi";
 import DialogActions from "@mui/material/DialogActions";
 import Alert from "@mui/material/Alert";
 

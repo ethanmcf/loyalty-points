@@ -7,7 +7,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DialogActions from "@mui/material/DialogActions";
 import { useUser } from "../../contexts/UserContext";
-import { getTransaction, setTransactionCompleted } from "../../transactionsApi";
+import {
+  getTransaction,
+  setTransactionCompleted,
+} from "../../apis/TransactionsApi";
 import Alert from "@mui/material/Alert";
 
 /**

@@ -10,7 +10,7 @@ import DialogActions from "@mui/material/DialogActions";
 import {
   getTransaction,
   markTransactionSuspicious,
-} from "../../transactionsApi";
+} from "../../apis/TransactionsApi";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useUser } from "../../contexts/UserContext";
 import Menu from "@mui/material/Menu";

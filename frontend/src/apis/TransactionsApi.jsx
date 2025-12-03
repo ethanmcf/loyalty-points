@@ -152,11 +152,3 @@ export async function getTransactions(
 
   return res.json();
 }
-
-export const transactionsApi = {
-  markTransactionSuspicious,
-  setTransactionCompleted,
-  getTransaction,
-  createNewTransaction,
-  getTransactions,
-};
