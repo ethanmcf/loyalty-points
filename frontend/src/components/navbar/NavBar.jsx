@@ -28,7 +28,7 @@ export function NavBar() {
     if (user?.avatarUrl) {
       setAvatar(`${import.meta.env.VITE_BACKEND_URL}/${user.avatarUrl}`);
     } else {
-      setAvatar("../public/default-avatar.png");
+      setAvatar("/default-avatar.png");
     }
   }, [user]);
 

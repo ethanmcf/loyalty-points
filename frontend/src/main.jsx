@@ -5,7 +5,6 @@ import App from "./App.jsx";
 const theme = createTheme({
   components: {
     MuiAppBar: {
-      defaultProps: { elevation: 0, color: "transparent", position: "static" },
       styleOverrides: {
         root: {
           backgroundColor: "#fff",

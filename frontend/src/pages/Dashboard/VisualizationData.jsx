@@ -58,7 +58,7 @@ export function TypeHistory({ transactions }) {
             <CardContent>
                 <div style={{ position: 'relative', height: '100%' }}>
                     <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>
-                        📊 Transaction Activity by Type
+                        📊 My Transaction Activity by Type
                     </Typography>
                     
                     <Typography variant="h4" color="primary" sx={{ fontWeight: 'extrabold', mb: 1.5 }}>

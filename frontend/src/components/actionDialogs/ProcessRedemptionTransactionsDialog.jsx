@@ -4,10 +4,14 @@ import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DialogActions from "@mui/material/DialogActions";
 import { useUser } from "../../contexts/UserContext";
-import { getTransaction, setTransactionCompleted } from "../../apis/transactionsApi";
+import {
+  getTransaction,
+  setTransactionCompleted,
+} from "../../apis/TransactionsApi";
+import Alert from "@mui/material/Alert";
 
 /**
  * Dialog component for marking a redemption transaction as processed.
@@ -21,7 +25,10 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
   const [transaction, setTransaction] = useState();
   const [error, setError] = useState();
 
-  const canProcess = user?.role === 'cashier' || user?.role === 'manager' || user?.role === 'superuser';
+  const canProcess =
+    user?.role === "cashier" ||
+    user?.role === "manager" ||
+    user?.role === "superuser";
 
   const fetchTransaction = async () => {
     if (!canProcess) return;
@@ -42,22 +49,22 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
 
   const handleClickOpen = () => {
     if (canProcess && transaction) {
-      if (transaction.type !== 'redemption') {
+      if (transaction.type !== "redemption") {
         setError("This is not a redemption transaction.");
         return;
       }
       setIsOpen(true);
     }
   };
-  
+
   const handleClose = () => {
     setIsOpen(false);
-    window.location.reload(); 
+    window.location.reload();
   };
 
   const handleProcess = async () => {
-    if (!transaction || transaction.type !== 'redemption') return;
-    
+    if (!transaction || transaction.type !== "redemption") return;
+
     try {
       await setTransactionCompleted(localStorage.token, id, true);
       handleClose();
@@ -72,30 +79,32 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
   const isProcessed = transaction?.processed;
 
   // only show the button if it's a redemption and it hasn't been processed yet
-  if (transaction?.type !== 'redemption' || isProcessed) {
-      return null;
+  if (transaction?.type !== "redemption" || isProcessed) {
+    return null;
   }
 
   return (
     <>
-      <Button 
-        variant="icon" 
+      <Button
+        variant="icon"
         onClick={handleClickOpen}
-        disabled={!transaction || isProcessed} 
+        disabled={!transaction || isProcessed}
       >
         <CheckCircleIcon color={"success"} />
       </Button>
-      
+
       {transaction && (
         <Dialog open={isOpen} onClose={handleClose}>
           <DialogTitle>Process Redemption (ID: {transaction.id})</DialogTitle>
           <DialogContent>
-            {error && <Alert severity="error" >{error}</Alert>}
-            
+            {error && <Alert severity="error">{error}</Alert>}
+
             <DialogContentText>
-              Are you sure you want to process this redemption? This action will permanently deduct {transaction.amount} points from the user's balance.
+              Are you sure you want to process this redemption? This action will
+              permanently deduct {transaction.amount} points from the user's
+              balance.
             </DialogContentText>
-            
+
             <p>
               <b>Affected User:</b> {transaction.utorid}
             </p>
@@ -105,11 +114,7 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button 
-              onClick={handleProcess} 
-              color="success" 
-              variant="contained"
-            > 
+            <Button onClick={handleProcess} color="success" variant="contained">
               Process and Deduct Points
             </Button>
           </DialogActions>

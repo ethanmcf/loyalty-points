@@ -307,7 +307,7 @@ async function createEvents() {
     const description = descriptions[i];
     const location = locations[i];
     const { startTime, endTime } = randomDateRange();
-    const published = Math.random() < 0.3 ? true : false;
+    const published = Math.random() < 0.1 ? true : false;
     const pointsRemain = randInt(50, 200);
     const pointsAwarded = randInt(10, 60);
     const organizerUsers = await pickRandomUsers(1, 3);

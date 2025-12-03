@@ -9,6 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
 import { changeMyPassword, getMyInfo, updateMyInfo } from "../../apis/UsersApi";
 import { useUser } from "../../contexts/UserContext";
+import { useEffect } from "react";
 
 function UpdateInfo() {
   const { user, updateUser } = useUser();
@@ -26,18 +27,15 @@ function UpdateInfo() {
   const [passwordError, setPasswordError] = useState(null);
   const [passwordSuccess, setPasswordSuccess] = useState(null);
 
-  // Helper
-  const nullIfEmpty = (value) => (value === "" ? null : value);
-
   // Update personal info
   const updatePersonalInfo = async () => {
     const token = localStorage.getItem("token");
-    const updateData = {
-      email: nullIfEmpty(updatedEmail),
-      name: nullIfEmpty(updatedName),
-      birthday: nullIfEmpty(updatedBirthday),
-      avatar: nullIfEmpty(updatedAvatar),
-    };
+    const updateData = new FormData();
+    if (updatedName) updateData.append("name", updatedName);
+    if (updatedEmail) updateData.append("email", updatedEmail);
+    if (updatedBirthday) updateData.append("birthday", updatedBirthday);
+    if (updatedAvatar instanceof File)
+      updateData.append("avatar", updatedAvatar);
     try {
       await updateMyInfo(token, updateData);
       const userData = await getMyInfo(localStorage.getItem("token"));
@@ -97,6 +95,7 @@ function UpdateInfo() {
       </LocalizationProvider>
     );
   };
+
   return (
     <div className="content-container">
       <div className="update-container">
@@ -124,19 +123,36 @@ function UpdateInfo() {
           onChange={(e) => setUpdatedEmail(e.target.value)}
         />
         <BirthdayPicker />
-        <label style={{ maxWidth: "200px" }} className="outline-button">
-          {updatedAvatar ? "File attached" : "Upload avatar"}
-          <input
-            type="file"
-            style={{ display: "none" }}
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                setUpdatedAvatar(file);
-              }
-            }}
-          />
-        </label>
+        <div className="file-upload-container">
+          <label
+            style={{ maxWidth: "200px" }}
+            className={`${updatedAvatar ? "success-attach" : "outline-button"}`}
+          >
+            {updatedAvatar ? "File attached" : "Attach avatar"}
+            <input
+              type="file"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setUpdatedAvatar(file);
+                }
+              }}
+              onClick={() => {
+                setUpdatedAvatar("");
+              }}
+            />
+          </label>
+          {updatedAvatar ? (
+            <img
+              src={URL.createObjectURL(updatedAvatar)}
+              width={40}
+              height={40}
+            />
+          ) : (
+            <p>No file attached</p>
+          )}
+        </div>
 
         {!personalError ? null : (
           <Alert severity="error">{personalError}</Alert>

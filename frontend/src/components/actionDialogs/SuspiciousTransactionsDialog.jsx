@@ -9,8 +9,9 @@ import { useUser } from "../../contexts/UserContext";
 import {
   getTransaction,
   markTransactionSuspicious,
-} from "../../apis/transactionsApi";
+} from "../../apis/TransactionsApi";
 import DialogContentText from "@mui/material/DialogContentText";
+import Alert from "@mui/material/Alert";
 
 /**
  * Dialog component for toggling the suspicious flag on a transaction.
@@ -21,7 +22,7 @@ export function SuspiciousTransactionsDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [transaction, setTransaction] = useState();
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
 
   // Only Managers and Superusers can use this
   const canToggle = user?.role === "manager" || user?.role === "superuser";
@@ -51,7 +52,7 @@ export function SuspiciousTransactionsDialog({ id }) {
   const handleClose = () => {
     setIsOpen(false);
     // TODO based on state management
-    window.location.reload();
+    //window.location.reload();
   };
 
   const handleToggleSuspicious = async () => {
@@ -59,11 +60,14 @@ export function SuspiciousTransactionsDialog({ id }) {
     const newSuspiciousStatus = !transaction.suspicious;
 
     try {
-      await markTransactionSuspicious(
+      const updatedTransaction = await markTransactionSuspicious(
         localStorage.token,
         id,
         newSuspiciousStatus
       );
+      setTransaction(updatedTransaction);
+      setError(null);
+      window.location.reload();
       handleClose();
     } catch (apiError) {
       console.error("Failed to toggle suspicious status:", apiError);
@@ -93,9 +97,9 @@ export function SuspiciousTransactionsDialog({ id }) {
             {error && <Alert severity="error">{error}</Alert>}
 
             <DialogContentText>
-              Are you sure you want to {actionText} the following
-              transaction (ID: {transaction.id})? The transaction is currently
-              marked as {statusText}.
+              Are you sure you want to {actionText} the following transaction
+              (ID: {transaction.id})? The transaction is currently marked as{" "}
+              {statusText}.
             </DialogContentText>
 
             <p>

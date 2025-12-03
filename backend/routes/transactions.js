@@ -41,7 +41,7 @@ router.patch(
 
     // if transaction has already been processed
     if (currentTransaction.processed === true) {
-      return res.status(400).json({ error: "Bad Request" });
+      return res.status(400).json({ error: "Bad Request: Transaction already processed" });
     }
 
     // change flag from false to then deduct points from the user
