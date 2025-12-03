@@ -9,10 +9,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
 import { changeMyPassword, getMyInfo, updateMyInfo } from "../../apis/UsersApi";
 import { useUser } from "../../contexts/UserContext";
-import { useEffect } from "react";
 
 function UpdateInfo() {
-  const { user, updateUser } = useUser();
+  const { updateUser } = useUser();
   // Personal info state
   const [updatedName, setUpdatedNmae] = useState("");
   const [updatedEmail, setUpdatedEmail] = useState("");
