@@ -32,12 +32,12 @@ function UpdateInfo() {
   // Update personal info
   const updatePersonalInfo = async () => {
     const token = localStorage.getItem("token");
-    const updateData = {
-      email: nullIfEmpty(updatedEmail),
-      name: nullIfEmpty(updatedName),
-      birthday: nullIfEmpty(updatedBirthday),
-      avatar: nullIfEmpty(updatedAvatar),
-    };
+    const updateData = new FormData();
+    if (updatedName) updateData.append("name", updatedName);
+    if (updatedEmail) updateData.append("email", updatedEmail);
+    if (updatedBirthday) updateData.append("birthday", updatedBirthday);
+    if (updatedAvatar instanceof File)
+      updateData.append("avatar", updatedAvatar);
     try {
       await updateMyInfo(token, updateData);
       const userData = await getMyInfo(localStorage.getItem("token"));

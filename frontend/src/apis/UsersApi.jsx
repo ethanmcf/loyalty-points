@@ -1,4 +1,3 @@
-
 import { buildQuery } from "./utils/buildQuery";
 const baseURL = `${import.meta.env.VITE_BACKEND_URL}/users`;
 
@@ -9,7 +8,7 @@ export async function changeMyPassword(authToken, oldPassword, newPassword) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
-    body: JSON.stringify ({
+    body: JSON.stringify({
       old: oldPassword,
       new: newPassword,
     }),
@@ -21,11 +20,7 @@ export async function changeMyPassword(authToken, oldPassword, newPassword) {
   }
 }
 
-export async function redeemMyPoints(
-  authToken,
-  amount,
-  remark = null
-) {
+export async function redeemMyPoints(authToken, amount, remark = null) {
   const res = await fetch(`${baseURL}/me/transactions`, {
     method: "POST",
     headers: {
@@ -73,10 +68,9 @@ export async function updateMyInfo(
   const res = await fetch(`${baseURL}/me`, {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
     },
-    body: JSON.stringify(updatedInfo),
+    body: updatedInfo,
   });
 
   if (!res.ok) {
@@ -207,12 +201,10 @@ export async function updateUserById(
 }
 
 /**
- * This function is used for the extra feature, the membership tierlist system. 
+ * This function is used for the extra feature, the membership tierlist system.
  * It returns the tier of the current user.
  */
-export async function getUserTier(
-  authToken
-) {
+export async function getUserTier(authToken) {
   const res = await fetch(`${baseURL}/me`, {
     method: "GET",
     headers: {
@@ -245,9 +237,9 @@ export async function getUserTier(
     pointsToNext = 2000 - data.points; // Points needed for silver
   }
 
-  return { 
-    tier, 
+  return {
+    tier,
     pointsToNext,
-    currentPoints: data.points 
+    currentPoints: data.points,
   };
 }

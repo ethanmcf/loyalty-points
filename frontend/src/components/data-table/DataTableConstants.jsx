@@ -108,7 +108,7 @@ export const UserColumns = [
     filterable: false,
     renderCell: (params) => {
       const src = !params.row.avatarUrl
-        ? "../../../public/default-avatar.png"
+        ? "/default-avatar.png"
         : `${import.meta.env.VITE_BACKEND_URL}/${params.row.avatarUrl}`;
       return (
         <div

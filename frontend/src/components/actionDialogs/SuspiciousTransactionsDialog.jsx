@@ -9,7 +9,7 @@ import { useUser } from "../../contexts/UserContext";
 import {
   getTransaction,
   markTransactionSuspicious,
-} from "../../apis/transactionsApi";
+} from "../../apis/TransactionsApi";
 import DialogContentText from "@mui/material/DialogContentText";
 import Alert from "@mui/material/Alert";
 
@@ -65,9 +65,9 @@ export function SuspiciousTransactionsDialog({ id }) {
         id,
         newSuspiciousStatus
       );
-      setTransaction(updatedTransaction); 
+      setTransaction(updatedTransaction);
       setError(null);
-      window.location.reload(); 
+      window.location.reload();
       handleClose();
     } catch (apiError) {
       console.error("Failed to toggle suspicious status:", apiError);
@@ -97,9 +97,9 @@ export function SuspiciousTransactionsDialog({ id }) {
             {error && <Alert severity="error">{error}</Alert>}
 
             <DialogContentText>
-              Are you sure you want to {actionText} the following
-              transaction (ID: {transaction.id})? The transaction is currently
-              marked as {statusText}.
+              Are you sure you want to {actionText} the following transaction
+              (ID: {transaction.id})? The transaction is currently marked as{" "}
+              {statusText}.
             </DialogContentText>
 
             <p>

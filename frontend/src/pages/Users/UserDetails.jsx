@@ -101,7 +101,7 @@ export function UserDetails() {
                     ? `${import.meta.env.VITE_BACKEND_URL}/${
                         userData.avatarUrl
                       }`
-                    : "../public/default-avatar.png"
+                    : "/default-avatar.png"
                 }
                 style={{
                   widht: 30,
