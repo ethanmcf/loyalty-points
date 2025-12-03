@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const checkRateLimit = require("../helpers/rateLimiter");
 const createAuthToken = require("../helpers/createAuthToken");
 const containsExtraFields = require("../helpers/extraFieldValidation");
+const authorize = require("../middleware/authorizeMiddleware");
 
 const express = require("express");
 const router = express.Router();
@@ -233,6 +234,33 @@ router.post("/register", async (req, res) => {
   return res.status(201).json(finalUser);
 });
 
+router.post(
+  "/maskToken",
+  authorize(["regular", "cashier", "manager", "superuser"]),
+  async (req, res) => {
+    const allowedFields = ["role"];
+    if (containsExtraFields(allowedFields, req.body)) {
+      return res
+        .status(400)
+        .json({ error: "Bad request - extra fields present" });
+    }
+    const roles = ["regular", "cashier", "manager", "superuser"];
+    if (!req.body.role || !roles.includes(req.body.role)) {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+    // Fetch logged-in user
+    const user = await prisma.user.findUnique({
+      where: { utorid: req.user.utorid },
+    });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    user.role = req.body.role;
+    const { token, _ } = createAuthToken(user);
+    return res.status(202).json(token);
+  }
+);
+
 /* Unsupported Methods */
 // tokens
 router.all("/tokens", async (req, res) => {
@@ -249,4 +277,7 @@ router.all("/resets", async (req, res) => {
   return res.status(405).json({ error: "Method unsupported" });
 });
 
+router.all("/maskToken", async (req, res) => {
+  return res.status(405).json({ error: "Method unsupported" });
+});
 module.exports = router;
