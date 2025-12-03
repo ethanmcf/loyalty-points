@@ -10,7 +10,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   getTransaction,
   markTransactionSuspicious,
-} from "../../apis/transactionsApi.jsx";
+} from "../../apis/transactionsApi";
 import { useUser } from "../../contexts/UserContext";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../../components/actionDialogs/ProcessRedemptionTransactionsDialog";
