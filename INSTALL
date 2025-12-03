@@ -6,6 +6,10 @@
 # 2. How to configure various servers (e.g., Nginx, Apache, etc)
 
 # Deployment
+## Notable packages used
+
+## Steps for Deployment
+
 
 # LOCAL SETUP
 ## .env setup
