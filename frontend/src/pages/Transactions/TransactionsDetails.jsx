@@ -107,7 +107,7 @@ export function TransactionDetails() {
           <div className="general-header">
             <h3>General Data</h3>
             {isEditing ? (
-              <Button type="submit" form="info-form">
+              <Button type="submit" form="transactions-info-form">
                 Save
               </Button>
             ) : (
@@ -124,18 +124,11 @@ export function TransactionDetails() {
               <TransactionQRCode transaction={transaction} />
             </div>
           )}
-          <form id="info-form" onSubmit={handleSubmit}>
-            <TextField
-              id="name"
-              name="name"
-              label="Transaction name"
-              value={transaction.name}
-              onChange={(e) =>
-                setTransaction({ ...transaction, name: e.target.value })
-              }
-              required
-              disabled={true}
-            />
+          <form
+            id="transactions-info-form"
+            className="info-form"
+            onSubmit={handleSubmit}
+          >
             <TextField
               id="userId"
               name="userId"
