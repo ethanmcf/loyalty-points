@@ -167,7 +167,7 @@ export function Dashboard() {
                       </div>
                     </div>
                     
-                    <div style={{
+                    {/* <div style={{
                       background: "white",
                       padding: "0.75rem",
                       borderRadius: "8px",
@@ -183,7 +183,7 @@ export function Dashboard() {
                           <li key={index}>{benefit}</li>
                         ))}
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </Popover>
