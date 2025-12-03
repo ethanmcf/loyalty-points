@@ -94,7 +94,6 @@ export function CustomToolBar(props) {
   };
 
   // Reference: https://mui.com/material-ui/react-menu/
-  console.log(JSON.parse(JSON.parse(localStorage[baseURL])[0]));
   return (
     <>
       <Toolbar>

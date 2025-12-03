@@ -163,7 +163,7 @@ export function DataTable({ baseURL, role, isOpen }) {
     fetchData();
 
     setIsLoading(false);
-  }, [baseURL, paginationModel, filterModel, isOpen]);
+  }, [baseURL, paginationModel, filterModel, isOpen, role]);
 
   // generates the columns to match MUI expected structure
   function generateColumns() {
