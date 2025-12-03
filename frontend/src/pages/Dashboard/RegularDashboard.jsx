@@ -5,6 +5,7 @@ import { useUser } from "../../contexts/UserContext";
 import { AddRedemptionTransactionDialog } from "../../components/addDialogs/AddRedemptionTransactionDialog";
 import { TypeHistory } from "./VisualizationData";
 import { getUserTier } from "../../apis/UsersApi";
+import { ActivityOverview } from "./DashboardActivity";
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
