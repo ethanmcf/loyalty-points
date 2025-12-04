@@ -84,7 +84,14 @@ a {
   color: black !important;
 }
 
-.MuiButton-text:hover {
+.main-container .MuiButton-text {
+  color: white !important;
+}
+.user-container .MuiButton-contained:hover {
+  background-color: #1a1a1a !important;
+}
+
+.page .MuiButton-text:hover {
   background-color: white !important;
   text-decoration: underline !important;
 }
