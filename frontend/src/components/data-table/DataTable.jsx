@@ -92,9 +92,9 @@ export function DataTable({ baseURL, role, isOpen }) {
         }
 
         if (filter.field === "amount") {
-          if (filter.operator === ">") {
+          if (filter.operator === ">=") {
             params.set("operator", "gte");
-          } else if (filter.operator === "<") {
+          } else if (filter.operator === "<=") {
             params.set("operator", "lte");
           }
         }
