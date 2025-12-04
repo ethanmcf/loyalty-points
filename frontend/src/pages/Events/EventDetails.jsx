@@ -129,11 +129,22 @@ export function EventDetails() {
     fetchData();
   }, []);
 
+  /* Reference: 
+  https://reactrouter.com/api/hooks/useNavigate 
+  https://www.w3schools.com/js/js_window_history.asp*/
+  const returnToPreviousPage = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   return (
     <div id="event-details-page" className="details-page">
       <div className="header">
         <div className="title">
-          <IconButton onClick={() => navigate(-1)}>
+          <IconButton onClick={returnToPreviousPage}>
             <ArrowBackIcon />
           </IconButton>
           <h2>Events Details Page</h2>
