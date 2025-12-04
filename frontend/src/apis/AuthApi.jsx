@@ -19,12 +19,6 @@ export async function login(utorid, password) {
 }
 
 export async function resetPassword(utorid, newPassword, resetToken) {
-  console.log(
-    utorid,
-    newPassword,
-    resetToken,
-    `${baseURL}/tokens/${resetToken}`
-  );
   const res = await fetch(`${baseURL}/resets/${resetToken}`, {
     method: "POST",
     headers: {
@@ -37,7 +31,6 @@ export async function resetPassword(utorid, newPassword, resetToken) {
   });
   if (!res.ok) {
     const err = await res.json();
-    console.log(err.error);
     throw new Error(err.error);
   }
 }
@@ -98,4 +91,22 @@ export async function registerSelf(name, email, password) {
   }
   res["utorid"] = utorid;
   return res.json(); // resetToken, expiresAt, utorid
+}
+
+export async function generateMaskToken(authToken, role) {
+  const res = await fetch(`${baseURL}/maskToken`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      role,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error);
+  }
+  return res.json(); // token
 }

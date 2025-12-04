@@ -81,17 +81,20 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
-        <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
-      </IconButton>
-      <Button
-        sx={{ display: { xs: "none", md: "flex" } }}
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-      >
-        Add New Promotion
-      </Button>
-
+      {canAdd && (
+        <>
+          <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+            <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
+          </IconButton>
+          <Button
+            sx={{ display: { xs: "none", md: "flex" } }}
+            onClick={handleClickOpen}
+            disabled={!canAdd}
+          >
+            Add New Promotion
+          </Button>
+        </>
+      )}
       <Dialog open={isOpen} onClose={handleClose}>
         {!isCreated ? (
           <>

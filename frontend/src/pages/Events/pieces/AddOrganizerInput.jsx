@@ -23,6 +23,7 @@ export function AddOrganizerInput() {
         utorid,
         localStorage.token
       );
+      window.location.reload();
     } catch (error) {
       setError(error.message);
     }

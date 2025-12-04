@@ -12,6 +12,8 @@ import {
   setTransactionCompleted,
 } from "../../apis/TransactionsApi";
 import Alert from "@mui/material/Alert";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
 
 /**
  * Dialog component for marking a redemption transaction as processed.
@@ -74,13 +76,29 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
     }
   };
 
-  if (!canProcess) return null; // Don't  render if user is unauthorized
+  if (!canProcess)
+    return (
+      <Tooltip title="You are not authorized to process redemptions.">
+        <Chip label="N/A" />
+      </Tooltip>
+    ); // Don't  render if user is unauthorized
 
   const isProcessed = transaction?.processed;
 
   // only show the button if it's a redemption and it hasn't been processed yet
-  if (transaction?.type !== "redemption" || isProcessed) {
-    return null;
+  if (transaction?.type !== "redemption") {
+    return (
+      <Tooltip title="Only Unprocessed Redemption Transactions can be processed">
+        <Chip label="N/A" />
+      </Tooltip>
+    );
+  }
+  if (isProcessed) {
+    return (
+      <Tooltip title="Only Unprocessed Redemption Transactions can be processed">
+        <Chip label="Processed" color="success" />
+      </Tooltip>
+    );
   }
 
   return (

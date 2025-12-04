@@ -22,7 +22,7 @@ function Login() {
       setTimeout(() => {
         setSuccess(false);
         completeLogin(loggedInuser);
-        navigate("/profile");
+        navigate("/dashboard");
       }, 2500);
     } catch (error) {
       setError(error.message);
@@ -63,7 +63,7 @@ function Login() {
 
           {!success ? null : (
             <Alert severity="success">
-              Login successful! Redirecting to profile page ...{" "}
+              Login successful! Redirecting to dashboard ...{" "}
             </Alert>
           )}
 

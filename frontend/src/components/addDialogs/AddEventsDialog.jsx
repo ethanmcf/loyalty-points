@@ -83,17 +83,21 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
 
   return (
     <>
-      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
-        <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
-      </IconButton>
-      <Button
-        sx={{ display: { xs: "none", md: "flex" } }}
-        variant="text"
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-      >
-        Add New Event
-      </Button>
+      {canAdd && (
+        <>
+          <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+            <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
+          </IconButton>
+          <Button
+            sx={{ display: { xs: "none", md: "flex" } }}
+            variant="text"
+            onClick={handleClickOpen}
+            disabled={!canAdd}
+          >
+            Add New Event
+          </Button>
+        </>
+      )}
 
       <Dialog open={isOpen} onClose={handleClose}>
         {!isCreated ? (

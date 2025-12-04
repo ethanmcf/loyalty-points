@@ -21,7 +21,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 
 function PersonalIfno() {
-  const { user, interfaceType, updateInterfaceType, updateUser } = useUser();
+  const { user, updateInterfaceType, updateUser } = useUser();
 
   // Transfer State
   const [recipients, setRecipients] = useState([]);
@@ -141,10 +141,11 @@ function PersonalIfno() {
 
   // Component for picking interface type
   const InterfacePicker = () => {
-    let usersTypes = [user.role];
-    if (user.role == "manager") {
+    const role = localStorage.getItem("originalRole");
+    let usersTypes = [role];
+    if (role == "manager") {
       usersTypes = ["regular", "manager"];
-    } else if (user.role == "superuser") {
+    } else if (role == "superuser") {
       usersTypes = ["regular", "cashier", "manager", "superuser"];
     }
 
@@ -154,7 +155,7 @@ function PersonalIfno() {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={interfaceType}
+          value={user.role}
           label="Interface"
           onChange={(e) => updateInterfaceType(e.target.value)}
         >
