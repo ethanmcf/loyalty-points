@@ -1,5 +1,5 @@
 // This dialogue is used by the cashier to process a redemption Transaction
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";

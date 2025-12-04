@@ -21,3 +21,18 @@ export async function sendResetEmail(userEmail, userToken) {
   const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
   emailjs.send(serviceId, templateId, templateParams, publicKey);
 }
+
+// Used for membership perks implementation
+export async function sendAddToEventEmail(managerEmail, userToken, tier, utorid) {
+  const templateParams = {
+    email: managerEmail,
+    token: userToken,
+    utorid: utorid,
+    tier: tier,
+  };
+  const templateId = import.meta.env.VITE_EMAILJS_REGISTER_TEMPLATE_ID;
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  emailjs.send(serviceId, templateId, templateParams, publicKey);
+}

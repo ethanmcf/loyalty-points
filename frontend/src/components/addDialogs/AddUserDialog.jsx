@@ -17,7 +17,7 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
   const [isCreated, setIsCreated] = useState(false);
   const [createdUser, setCreatedUser] = useState();
   const [error, setError] = useState();
-  const canAdd = user?.role === "manager" || user?.role === "superuser";
+  const canAdd = user?.role === "manager" || user?.role === "superuser" || user?.role === 'cashier';
 
   const handleClickOpen = () => {
     setIsOpen(true);
