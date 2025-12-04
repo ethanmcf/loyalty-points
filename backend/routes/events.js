@@ -194,24 +194,24 @@ router.delete(
     }
     const eventId = Number(req.params["eventId"]);
     if (!Number.isInteger(eventId) || eventId <= 0) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Not found - Event Not Found" });
     }
     const userId = Number(req.params["userId"]);
     if (!Number.isInteger(userId) || userId <= 0) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Not found - Organizer Not Found" });
     }
     const event = await prisma.event.findFirst({
       where: { id: eventId },
       include: { guests: true, organizers: true },
     });
     if (!event) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Not found - Event Not Found" });
     }
     const organizerUser = await prisma.user.findFirst({
       where: { id: userId },
     });
     if (!organizerUser) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Not found - Organizer Not Found" });
     }
     if (!event.organizers.find((organizer) => organizer.id === userId)) {
       return res
@@ -244,14 +244,16 @@ router.post(
      */
     const eventId = Number(req.params["eventId"]);
     if (!Number.isInteger(eventId)) {
-      return res.status(404).json({ error: "Not Found" });
+      return res.status(404).json({ error: "Not Found - Guest is not Found" });
     }
     // step 2: check payload validity
 
     const guestUtorID = req.body.utorid;
 
     if (!guestUtorID || typeof guestUtorID !== "string" || guestUtorID === "") {
-      return res.status(400).json({ error: "Bad Request" });
+      return res
+        .status(400)
+        .json({ error: "Bad Request - Utorid Not Included" });
     }
 
     // look for user by utorid
@@ -262,7 +264,9 @@ router.post(
     });
 
     if (!guestUser) {
-      return res.status(404).json({ error: "Not found" });
+      return res
+        .status(404)
+        .json({ error: "Not found - Guest User Not Found" });
     }
 
     // look for event
@@ -272,7 +276,7 @@ router.post(
     });
 
     if (!event) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Not found - Event Not Found" });
     }
 
     const { role, utorid } = req.user;
@@ -292,7 +296,9 @@ router.post(
         (organizer) => organizer.utorid === guestUser.utorid
       )
     ) {
-      return res.status(400).json({ error: "Bad Request" });
+      return res
+        .status(400)
+        .json({ error: "Bad Request - User is already an organizer" });
     }
 
     // check is user is already a guest
@@ -314,12 +320,12 @@ router.post(
     const endDateTime = new Date(event.endTime);
 
     if (endDateTime < currentDateTime) {
-      return res.status(410).json({ error: "Gone" });
+      return res.status(410).json({ error: "Gone - Event Ended" });
     }
 
     // check if guest list is full
     if (event.capacity === event.guests.length) {
-      return res.status(410).json({ error: "Gone" });
+      return res.status(410).json({ error: "Gone - Event Full" });
     }
 
     // update the list of guests
@@ -366,7 +372,7 @@ router.post(
     const { utorid } = req.body;
 
     if (!utorid || typeof utorid !== "string" || utorid === "") {
-      return res.status(400).json({ error: "Bad Request" });
+      return res.status(400).json({ error: "Bad Request - Invalid Utorid" });
     }
 
     const eventId = Number(req.params["eventId"]);
@@ -406,7 +412,7 @@ router.post(
     const endDateTime = new Date(event.endTime);
 
     if (endDateTime < currentDateTime) {
-      return res.status(410).json({ error: "Gone" });
+      return res.status(410).json({ error: "Gone - Event has ended" });
     }
 
     // update the list of organizers

@@ -41,7 +41,9 @@ router.patch(
 
     // if transaction has already been processed
     if (currentTransaction.processed === true) {
-      return res.status(400).json({ error: "Bad Request: Transaction already processed" });
+      return res
+        .status(400)
+        .json({ error: "Bad Request: Transaction already processed" });
     }
 
     // change flag from false to then deduct points from the user
@@ -418,7 +420,9 @@ router.post(
       });
 
       if (!oldUser) {
-        return res.status(404).json({ error: "Not Found" });
+        return res
+          .status(404)
+          .json({ error: "Not Found - Old User Not Found" });
       }
 
       const newPoints = oldUser.points + Number(amount);
@@ -502,7 +506,9 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
   if (req.query.promotionalId) {
     // check if the promotionalId exists
     if (!Number.isInteger(Number(req.query.promotionId))) {
-      return res.status(400).json({ error: "Bad Request" });
+      return res
+        .status(400)
+        .json({ error: "Bad Request - Promotional Id Is invalid" });
     }
 
     const promotion = await prisma.promotion.findUnique({
@@ -511,7 +517,7 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
 
     // promotion not found
     if (!promotion) {
-      return res.status(404).json({ error: "Not Found" });
+      return res.status(404).json({ error: "Not Found - Promotion Not Found" });
     }
 
     filter.promotionIds = { contains: { id: Number(req.query.promotionalId) } };
@@ -534,8 +540,10 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
   if (req.query.relatedId) {
     if (req.query.type) {
       // check that relatedID is a valid number
-      if (!Number.isInteger(Number(req.query.promotionId))) {
-        return res.status(400).json({ error: "Bad Request" });
+      if (!Number.isInteger(Number(req.query.relatedId))) {
+        return res
+          .status(400)
+          .json({ error: "Bad Request - Related ID is invalid" });
       }
       if (req.query.type === "adjustment") {
         // verify that its a valid transaction
@@ -598,14 +606,16 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
   if (req.query.amount && req.query.operator) {
     if (!Number.isInteger(Number(req.query.amount))) {
       // does this need to be an integer
-      return res.status(400).json({ error: "Bad Request" });
+      return res.status(400).json({ error: "Bad Request - Amount is Invalid" });
     }
 
-    if (req.query.operation !== "gte" && req.query.operation !== "lte") {
-      return res.status(400).json({ error: "Bad Request" });
+    if (req.query.operator !== "gte" && req.query.operator !== "lte") {
+      return res
+        .status(400)
+        .json({ error: "Bad Request - Operator is Invalid" });
     }
 
-    if (req.query.operation === "gte") {
+    if (req.query.operator === "gte") {
       filter.amount = {
         gte: Number(req.query.amount),
       };
@@ -621,13 +631,13 @@ router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
   // default values
   if (req.query.page) {
     if (!Number.isInteger(Number(req.query.page))) {
-      return res.status(400).json({ error: "Bad Request" });
+      return res.status(400).json({ error: "Bad Request - Page is Invalid" });
     }
   }
 
   if (req.query.limit) {
     if (!Number.isInteger(Number(req.query.limit))) {
-      return res.status(400).json({ error: "Bad Request" });
+      return res.status(400).json({ error: "Bad Request - Limit is Invalid" });
     }
   }
 
