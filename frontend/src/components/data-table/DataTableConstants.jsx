@@ -9,12 +9,17 @@ import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog
 import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
 import Chip from "@mui/material/Chip";
 import { RelatedIdDisplay } from "./pieces/RelatedIdDisplay";
-import { getGridStringOperators } from "@mui/x-data-grid";
+import {
+  getGridNumericOperators,
+  getGridStringOperators,
+} from "@mui/x-data-grid";
 
 const containsOperator = [
   getGridStringOperators().find((operator) => operator.value === "contains"),
 ];
-console.log(containsOperator);
+const gtelteOperator = getGridNumericOperators().filter(
+  (operator) => operator.value === "<=" || operator.value === ">="
+);
 export const UserColumns = [
   {
     field: "id",
@@ -237,6 +242,7 @@ export const TransactionColumns = [
     field: "amount",
     headerName: "Amount",
     type: "number",
+    filterOperators: gtelteOperator,
   },
   {
     field: "remarks",
@@ -621,6 +627,7 @@ export const UserTransactionsColumns = [
     field: "amount",
     headerName: "Amount",
     type: "number",
+    filterOperators: gtelteOperator,
   },
   {
     field: "remarks",
