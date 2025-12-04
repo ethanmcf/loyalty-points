@@ -84,11 +84,11 @@ export function TransactionDetails() {
       <div className="header">
         <div className="title">
           {user.role === "regular" ? (
-            <IconButton onClick={() => navigate("/dashboard")}>
+            <IconButton onClick={() => navigate(-1)}>
               <ArrowBackIcon />
             </IconButton>
           ) : (
-            <IconButton onClick={() => navigate("/transactions")}>
+            <IconButton onClick={() => navigate(-1)}>
               <ArrowBackIcon />
             </IconButton>
           )}

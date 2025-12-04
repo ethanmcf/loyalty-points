@@ -83,7 +83,7 @@ export function UserDetails() {
     <div className="details-page" id="users-details-page">
       <div className="header">
         <div className="title">
-          <IconButton onClick={() => navigate("/users")}>
+          <IconButton onClick={() => navigate(-1)}>
             <ArrowBackIcon />
           </IconButton>
           <h2>User Details Page</h2>

@@ -110,7 +110,7 @@ export function PromotionDetails() {
     <div id="promotions-details-page" className="details-page">
       <div className="header">
         <div className="title">
-          <IconButton onClick={() => navigate("/promotions")}>
+          <IconButton onClick={() => navigate(-1)}>
             <ArrowBackIcon />
           </IconButton>
           <h2>Promotion Details Page</h2>

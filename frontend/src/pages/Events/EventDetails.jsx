@@ -133,7 +133,7 @@ export function EventDetails() {
     <div id="event-details-page" className="details-page">
       <div className="header">
         <div className="title">
-          <IconButton onClick={() => navigate("/events")}>
+          <IconButton onClick={() => navigate(-1)}>
             <ArrowBackIcon />
           </IconButton>
           <h2>Events Details Page</h2>
