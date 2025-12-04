@@ -15,13 +15,23 @@ export function Events() {
       <div className="table-page-header">
         <div className="table-page-title">
           <h2>Events</h2>
-          <Tooltip
-            title={
-              "Below displays the list of events currently in the system. You can edit and manage each events's data by pressing the View Details button."
-            }
-          >
-            <InfoOutlineIcon />
-          </Tooltip>
+          {user.role === "cashier" || user.role === "regular" ? (
+            <Tooltip
+              title={
+                "Below displays the list of events that you are organizing. You can manage the guest list or update information you are authorized for."
+              }
+            >
+              <InfoOutlineIcon />
+            </Tooltip>
+          ) : (
+            <Tooltip
+              title={
+                "Below displays the list of events currently in the system. You can edit and manage each events's data by pressing the View Details button."
+              }
+            >
+              <InfoOutlineIcon />
+            </Tooltip>
+          )}
         </div>
 
         <AddEventsDialog isOpen={isOpen} setIsOpen={setIsOpen} />
