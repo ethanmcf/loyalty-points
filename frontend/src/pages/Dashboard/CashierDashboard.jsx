@@ -1,7 +1,5 @@
 import "./Dashboard.css";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useUser } from "../../contexts/UserContext";
 import { AddUserDialog } from "../../components/addDialogs/AddUserDialog";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import { ApplyRedemptionTransactionDialog } from "../../components/actionDialogs/ApplyRedemptionTransactionDialog";
@@ -9,10 +7,7 @@ import { TypeHistory } from "./VisualizationData";
 import { ActivityOverview } from "./DashboardActivity"; 
 
 export function CashierDashboard({transactions}) {
-  const navigate = useNavigate();
 
-  const { user } = useUser();
-  const [roleView, setRoleView] = useState(user.role);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isTransactionsOpen, setIsTransactionsOpen] = useState(false);
 

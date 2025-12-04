@@ -477,7 +477,7 @@ router.post(
 );
 
 // get list of transactions with filters (Jennifer Tan)
-router.get("/", authorize(["manager", "superuser"]), async (req, res) => {
+router.get("/", authorize(["cashier", "manager", "superuser"]), async (req, res) => {
   const filter = {};
   // note: query can only be string
   if (req.query.name) {

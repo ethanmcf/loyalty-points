@@ -1,22 +1,16 @@
 import "./Dashboard.css";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import RegularDashboard from "./RegularDashboard";
-import ManagerDashboard from "./ManagerDashboard";
-import CashierDashboard from "./CashierDashboard";
 import { getUserTier } from "../../apis/UsersApi";
 import Popover from "@mui/material/Popover";
 import { useEffect } from "react";
-import { getMyTransactions } from "../../apis/UsersApi";
 import { LoadData } from "./LoadData";
+import RequestEventAccessButton from "../../components/actionDialogs/RequestAccessToEventDialog";
 
 export function Dashboard() {
-  const navigate = useNavigate();
 
   // get user info
   const { user } = useUser();
-  const [roleView, setRoleView] = useState(user.role);
   const [userTier, setUserTier] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
 
@@ -26,28 +20,25 @@ export function Dashboard() {
       color: "#cfddfcff",
       displayName: "Platinum",
       emoji: "💎",
-      benefits: [
-        "15% off every transaction",
-        "Invite to exclusive platinum members event",
-      ],
+      benefits: ["Invite to exclusive Platinum members event"],
     },
     gold: {
       color: "#FFD700",
       displayName: "Gold",
       emoji: "🥇",
-      benefits: ["10% off every transaction"],
+      benefits: ["Invite to exclusive Gold members event"],
     },
     silver: {
       color: "#C0C0C0",
       displayName: "Silver",
       emoji: "🥈",
-      benefits: ["One-time 40% discount on any transaction"],
+      benefits: ["Invite to exclusive Silver members event"],
     },
     bronze: {
       color: "#CD7F32",
       displayName: "Bronze",
       emoji: "🥉",
-      benefits: ["One-time 10% discount on transactions of $30+"],
+      benefits: ["None, progress to a higher tier to gain benefits!"],
     },
   };
 
@@ -56,11 +47,9 @@ export function Dashboard() {
     const fetchTier = async () => {
       try {
         const res = await getUserTier(localStorage.token);
-        console.log("TIER RESULT:", res);
         setUserTier(res);
       } catch (error) {
-        console.error("Failed to fetch tier:", error);
-        // Optionally set a default tier
+        // set a default tier
         setUserTier({ tier: "bronze" });
       } finally {
         setLoading(false);
@@ -86,27 +75,22 @@ export function Dashboard() {
           <div className="user-info">
             <h3>Hi {user.name}!</h3>
             {!loading && userTier && user.role === "regular" && (
-              <div className="membership">
+              <div className="membership" onMouseEnter={handleEnter}
+                onMouseLeave={handleLeave}>
                 <span
                   className="tier-badge"
-                  onMouseEnter={handleEnter}
-                  onMouseLeave={handleLeave}
                   style={{
                     backgroundColor: currentTier.color,
                     color:
                       userTier.tier === "silver" || userTier.tier === "platinum"
                         ? "#333"
                         : "#fff",
-                    fontWeight: "bold",
-                    fontSize: "0.75rem",
-                    padding: "4px 12px",
-                    borderRadius: "12px",
-                    cursor: "pointer",
                   }}
                 >
                   {currentTier.displayName}
                 </span>
 
+                {/* Reference: https://mui.com/material-ui/react-popover/ */}
                 <Popover
                   open={open}
                   anchorEl={anchorEl}
@@ -114,7 +98,6 @@ export function Dashboard() {
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   transformOrigin={{ vertical: "top", horizontal: "center" }}
                   sx={{
-                    pointerEvents: "none",
                     "& .MuiPopover-paper": {
                       marginTop: "8px",
                       borderRadius: "12px",
@@ -123,21 +106,14 @@ export function Dashboard() {
                     },
                   }}
                 >
-                  <div
+                  <div className="popover-content"
                     style={{
                       background: `linear-gradient(135deg, ${currentTier.color}22 0%, ${currentTier.color}11 100%)`,
-                      padding: "1.5rem",
-                      minWidth: "250px",
                     }}
                   >
-                    <div
+                    <div className="tier-header"
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.75rem",
-                        marginBottom: "1rem",
                         borderBottom: `2px solid ${currentTier.color}`,
-                        paddingBottom: "0.75rem",
                       }}
                     >
                       <span style={{ fontSize: "1.5rem" }}>
@@ -145,9 +121,6 @@ export function Dashboard() {
                       </span>
                       <h4
                         style={{
-                          margin: 0,
-                          fontSize: "1.25rem",
-                          fontWeight: "600",
                           color: "#333",
                         }}
                       >
@@ -155,48 +128,25 @@ export function Dashboard() {
                       </h4>
                     </div>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.75rem",
-                        fontSize: "0.9rem",
-                        color: "#555",
-                      }}
-                    >
-                      <div
-                        style={{
-                          background: "white",
-                          padding: "0.75rem",
-                          borderRadius: "8px",
-                          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                        }}
-                      >
+                    <div className="tier-main">
+                      <div className="future-tier">
                         <strong style={{ color: "#333" }}>Next Tier:</strong>
-                        <div style={{ marginTop: "0.25rem" }}>
+                        <div>
                           {userTier.pointsToNext > 0
                             ? `${userTier.pointsToNext} points to go`
                             : "Max Tier Reached!"}
                         </div>
                       </div>
 
-                      {/* <div style={{
-                      background: "white",
-                      padding: "0.75rem",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
-                    }}>
+                      <div className="tier-benefits">
                       <strong style={{ color: "#333" }}>Benefits:</strong>
-                      <ul style={{ 
-                        margin: "0.5rem 0 0 0", 
-                        paddingLeft: "1.25rem",
-                        lineHeight: "1.6"
-                      }}>
+                      <ul>
                         {currentTier.benefits.map((benefit, index) => (
                           <li key={index}>{benefit}</li>
                         ))}
                       </ul>
-                    </div> */}
+                    </div>
+                    <RequestEventAccessButton tier={userTier} token={localStorage.token} utorid={user.utorid}/>
                     </div>
                   </div>
                 </Popover>
