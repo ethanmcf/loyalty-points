@@ -1,10 +1,8 @@
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { AddRedemptionTransactionDialog } from "../../components/addDialogs/AddRedemptionTransactionDialog";
 import { TypeHistory } from "./VisualizationData";
-import { getUserTier } from "../../apis/UsersApi";
 import { ActivityOverview } from "./DashboardActivity";
 
 // Table-related imports
@@ -18,18 +16,6 @@ export function RegularDashboard({ transactions }) {
 
   // get user info
   const { user } = useUser();
-  const [roleView, setRoleView] = useState(user.role);
-
-  const tier = async () => {
-    const res = await getUserTier(localStorage.token);
-    return res;
-  }
-
-  const userTier = tier();
-
-  const handleRoleChange = (event) => {
-    setRoleView(event.target.value);
-  };
 
   return (
     <div>
