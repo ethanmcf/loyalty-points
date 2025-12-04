@@ -17,6 +17,7 @@ import { PromotionDetails } from "./pages/Promotions/PromotionDetails";
 import { Events } from "./pages/Events/Events";
 import { UserDetails } from "./pages/Users/UserDetails";
 import { TransactionDetails } from "./pages/Transactions/TransactionsDetails";
+import Skeleton from "@mui/material/Skeleton";
 
 function App() {
   return (
@@ -151,7 +152,7 @@ function PublicRoute({ children }) {
 function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
-    return <div>loading</div>;
+    return <Skeleton variant="rectangular" width={"100%"} height={"100%"} />;
   }
   return user ? children : <Navigate to="/login" replace />;
 }
