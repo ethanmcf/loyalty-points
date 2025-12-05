@@ -1,5 +1,5 @@
 import "./Dashboard.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { MarkTransactionSuspicious } from "../../components/actionDialogs/MarkTransactionSuspicious";
@@ -9,10 +9,6 @@ import { ActivityOverview } from "./DashboardActivity";
 
 // Table-related imports
 import { DataTable } from "../../components/data-table/DataTable";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { AddGuestToEventDialog } from "../../components/addDialogs/AddGuestToEventDialog";
 import { VerifyUserDialog } from "../../components/actionDialogs/VerifyUserDialog";
 import { MarkCashierSuspiciousDialog } from "../../components/actionDialogs/MarkCashierSuspiciousDialog";

@@ -2,13 +2,9 @@ import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import RegularDashboard from "./RegularDashboard";
-import ManagerDashboard from "./ManagerDashboard";
-import CashierDashboard from "./CashierDashboard";
 import { getUserTier } from "../../apis/UsersApi";
 import Popover from "@mui/material/Popover";
 import { useEffect } from "react";
-import { getMyTransactions } from "../../apis/UsersApi";
 import { LoadData } from './LoadData'; 
 
 

@@ -1,3 +1,5 @@
+// Reference: https://refine.dev/blog/recharts/#introduction
+
 import Typography from '@mui/material/Typography';
 import { 
     BarChart, 
@@ -6,16 +8,14 @@ import {
     YAxis, 
     CartesianGrid, 
     Tooltip, 
-    Legend,
     ResponsiveContainer,
     Cell
 } from 'recharts'; 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 
-/**
- * Processes transaction data to get the frequency of each transaction type.
- */
+import './VisualizationData.css'; 
+
 const processTransactionFrequency = (transactions) => {
     if (!transactions) return [];
 
@@ -39,10 +39,10 @@ const processTransactionFrequency = (transactions) => {
 const TYPE_COLORS = {
     Purchase: "#1976d2",     
     Redemption: "#9c27b0",   
-    Adjustment: "#ef5350",   
+    Adjustment: "#ef5350",
+    Event: "#a4cd2aff",  
     Unknown: "#757575"       
 };
-
 
 export function TypeHistory({ transactions }) {
     const transactionFrequency = processTransactionFrequency(transactions);
@@ -54,19 +54,20 @@ export function TypeHistory({ transactions }) {
     const XAXIS_HEIGHT = 50; 
 
     return (
-        <Card sx={{ height: 400, borderRadius: '8px', boxShadow: 3 }}>
+        <Card className="history-card" sx={{ boxShadow: 3 }}>
             <CardContent>
-                <div style={{ position: 'relative', height: '100%' }}>
-                    <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>
+                <div className="chart-wrapper">
+                    
+                    <Typography variant="h6" component="h4" className="chart-title">
                         📊 My Transaction Activity by Type
                     </Typography>
                     
-                    <Typography variant="h4" color="primary" sx={{ fontWeight: 'extrabold', mb: 1.5 }}>
+                    <Typography variant="h4" color="primary" className="total-count-text">
                         {totalTransactions} Total Actions
                     </Typography>
                     
                     {transactionFrequency.length === 0 ? (
-                        <Typography color="textSecondary" sx={{ mt: 5 }}>
+                        <Typography color="textSecondary" className="no-data-text">
                             No transaction history available yet.
                         </Typography>
                     ) : (

@@ -1,0 +1,23 @@
+.history-card {
+    height: 400px;
+    border-radius: 8px !important; 
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 100%;
+}
+
+.chart-title {
+    font-weight: bold !important;
+}
+
+
+.total-count-text {
+    font-weight: 800 !important; 
+    margin-bottom: 12px !important; 
+}
+
+.no-data-text {
+    margin-top: 40px !important; 
+}
