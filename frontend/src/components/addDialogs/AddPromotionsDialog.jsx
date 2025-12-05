@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
-import { createPromotion } from "../../apis/promotionsApis";
+import { createPromotion } from "../../apis/PromotionsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
@@ -17,6 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
+
 export function AddPromotionDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
   const [isCreated, setIsCreated] = useState(false);
@@ -42,7 +43,6 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
     setError(null);
     setStartTime(null);
     setEndTime(null);
-    // TODO: find out state management
     window.location.reload();
   };
 
@@ -53,8 +53,7 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
     const isoStartTime = startTime ? startTime.toISOString() : null;
     const isoEndTime = endTime ? endTime.toISOString() : null;
     console.log(formJson);
-    // ?? Not sure if we should do this but I converted necessary fields to numbers, using undefined or null if not applicable/zero.
-    // The backend handles undefined/null correctly, it but expects positive numbers for these.
+    
     const payload = {
       name: formJson.name,
       description: formJson.description,
@@ -140,9 +139,9 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
                   id="type"
                   name="type"
                   label="Promotion Type"
-                  defaultValue="automatic" // Set default value
+                  defaultValue="automatic" 
                   fullWidth
-                  variant="standard" // not sure if the menu items below are ok or if we should replace with something else?
+                  variant="standard" 
                 >
                   <MenuItem value="automatic">Automatic</MenuItem>
                   <MenuItem value="one-time">One-Time</MenuItem>

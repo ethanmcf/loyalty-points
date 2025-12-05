@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { getPromotionById, updatePromotion } from "../../apis/promotionsApis";
+import { getPromotionById, updatePromotion } from "../../apis/PromotionsApi";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";

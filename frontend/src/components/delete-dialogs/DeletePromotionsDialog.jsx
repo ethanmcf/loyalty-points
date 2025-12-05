@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useUser } from "../../contexts/UserContext";
-import { getPromotionById, deletePromotion } from "../../apis/promotionsApis";
+import { getPromotionById, deletePromotion } from "../../apis/PromotionsApi";
 
 export function DeletePromotionsDialog({ id }) {
   const { user } = useUser();
@@ -42,7 +42,6 @@ export function DeletePromotionsDialog({ id }) {
 
   const handleClose = () => {
     setIsOpen(false);
-    // TODO based on state management
     window.location.reload();
   };
 
@@ -53,7 +52,6 @@ export function DeletePromotionsDialog({ id }) {
       handleClose();
     } catch (error) {
       console.error("Promotion deletion failed:", error);
-      //TODO need to show actual error msg not one console?
     }
   };
 

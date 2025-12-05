@@ -4,6 +4,7 @@ import { useUser } from "../../contexts/UserContext";
 import { getUserTier } from "../../apis/UsersApi";
 import Popover from "@mui/material/Popover";
 import { useEffect } from "react";
+
 import { LoadData } from "./LoadData";
 import RequestEventAccessButton from "../../components/actionDialogs/RequestAccessToEventDialog";
 
