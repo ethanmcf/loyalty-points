@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login as loginApi } from "../apis/AuthApi";
+import { generateMaskToken, login as loginApi } from "../apis/AuthApi";
 import { getMyInfo } from "../apis/UsersApi";
 
 const UserContext = createContext();
@@ -13,7 +13,6 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null); // this is null when nobody is logged in
-  const [interfaceType, setInterfaceType] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Fetches logged in user info
@@ -32,8 +31,7 @@ export const UserProvider = ({ children }) => {
       setLoading(true);
       const userData = await fetchLoggedinInfo();
       if (userData) {
-        setUser(userData);
-        setInterfaceType(userData.role);
+        setUser({ ...userData, role: localStorage.getItem("role") });
       }
       setLoading(false);
     };
@@ -43,19 +41,24 @@ export const UserProvider = ({ children }) => {
   const login = async (email, password) => {
     const { token, _ } = await loginApi(email, password);
     localStorage.setItem("token", token);
+    localStorage.setItem("originalToken", token);
     const userData = await fetchLoggedinInfo();
     return userData;
   };
 
   const completeLogin = (userData) => {
     setUser(userData);
-    setInterfaceType(userData.role);
+    localStorage.setItem("role", userData.role);
+    localStorage.setItem("originalRole", userData.role);
   };
 
   const logout = () => {
     setUser(null);
-    setInterfaceType(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("originalToken");
+    localStorage.removeItem("originalRole");
+    localStorage.removeItem("role");
+    localStorage.clear(); // for clearing filters
     navigate("/");
   };
 
@@ -67,18 +70,30 @@ export const UserProvider = ({ children }) => {
     setUser((prev) => ({
       ...prev,
       ...data,
+      role: localStorage.getItem("role"),
     }));
   };
 
-  const updateInterfaceType = (type) => {
-    setInterfaceType(type);
+  const updateInterfaceType = async (type) => {
+    let token = localStorage.getItem("originalToken");
+    if (type !== localStorage.getItem("originalRole")) {
+      token = await generateMaskToken(
+        localStorage.getItem("originalToken"),
+        type
+      );
+    }
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", type);
+    setUser((prev) => ({
+      ...prev,
+      role: type,
+    }));
   };
 
   return (
     <UserContext.Provider
       value={{
         user,
-        interfaceType,
         loading,
         completeLogin,
         login,

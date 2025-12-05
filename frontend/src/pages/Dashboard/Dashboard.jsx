@@ -1,50 +1,46 @@
 import "./Dashboard.css";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { getUserTier } from "../../apis/UsersApi";
 import Popover from "@mui/material/Popover";
 import { useEffect } from "react";
-import { LoadData } from './LoadData'; 
 
+import { LoadData } from "./LoadData";
+import RequestEventAccessButton from "../../components/actionDialogs/RequestAccessToEventDialog";
 
 export function Dashboard() {
-  const navigate = useNavigate();
 
   // get user info
   const { user } = useUser();
-  const [roleView, setRoleView] = useState(user.role);
   const [userTier, setUserTier] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
 
-
   // Tier configuration
   const tierConfig = {
-    platinum: { color: "#cfddfcff", 
-      displayName: "Platinum", 
+    platinum: {
+      color: "#cfddfcff",
+      displayName: "Platinum",
       emoji: "💎",
-      benefits: [
-      "15% off every transaction",
-      "Invite to exclusive platinum members event"
-    ] },
-    gold: { color: "#FFD700", 
-      displayName: "Gold", 
+      benefits: ["Invite to exclusive Platinum members event"],
+    },
+    gold: {
+      color: "#FFD700",
+      displayName: "Gold",
       emoji: "🥇",
-      benefits: [
-      "10% off every transaction"
-    ]},
-    silver: { color: "#C0C0C0", 
-      displayName: "Silver", 
+      benefits: ["Invite to exclusive Gold members event"],
+    },
+    silver: {
+      color: "#C0C0C0",
+      displayName: "Silver",
       emoji: "🥈",
-      benefits: [
-        "One-time 40% discount on any transaction"
-    ]},
-    bronze: { color: "#CD7F32", 
-      displayName: "Bronze", 
+      benefits: ["Invite to exclusive Silver members event"],
+    },
+    bronze: {
+      color: "#CD7F32",
+      displayName: "Bronze",
       emoji: "🥉",
-      benefits: [
-      "One-time 10% discount on transactions of $30+"
-    ]}
+      benefits: ["None, progress to a higher tier to gain benefits!"],
+    },
   };
 
   // Fetching the Tier of the user
@@ -52,17 +48,14 @@ export function Dashboard() {
     const fetchTier = async () => {
       try {
         const res = await getUserTier(localStorage.token);
-        console.log("TIER RESULT:", res);
         setUserTier(res);
       } catch (error) {
-        console.error("Failed to fetch tier:", error);
-        // Optionally set a default tier
+        // set a default tier
         setUserTier({ tier: "bronze" });
       } finally {
         setLoading(false);
       }
     };
-
     fetchTier();
   }, []);
 
@@ -71,8 +64,9 @@ export function Dashboard() {
   const handleLeave = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
 
-  const currentTier = userTier ? (tierConfig[userTier.tier] || tierConfig.bronze) : tierConfig.bronze;
-
+  const currentTier = userTier
+    ? tierConfig[userTier.tier] || tierConfig.bronze
+    : tierConfig.bronze;
 
   return (
     <div>
@@ -80,115 +74,88 @@ export function Dashboard() {
         <div className="title-container">
           <h2>Dashboard</h2>
           <div className="user-info">
-            <h3>
-              Hi { user.name }!
-            </h3>
+            <h3>Hi {user.name}!</h3>
             {!loading && userTier && user.role === "regular" && (
-            <div className="membership">
-            <span 
-                className="tier-badge"
-                onMouseEnter={handleEnter}
-                onMouseLeave={handleLeave}
-                style={{
-                  backgroundColor: currentTier.color,
-                  color: userTier.tier === "silver" || userTier.tier === "platinum" ? "#333" : "#fff",
-                  fontWeight: "bold",
-                  fontSize: "0.75rem",
-                  padding: "4px 12px",
-                  borderRadius: "12px",
-                  cursor: "pointer"
-                }}
-              >
-                {currentTier.displayName}
-              </span>
+              <div className="membership" onMouseEnter={handleEnter}
+                onMouseLeave={handleLeave}>
+                <span
+                  className="tier-badge"
+                  style={{
+                    backgroundColor: currentTier.color,
+                    color:
+                      userTier.tier === "silver" || userTier.tier === "platinum"
+                        ? "#333"
+                        : "#fff",
+                  }}
+                >
+                  {currentTier.displayName}
+                </span>
 
-              <Popover
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleLeave}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                transformOrigin={{ vertical: "top", horizontal: "center" }}
-                sx={{
-                  pointerEvents: "none",
-                  "& .MuiPopover-paper": {
-                    marginTop: "8px",
-                    borderRadius: "12px",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-                    overflow: "hidden"
-                  }
-                }}
-              >
-                <div style={{
-                  background: `linear-gradient(135deg, ${currentTier.color}22 0%, ${currentTier.color}11 100%)`,
-                  padding: "1.5rem",
-                  minWidth: "250px"
-                }}>
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    marginBottom: "1rem",
-                    borderBottom: `2px solid ${currentTier.color}`,
-                    paddingBottom: "0.75rem"
-                  }}>
-                    <span style={{ fontSize: "1.5rem" }}>{currentTier.emoji}</span>
-                    <h4 style={{ 
-                      margin: 0, 
-                      fontSize: "1.25rem",
-                      fontWeight: "600",
-                      color: "#333"
-                    }}>
-                      {currentTier.displayName} Member
-                    </h4>
-                  </div>
-                  
-                  <div style={{ 
-                    display: "flex", 
-                    flexDirection: "column", 
-                    gap: "0.75rem",
-                    fontSize: "0.9rem",
-                    color: "#555"
-                  }}>
-                    <div style={{
-                      background: "white",
-                      padding: "0.75rem",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
-                    }}>
-                      <strong style={{ color: "#333" }}>Next Tier:</strong>
-                      <div style={{ marginTop: "0.25rem" }}>
-                        {userTier.pointsToNext > 0
-                        ? `${userTier.pointsToNext} points to go`
-                        : "Max Tier Reached!"}
-                      </div>
+                {/* Reference: https://mui.com/material-ui/react-popover/ */}
+                <Popover
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleLeave}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  sx={{
+                    "& .MuiPopover-paper": {
+                      marginTop: "8px",
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+                      overflow: "hidden",
+                    },
+                  }}
+                >
+                  <div className="popover-content"
+                    style={{
+                      background: `linear-gradient(135deg, ${currentTier.color}22 0%, ${currentTier.color}11 100%)`,
+                    }}
+                  >
+                    <div className="tier-header"
+                      style={{
+                        borderBottom: `2px solid ${currentTier.color}`,
+                      }}
+                    >
+                      <span style={{ fontSize: "1.5rem" }}>
+                        {currentTier.emoji}
+                      </span>
+                      <h4
+                        style={{
+                          color: "#333",
+                        }}
+                      >
+                        {currentTier.displayName} Member
+                      </h4>
                     </div>
-                    
-                    {/* <div style={{
-                      background: "white",
-                      padding: "0.75rem",
-                      borderRadius: "8px",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
-                    }}>
+
+                    <div className="tier-main">
+                      <div className="future-tier">
+                        <strong style={{ color: "#333" }}>Next Tier:</strong>
+                        <div>
+                          {userTier.pointsToNext > 0
+                            ? `${userTier.pointsToNext} points to go`
+                            : "Max Tier Reached!"}
+                        </div>
+                      </div>
+
+                      <div className="tier-benefits">
                       <strong style={{ color: "#333" }}>Benefits:</strong>
-                      <ul style={{ 
-                        margin: "0.5rem 0 0 0", 
-                        paddingLeft: "1.25rem",
-                        lineHeight: "1.6"
-                      }}>
+                      <ul>
                         {currentTier.benefits.map((benefit, index) => (
                           <li key={index}>{benefit}</li>
                         ))}
                       </ul>
-                    </div> */}
+                    </div>
+                    {userTier !== 'bronze' && <RequestEventAccessButton tier={userTier} token={localStorage.token} utorid={user.utorid}/>}
+                    </div>
                   </div>
-                </div>
-              </Popover>
-            </div>
-          )}
+                </Popover>
+              </div>
+            )}
           </div>
         </div>
         <LoadData />
-      
       </div>
     </div>
   );

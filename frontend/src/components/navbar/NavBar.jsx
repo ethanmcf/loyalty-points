@@ -146,17 +146,16 @@ export function NavBar() {
                 >
                   Dashboard
                 </NavLink>
-                {user.role === "manager" ||
-                  (user.role === "superuser" && (
-                    <NavLink
-                      to="/users"
-                      className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "active" : ""
-                      }
-                    >
-                      Users
-                    </NavLink>
-                  ))}
+                {(user.role === "manager" || user.role === "superuser") && (
+                  <NavLink
+                    to="/users"
+                    className={({ isActive, isPending }) =>
+                      isPending ? "pending" : isActive ? "active" : ""
+                    }
+                  >
+                    Users
+                  </NavLink>
+                )}
                 <NavLink
                   to="/events"
                   className={({ isActive, isPending }) =>

@@ -97,17 +97,21 @@ export function AddTransactionDialog({
 
   return (
     <>
-      <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
-        <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
-      </IconButton>
-      <Button
-        sx={{ display: { xs: "none", md: "flex" } }}
-        variant="text"
-        onClick={handleClickOpen}
-        disabled={!canAdd}
-      >
-        Add New Transaction
-      </Button>
+      {canAdd && (
+        <>
+          <IconButton sx={{ display: { xs: "flex", md: "none" } }}>
+            <AddIcon onClick={handleClickOpen} disabled={!canAdd} />
+          </IconButton>
+          <Button
+            sx={{ display: { xs: "none", md: "flex" } }}
+            variant="text"
+            onClick={handleClickOpen}
+            disabled={!canAdd}
+          >
+            Add New Transaction
+          </Button>
+        </>
+      )}
 
       <Dialog open={isOpen} onClose={handleClose}>
         {!isCreated ? (

@@ -35,6 +35,7 @@ export function AddGuestInput({ guestList, canEdit }) {
   const handleAddGuest = async () => {
     try {
       const res = await postGuestToEvent(eventId, utorid, localStorage.token);
+      window.location.reload();
     } catch (error) {
       setError(error.message);
     }
@@ -43,6 +44,7 @@ export function AddGuestInput({ guestList, canEdit }) {
   const handleRSVPme = async () => {
     try {
       const res = await joinEventLoggedIn(localStorage.token, eventId);
+      window.location.reload();
     } catch (error) {
       setError(error.message);
     }
@@ -51,6 +53,7 @@ export function AddGuestInput({ guestList, canEdit }) {
   const handleUnRSVPme = async () => {
     try {
       const res = await leaveEvent(localStorage.token, eventId);
+      window.location.reload();
     } catch (error) {
       setError(error.message);
     }

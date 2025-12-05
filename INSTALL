@@ -1,32 +1,85 @@
-# This text file should explain how to deploy your website.
+# Deployment Guide
 
-# You should write detailed description on:
+## Packages used (app dependencies)
+Frontend:
+- MUI (Material UI + DatePicker)
+- dayjs
+- emailjs-com
+- qrcode
+- recharts
 
-# 1. All the packages you need to install
-# 2. How to configure various servers (e.g., Nginx, Apache, etc)
+Backend:
+- Express
+- Prisma Client
 
-# Deployment
+## EmailJS setup
+1) Create an EmailJS account.
+2) Create a template with variables: title, subject, email, body (HTML). Use this as VITE_EMAILJS_TEMPLATE_ID.
+3) Put service and public keys into frontend env variables.
 
-# LOCAL SETUP
-## .env setup
-JWT_SECRET=your_jwt_secret
-BACKEND_PORT=3000
-FRONTEND_URL=...
-VITE_BACKEND_URL=...
-VITE_EMAILJS_SERVICE_ID=emailjs_service_key
-VITE_EMAILJS_RESET_TEMPLATE_ID=emailjs_template_key
-VITE_EMAILJS_REGISTER_TEMPLATE_ID=emailjs_template_key
-VITE_EMAILJS_PUBLIC_KEY=emailjs_public_key
+## Environment variables
+Frontend:
+- VITE_BACKEND_URL=https://<backend-url>
+- VITE_EMAILJS_SERVICE_ID=<emailjs_service_id>
+- VITE_EMAILJS_PUBLIC_KEY=<emailjs_public_key>
+- VITE_EMAILJS_TEMPLATE_ID=<emailjs_template_id> 
 
-## Front end setup
-cd frontend
-npm install
-npm run dev
+Backend:
+- JWT_SECRET=<your_jwt_secret>
+- BACKEND_PORT=<port>               
+- FRONTEND_URL=https://<frontend-url>
 
-## Backend setup
-cd backend
-npm install
-npx prisma generate
-npx prisma db push
-node prisma/seed.js
-node index.js
+---
+
+## Deployment: Railway (recommended)
+
+### Frontend service 
+- Root directory: /frontend
+- Install/Build command:
+    npm run build
+- Start command
+    npx serve -s dist
+- Variables:
+  - VITE_BACKEND_URL=https://<your-backend-service>.railway.app
+  - VITE_EMAILJS_SERVICE_ID
+  - VITE_EMAILJS_PUBLIC_KEY
+  - VITE_EMAILJS_TEMPLATE_ID
+
+Notes
+    - Will have to copy backend url after creating backend service
+
+### Backend service 
+- Root directory: /backend
+- Install/Build command that installs, creates and seeds the database:
+  npm run build && npx prisma generate && npx prisma migrate deploy && node prisma/seed.js
+- Start command:
+  npm run start
+- Variables:
+  - JWT_SECRET=your_jwt_secret
+  - FRONTEND_URL=https://<your-frontend-service>.railway.app
+  - BACKEND_PORT=<your-backend-service-port> 
+
+---
+
+## Local development
+.env (repo root):
+- JWT_SECRET=your_jwt_secret
+- BACKEND_PORT=3000
+- FRONTEND_URL=http://localhost:5173
+- VITE_BACKEND_URL=http://localhost:3000
+- VITE_EMAILJS_SERVICE_ID=...
+- VITE_EMAILJS_PUBLIC_KEY=...
+- VITE_EMAILJS_GENERIC_TEMPLATE_ID=...
+
+Frontend:
+- cd frontend
+- npm install
+- npm run dev
+
+Backend:
+- cd backend
+- npm install
+- npx prisma generate
+- npx prisma db push
+- node prisma/seed.js
+- node index.js

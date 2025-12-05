@@ -78,20 +78,24 @@ export function TransactionDetails() {
       }
     }
   };
+  /* Reference: 
+  https://reactrouter.com/api/hooks/useNavigate 
+  https://www.w3schools.com/js/js_window_history.asp*/
+  const returnToPreviousPage = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/dashboard");
+    }
+  };
 
   return (
     <div className="details-page" id="transactions-details-page">
       <div className="header">
         <div className="title">
-          {user.role === "regular" ? (
-            <IconButton onClick={() => navigate("/dashboard")}>
-              <ArrowBackIcon />
-            </IconButton>
-          ) : (
-            <IconButton onClick={() => navigate("/transactions")}>
-              <ArrowBackIcon />
-            </IconButton>
-          )}
+          <IconButton onClick={returnToPreviousPage}>
+            <ArrowBackIcon />
+          </IconButton>
           <h2>Transactions Details Page</h2>
         </div>
 

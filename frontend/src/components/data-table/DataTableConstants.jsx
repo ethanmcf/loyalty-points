@@ -9,7 +9,17 @@ import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog
 import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
 import Chip from "@mui/material/Chip";
 import { RelatedIdDisplay } from "./pieces/RelatedIdDisplay";
+import {
+  getGridNumericOperators,
+  getGridStringOperators,
+} from "@mui/x-data-grid";
 
+const containsOperator = [
+  getGridStringOperators().find((operator) => operator.value === "contains"),
+];
+const gtelteOperator = getGridNumericOperators().filter(
+  (operator) => operator.value === "<=" || operator.value === ">="
+);
 export const UserColumns = [
   {
     field: "id",
@@ -22,6 +32,7 @@ export const UserColumns = [
     field: "name",
     headerName: "Name",
     type: "string",
+    filterOperators: containsOperator,
     flex: 1,
   },
   {
@@ -169,11 +180,13 @@ export const TransactionColumns = [
     field: "utorid",
     headerName: "UtorID",
     type: "string",
+    filterOperators: containsOperator,
     flex: 1,
   },
   {
     field: "createdBy",
     headerName: "Created By",
+    filterOperators: containsOperator,
     type: "string",
     flex: 1,
   },
@@ -229,6 +242,7 @@ export const TransactionColumns = [
     field: "amount",
     headerName: "Amount",
     type: "number",
+    filterOperators: gtelteOperator,
   },
   {
     field: "remarks",
@@ -254,7 +268,7 @@ export const TransactionColumns = [
   {
     field: "processRedemption",
     headerName: "Process Redemption",
-    width: 150,
+    type: "actions",
     filterable: false,
     sortable: false,
     renderCell: (params) => (
@@ -283,6 +297,7 @@ const EventColumnsBase = [
   {
     field: "name",
     headerName: "Name",
+    filterOperators: containsOperator,
     type: "string",
     minWidth: 150,
     flex: 1,
@@ -290,6 +305,7 @@ const EventColumnsBase = [
   {
     field: "location",
     headerName: "Location",
+    filterOperators: containsOperator,
     type: "string",
     flex: 1,
     minWidth: 150,
@@ -417,6 +433,7 @@ const PromotionsColumnsBase = [
     field: "name",
     headerName: "Name",
     type: "string",
+    filterOperators: containsOperator,
     flex: 1,
   },
   {
@@ -610,6 +627,7 @@ export const UserTransactionsColumns = [
     field: "amount",
     headerName: "Amount",
     type: "number",
+    filterOperators: gtelteOperator,
   },
   {
     field: "remarks",

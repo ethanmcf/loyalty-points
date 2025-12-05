@@ -16,6 +16,7 @@ import { PromotionDetails } from "./pages/Promotions/PromotionDetails";
 import { Events } from "./pages/Events/Events";
 import { UserDetails } from "./pages/Users/UserDetails";
 import { TransactionDetails } from "./pages/Transactions/TransactionsDetails";
+import Skeleton from "@mui/material/Skeleton";
 
 function App() {
   return (
@@ -134,23 +135,23 @@ function App() {
   );
 }
 
-// If user is logged in, redirect "/" to profile page
+// If user is logged in, redirect "/" to dashboard page
 function LandingPageRedirect() {
   const { user } = useUser();
-  return user ? <Navigate to="/profile" replace /> : <Landing />;
+  return user ? <Navigate to="/dashboard" replace /> : <Landing />;
 }
 
-// Public routes, only non logged in users can access. Redirect to profile if already logged in
+// Public routes, only non logged in users can access. Redirect to dashboard if already logged in
 function PublicRoute({ children }) {
   const { user } = useUser();
-  return user ? <Navigate to="/profile" replace /> : children;
+  return user ? <Navigate to="/dashboard" replace /> : children;
 }
 
 // Protected routes, only logged in users can access, redirect to login if not authenticated
 function ProtectedRoute({ children }) {
   const { user, loading } = useUser();
   if (loading) {
-    return <div>loading</div>;
+    return <Skeleton variant="rectangular" width={"100%"} height={"100%"} />;
   }
   return user ? children : <Navigate to="/login" replace />;
 }
