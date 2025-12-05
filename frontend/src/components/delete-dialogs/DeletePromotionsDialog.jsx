@@ -42,7 +42,6 @@ export function DeletePromotionsDialog({ id }) {
 
   const handleClose = () => {
     setIsOpen(false);
-    // TODO based on state management
     window.location.reload();
   };
 
@@ -53,7 +52,6 @@ export function DeletePromotionsDialog({ id }) {
       handleClose();
     } catch (error) {
       console.error("Promotion deletion failed:", error);
-      //TODO need to show actual error msg not one console?
     }
   };
 
