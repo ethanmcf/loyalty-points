@@ -21,7 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import { deletePromotion } from "../../../apis/promotionsApis";
+import { deletePromotion } from "../../../apis/PromotionsApi";
 import { deleteSingleEvent } from "../../../apis/EventsApi";
 
 // Reference: https://mui.com/x/react-data-grid/components/toolbar/

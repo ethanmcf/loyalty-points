@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
-import { createPromotion } from "../../apis/promotionsApis";
+import { createPromotion } from "../../apis/PromotionsApi";
 import { useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 
@@ -17,6 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import AddIcon from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
+
 export function AddPromotionDialog({ isOpen, setIsOpen }) {
   const { user } = useUser();
   const [isCreated, setIsCreated] = useState(false);

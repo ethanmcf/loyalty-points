@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   getSingleEvent,
   patchSingleEvent,
-  postOrganizerToEvent,
 } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -18,8 +17,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
-import { AwardAllGuestButton } from "./pieces/AwardAllGuestButton";
-import { DataTable } from "../../components/data-table/DataTable";
 import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";

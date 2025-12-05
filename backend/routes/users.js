@@ -188,8 +188,6 @@ router.get(
         remark: transaction.remark || "",
         createdBy: transaction.creator?.utorid || "",
         suspicious: transaction.suspicious,
-        processedBy: transaction.processedBy,
-        processed: transaction.processed
       })),
     });
   }
