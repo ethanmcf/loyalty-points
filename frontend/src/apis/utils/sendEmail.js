@@ -46,11 +46,10 @@ export async function sendAddToEventEmail(
   utorid
 ) {
   const body = `
-    <p>The following user has requested access to a special membership event ... </p>
-    <p><strong> ${userToken}</strong></p>
-    <p><strong> ${tier}</strong></p>
-    <p><strong> ${utorid}</strong></p>
-    <p>Closing remoarks</p>
+    <p>The following user has requested access to a special membership event</p>
+    <p><strong> Tier: ${tier}</strong></p>
+    <p><strong> utorid: ${utorid}</strong></p>
+    <p>Please add the user to the respective event</p>
   `;
   const templateParams = {
     subject: "Event Request",
