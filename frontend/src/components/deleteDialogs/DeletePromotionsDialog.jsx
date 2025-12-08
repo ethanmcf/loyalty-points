@@ -42,13 +42,13 @@ export function DeletePromotionsDialog({ id }) {
 
   const handleClose = () => {
     setIsOpen(false);
-    window.location.reload();
   };
 
   const handleDelete = async () => {
     // adding the delete API call
     try {
       await deletePromotion(localStorage.token, id);
+      window.location.reload();
       handleClose();
     } catch (error) {
       console.error("Promotion deletion failed:", error);
