@@ -32,7 +32,6 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
     if (!canProcess) return;
     try {
       const res = await getTransaction(localStorage.token, id);
-      console.log(` API Response for Transaction ${id}:`, res);
       setTransaction(res);
       setError(null);
     } catch (error) {
