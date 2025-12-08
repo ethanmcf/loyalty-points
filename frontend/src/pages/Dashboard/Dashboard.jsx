@@ -147,7 +147,7 @@ export function Dashboard() {
                         ))}
                       </ul>
                     </div>
-                    {userTier !== 'bronze' && <RequestEventAccessButton tier={userTier} token={localStorage.token} utorid={user.utorid}/>}
+                    {userTier.tier !== 'bronze' && <RequestEventAccessButton tier={userTier.tier} token={localStorage.token} utorid={user.utorid}/>}
                     </div>
                   </div>
                 </Popover>
