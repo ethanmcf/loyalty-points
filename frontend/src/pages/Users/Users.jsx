@@ -1,5 +1,5 @@
 import { useUser } from "../../contexts/UserContext";
-import { DataTable } from "../../components/data-table/DataTable";
+import { DataTable } from "../../components/dataTable/DataTable";
 import { useState } from "react";
 import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
 import "../../styles/tablesPage.css";

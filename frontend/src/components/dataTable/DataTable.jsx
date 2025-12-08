@@ -255,15 +255,19 @@ export function DataTable({ baseURL, role, isOpen }) {
               return false;
             }
           }
-          const currentDateTime = new Date();
-          const startTime = new Date(params.row.startTime);
-          const endTime = new Date(params.row.endTime);
 
-          if (currentDateTime >= startTime || currentDateTime >= endTime) {
-            return false;
+          if (baseURL.includes("promotion") || baseURL.includes("event")) {
+            const currentDateTime = new Date();
+            const startTime = new Date(params.row.startTime);
+            const endTime = new Date(params.row.endTime);
+
+            if (currentDateTime >= startTime || currentDateTime >= endTime) {
+              return false;
+            }
+
+            return true;
           }
-
-          return true;
+          return false;
         }}
       />
     </Box>

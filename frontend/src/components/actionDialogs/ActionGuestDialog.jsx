@@ -1,5 +1,5 @@
 import { AwardSingleGuestDialog } from "../../pages/Events/pieces/AwardSingleGuestDialog";
-import { DeleteGuestDialog } from "../delete-dialogs/DeleteGuestDialog";
+import { DeleteGuestDialog } from "../deleteDialogs/DeleteGuestDialog";
 
 export function ActionGuestDialog({ userId }) {
   return (

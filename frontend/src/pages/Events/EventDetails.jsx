@@ -14,7 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
-import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
+import { DeleteEventsDialog } from "../../components/deleteDialogs/DeleteEventsDialog";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useUser } from "../../contexts/UserContext";
