@@ -217,21 +217,26 @@ export function AddEventsDialog({ isOpen, setIsOpen }) {
           <>
             <DialogTitle>Event Created Successfully</DialogTitle>
             <DialogContent>
-              <Alert severity="success" sx={{ mb: 2 }}>
-                Event "{createdEvent.name}" (ID: {createdEvent.id}) has been
-                created as unpublished.
-              </Alert>
-              {Object.keys(createdEvent).map(
-                (prop, index) =>
-                  prop !== "description" &&
-                  prop !== "guests" &&
-                  prop !== "organizers" && (
-                    <div key={index}>
-                      <b>{prop}: </b>
-                      {createdEvent[prop]?.toString() || "N/A"}
-                    </div>
-                  )
-              )}
+              {Object.keys(createdEvent).map((prop, index) => {
+                if (prop === "description" || prop === "guests" || prop === "organizers") {
+                  return null;
+                }
+
+                let displayValue = createdEvent[prop];
+
+                if ((prop === "startTime" || prop === "endTime") && displayValue) {
+                  displayValue = new Date(displayValue).toLocaleString();
+                } else {
+                  displayValue = displayValue?.toString() || "N/A";
+                }
+
+                return (
+                  <div key={index}>
+                    <b>{prop}: </b>
+                    {displayValue}
+                  </div>
+                );
+              })}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} variant="outlined">

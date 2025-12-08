@@ -235,15 +235,24 @@ export function AddPromotionDialog({ isOpen, setIsOpen }) {
             <DialogTitle style={{}}>Promotion Created</DialogTitle>
             <DialogContent>
               <div>
-                {Object.keys(createdPromotion).map((prop, index) => (
-                  <div key={index}>
-                    <b>{prop}: </b>
-                    {/* formatting date properties for readability */}
-                    {prop === "startTime" || prop === "endTime"
-                      ? new Date(createdPromotion[prop]).toLocaleString()
-                      : createdPromotion[prop].toString()}
-                  </div>
-                ))}
+                {Object.keys(createdPromotion).map((prop, index) => {
+                  let displayValue = createdPromotion[prop];
+
+                  if (prop === "startTime" || prop === "endTime") {
+                     displayValue = displayValue ? new Date(displayValue).toLocaleString() : "N/A";
+                  } else {
+                     displayValue = (displayValue !== null && displayValue !== undefined) 
+                        ? displayValue.toString() 
+                        : "N/A";
+                  }
+
+                  return (
+                    <div key={index}>
+                      <b>{prop}: </b>
+                      {displayValue}
+                    </div>
+                  );
+                })}
               </div>
             </DialogContent>
             <DialogActions>
