@@ -250,6 +250,7 @@ export function DataTable({ baseURL, role, isOpen }) {
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         isRowSelectable={(params) => {
+          if (!params || !params.row) return false; // safety if row isnt ready yet
           if (baseURL.includes("event")) {
             if (params.row.published) {
               return false;
