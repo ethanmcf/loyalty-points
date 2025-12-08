@@ -10,6 +10,7 @@ import {
 } from "../../../apis/EventsApi";
 import { useUser } from "../../../contexts/UserContext";
 import { AwardAllGuestButton } from "./AwardAllGuestButton";
+import Snackbar, { snackbarClasses } from "@mui/material/Snackbar";
 
 export function AddGuestInput({ guestList, canEdit, fetchData }) {
   const { eventId } = useParams();
@@ -18,6 +19,19 @@ export function AddGuestInput({ guestList, canEdit, fetchData }) {
   const [utorid, setUtorid] = useState("");
   const [error, setError] = useState("");
   const [isUserGuest, setIsUserGuest] = useState(false);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+
+  // Reference: https://mui.com/material-ui/react-snackbar/
+  const handleOpenSnackBar = () => {
+    setSnackBarOpen(true);
+  };
+
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackBarOpen(false);
+  };
 
   useEffect(() => {
     if (guestList.find((guest) => guest.id === user.id)) {
@@ -36,6 +50,7 @@ export function AddGuestInput({ guestList, canEdit, fetchData }) {
     try {
       const res = await postGuestToEvent(eventId, utorid, localStorage.token);
       fetchData();
+      handleOpenSnackBar();
     } catch (error) {
       setError(error.message);
     }
@@ -45,6 +60,7 @@ export function AddGuestInput({ guestList, canEdit, fetchData }) {
     try {
       const res = await joinEventLoggedIn(localStorage.token, eventId);
       fetchData();
+      handleOpenSnackBar();
     } catch (error) {
       setError(error.message);
     }
@@ -54,12 +70,12 @@ export function AddGuestInput({ guestList, canEdit, fetchData }) {
     try {
       await leaveEvent(localStorage.token, eventId);
       fetchData();
+      handleOpenSnackBar();
     } catch (error) {
       setError(error.message);
     }
   };
 
-  // TOOD: add success feedback
   return (
     <div className="adding-input">
       {!error ? null : <Alert severity="error">{error}</Alert>}
@@ -88,6 +104,13 @@ export function AddGuestInput({ guestList, canEdit, fetchData }) {
         </Button>
       )}
       {canEdit && <AwardAllGuestButton variant="contained" />}
+      <Snackbar
+        color="success"
+        open={snackBarOpen}
+        onClose={handleCloseSnackBar}
+        autoHideDuration={1000}
+        message="Guest List Successfully Updated."
+      />
     </div>
   );
 }

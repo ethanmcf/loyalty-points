@@ -5,11 +5,24 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import { postOrganizerToEvent } from "../../../apis/EventsApi";
-
+import Snackbar from "@mui/material/Snackbar";
 export function AddOrganizerInput({ fetchData }) {
   const { eventId } = useParams();
   const [utorid, setUtorid] = useState("");
   const [error, setError] = useState("");
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+
+  // Reference: https://mui.com/material-ui/react-snackbar/
+  const handleOpenSnackBar = () => {
+    setSnackBarOpen(true);
+  };
+
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackBarOpen(false);
+  };
 
   const handleUtoridChange = (e) => {
     e.preventDefault();
@@ -23,8 +36,8 @@ export function AddOrganizerInput({ fetchData }) {
         utorid,
         localStorage.token
       );
-      // window.location.reload();
       fetchData();
+      handleOpenSnackBar();
     } catch (error) {
       setError(error.message);
     }
@@ -44,6 +57,13 @@ export function AddOrganizerInput({ fetchData }) {
       <Button variant="contained" onClick={handleAddOrganizer}>
         Add Organizer
       </Button>
+      <Snackbar
+        color="success"
+        open={snackBarOpen}
+        onClose={handleCloseSnackBar}
+        autoHideDuration={1000}
+        message="Organizer List Successfully Updated."
+      />
     </div>
   );
 }
