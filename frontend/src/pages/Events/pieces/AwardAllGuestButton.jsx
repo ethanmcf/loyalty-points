@@ -8,12 +8,15 @@ import { useState } from "react";
 import { createEventTransaction } from "../../../apis/EventsApi";
 import Alert from "@mui/material/Alert";
 import DialogActions from "@mui/material/DialogActions";
+import { useParams } from "react-router-dom";
 
 export function AwardAllGuestButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState();
   const [createdTransaction, setCreatedTransaction] = useState();
   const [userCount, setUserCount] = useState(0);
+  const { eventId } = useParams();
+
   const handleClickOpen = () => {
     setIsOpen(true);
   };
@@ -29,7 +32,6 @@ export function AwardAllGuestButton() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
     const formJson = {
       ...Object.fromEntries(formData.entries()),
       type: "event",
@@ -38,7 +40,7 @@ export function AwardAllGuestButton() {
     try {
       const res = await createEventTransaction(
         localStorage.token,
-        eventId,
+        Number(eventId),
         formJson
       );
       setCreatedTransaction(res);
@@ -79,8 +81,8 @@ export function AwardAllGuestButton() {
                 any remarks you would like to leave.
               </DialogContentText>
               <form onSubmit={handleSubmit} id="reward-all-form">
-                <TextField id="amount" label="Amount to Reward" />
-                <TextField id="remark" label="Remarks" />
+                <TextField id="amount" label="Amount to Reward" name="amount" />
+                <TextField id="remark" label="Remarks" name="remark" />
               </form>
               {!error ? null : <Alert severity="error">{error}</Alert>}
             </DialogContent>

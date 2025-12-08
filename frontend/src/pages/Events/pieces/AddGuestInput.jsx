@@ -11,7 +11,7 @@ import {
 import { useUser } from "../../../contexts/UserContext";
 import { AwardAllGuestButton } from "./AwardAllGuestButton";
 
-export function AddGuestInput({ guestList, canEdit }) {
+export function AddGuestInput({ guestList, canEdit, fetchData }) {
   const { eventId } = useParams();
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ export function AddGuestInput({ guestList, canEdit }) {
   const handleAddGuest = async () => {
     try {
       const res = await postGuestToEvent(eventId, utorid, localStorage.token);
-      window.location.reload();
+      fetchData();
     } catch (error) {
       setError(error.message);
     }
@@ -44,7 +44,7 @@ export function AddGuestInput({ guestList, canEdit }) {
   const handleRSVPme = async () => {
     try {
       const res = await joinEventLoggedIn(localStorage.token, eventId);
-      window.location.reload();
+      fetchData();
     } catch (error) {
       setError(error.message);
     }
@@ -52,8 +52,8 @@ export function AddGuestInput({ guestList, canEdit }) {
 
   const handleUnRSVPme = async () => {
     try {
-      const res = await leaveEvent(localStorage.token, eventId);
-      window.location.reload();
+      await leaveEvent(localStorage.token, eventId);
+      fetchData();
     } catch (error) {
       setError(error.message);
     }

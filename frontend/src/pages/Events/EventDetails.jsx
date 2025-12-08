@@ -272,7 +272,11 @@ export function EventDetails() {
             Guest Count:
             {eventData.guests ? eventData.guests.length : eventData.numGuests}
           </h4>
-          <AddGuestInput guestList={eventData.guests ?? []} canEdit={canEdit} />
+          <AddGuestInput
+            guestList={eventData.guests ?? []}
+            canEdit={canEdit}
+            fetchData={fetchData}
+          />
           {canEdit && <SimpleTable type={"guests"} data={eventData.guests} />}
         </>
       )}

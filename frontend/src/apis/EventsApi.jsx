@@ -401,5 +401,5 @@ export async function createEventTransaction(authToken, eventId, eventData) {
     throw new Error(error.error);
   }
 
-  return res.json();
+  return await res.json();
 }
