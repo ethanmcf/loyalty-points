@@ -616,6 +616,7 @@ export const UserTransactionsColumns = [
     field: "relatedId",
     headerName: "Related ID",
     type: "number",
+    filterable: false,
     renderCell: (params) => {
       return (
         <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
