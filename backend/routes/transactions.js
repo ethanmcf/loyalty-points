@@ -196,6 +196,7 @@ router.get(
         promotionIds: true,
         relatedId: true,
         suspicious: true,
+        processed: true,
         remark: true,
         creator: { select: { utorid: true } },
       },
@@ -213,6 +214,7 @@ router.get(
       suspicious: transaction.suspicious,
       remark: transaction.remark,
       createdBy: transaction.creator.utorid,
+      processed: transaction.processed,
     };
     if (transaction.type === "adjustment") {
       outputData.relatedId = transaction.relatedId;
