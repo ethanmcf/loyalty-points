@@ -136,7 +136,7 @@ export function MarkTransactionSuspicious() {
           </>
         ) : (
           <>
-            <dialogTitle></dialogTitle>
+            <dialogTitle>Success!</dialogTitle>
             <DialogContent>
               <Alert severity="success" sx={{ mb: 2 }}>
                 Transaction with id {transaction.id} has been marked as
