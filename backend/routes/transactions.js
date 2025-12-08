@@ -479,227 +479,243 @@ router.post(
 );
 
 // get list of transactions with filters (Jennifer Tan)
-router.get("/", authorize(["cashier", "manager", "superuser"]), async (req, res) => {
-  const filter = {};
-  // note: query can only be string
-  if (req.query.name) {
-    filter.name = { contains: req.query.name };
-  }
+router.get(
+  "/",
+  authorize(["cashier", "manager", "superuser"]),
+  async (req, res) => {
+    const filter = {};
+    // note: query can only be string
+    if (req.query.name) {
+      filter.user = { name: { contains: req.query.name } };
+    }
 
-  if (req.query.createdBy) {
-    filter.createdBy = { contains: req.query.createdBy };
-  }
+    if (req.query.utorid) {
+      filter.user = { utorid: { contains: req.query.utorid } };
+    }
 
-  // check if suspicious
-  if (req.query.suspicious) {
-    if (req.query.suspicious === "true" || req.query.suspicious === "false") {
-      if (req.query.suspicious === "true") {
-        filter.suspicious = true;
+    if (req.query.createdBy) {
+      filter.createdBy = { contains: req.query.createdBy };
+    }
+
+    // check if suspicious
+    if (req.query.suspicious) {
+      if (req.query.suspicious === "true" || req.query.suspicious === "false") {
+        if (req.query.suspicious === "true") {
+          filter.suspicious = true;
+        } else {
+          filter.suspicious = false;
+        }
       } else {
-        filter.suspicious = false;
-      }
-    } else {
-      return res
-        .status(400)
-        .json({ error: "Bad Request - Suspicious is Invalid" });
-    }
-  }
-
-  if (req.query.promotionalId) {
-    // check if the promotionalId exists
-    if (!Number.isInteger(Number(req.query.promotionId))) {
-      return res
-        .status(400)
-        .json({ error: "Bad Request - Promotional Id Is invalid" });
-    }
-
-    const promotion = await prisma.promotion.findUnique({
-      where: { id: Number(req.query.promotionId) },
-    });
-
-    // promotion not found
-    if (!promotion) {
-      return res.status(404).json({ error: "Not Found - Promotion Not Found" });
-    }
-
-    filter.promotionIds = { contains: { id: Number(req.query.promotionalId) } };
-  }
-
-  if (req.query.type) {
-    if (
-      req.query.type === "purchase" ||
-      req.query.type === "adjustment" ||
-      req.query.type === "transfer" ||
-      req.query.type === "redemption" ||
-      req.query.type === "event"
-    ) {
-      filter.type = req.query.type;
-    } else {
-      return res.status(400).json({ error: "Bad Request - Type is Invalid" });
-    }
-  }
-
-  if (req.query.relatedId) {
-    if (req.query.type) {
-      // check that relatedID is a valid number
-      if (!Number.isInteger(Number(req.query.relatedId))) {
         return res
           .status(400)
-          .json({ error: "Bad Request - Related ID is invalid" });
+          .json({ error: "Bad Request - Suspicious is Invalid" });
       }
-      if (req.query.type === "adjustment") {
-        // verify that its a valid transaction
-        const relatedTransaction = await prisma.transaction.findUnique({
-          where: { id: Number(req.query.relatedId) },
-        });
+    }
 
-        if (!relatedTransaction) {
-          return res
-            .status(404)
-            .json({ error: "Related Transaction Not Found" });
-        }
-      } else if (req.query.type === "transfer") {
-        // verify that its a valid transaction
-        const relatedUser = await prisma.user.findUnique({
-          where: { id: Number(req.query.relatedId) },
-        });
+    if (req.query.promotionalId) {
+      // check if the promotionalId exists
+      if (!Number.isInteger(Number(req.query.promotionId))) {
+        return res
+          .status(400)
+          .json({ error: "Bad Request - Promotional Id Is invalid" });
+      }
 
-        if (!relatedUser) {
-          return res.status(404).json({ error: "Related User Not Found" });
-        }
-      } else if (req.query.type === "redemption") {
-        const relatedCashier = await prisma.user.findUnique({
-          where: { id: Number(req.query.relatedId), role: "cashier" },
-        });
+      const promotion = await prisma.promotion.findUnique({
+        where: { id: Number(req.query.promotionId) },
+      });
 
-        if (!relatedCashier) {
-          return res
-            .status(404)
-            .json({ error: "Not Found - Cashier Does not Exist" });
-        }
+      // promotion not found
+      if (!promotion) {
+        return res
+          .status(404)
+          .json({ error: "Not Found - Promotion Not Found" });
+      }
 
-        filter.processorId = Number(req.query.relatedId);
-        filter.processed = true;
+      filter.promotionIds = {
+        contains: { id: Number(req.query.promotionalId) },
+      };
+    }
+
+    if (req.query.type) {
+      if (
+        req.query.type === "purchase" ||
+        req.query.type === "adjustment" ||
+        req.query.type === "transfer" ||
+        req.query.type === "redemption" ||
+        req.query.type === "event"
+      ) {
+        filter.type = req.query.type;
       } else {
-        const relatedEvent = await prisma.event.findUnique({
-          where: { id: Number(req.query.relatedId) },
-        });
-
-        if (!relatedEvent) {
-          return res.status(404).json({ error: "Related Event Not Found" });
-        }
+        return res.status(400).json({ error: "Bad Request - Type is Invalid" });
       }
-    } else {
+    }
+
+    if (req.query.relatedId) {
+      if (req.query.type) {
+        // check that relatedID is a valid number
+        if (!Number.isInteger(Number(req.query.relatedId))) {
+          return res
+            .status(400)
+            .json({ error: "Bad Request - Related ID is invalid" });
+        }
+        if (req.query.type === "adjustment") {
+          // verify that its a valid transaction
+          const relatedTransaction = await prisma.transaction.findUnique({
+            where: { id: Number(req.query.relatedId) },
+          });
+
+          if (!relatedTransaction) {
+            return res
+              .status(404)
+              .json({ error: "Related Transaction Not Found" });
+          }
+        } else if (req.query.type === "transfer") {
+          // verify that its a valid transaction
+          const relatedUser = await prisma.user.findUnique({
+            where: { id: Number(req.query.relatedId) },
+          });
+
+          if (!relatedUser) {
+            return res.status(404).json({ error: "Related User Not Found" });
+          }
+        } else if (req.query.type === "redemption") {
+          const relatedCashier = await prisma.user.findUnique({
+            where: { id: Number(req.query.relatedId), role: "cashier" },
+          });
+
+          if (!relatedCashier) {
+            return res
+              .status(404)
+              .json({ error: "Not Found - Cashier Does not Exist" });
+          }
+
+          filter.processorId = Number(req.query.relatedId);
+          filter.processed = true;
+        } else {
+          const relatedEvent = await prisma.event.findUnique({
+            where: { id: Number(req.query.relatedId) },
+          });
+
+          if (!relatedEvent) {
+            return res.status(404).json({ error: "Related Event Not Found" });
+          }
+        }
+      } else {
+        return res.status(400).json({
+          error: "Bad Request - Related Id is Invalid, Must be used with type.",
+        });
+      }
+    }
+
+    // check amount and operator (must exist together)
+    if (
+      (req.query.amount && !req.query.operator) ||
+      (!req.query.amount && req.query.operator)
+    ) {
       return res.status(400).json({
-        error: "Bad Request - Related Id is Invalid, Must be used with type.",
+        error: "Bad Request - Amount and Operator must exist at the same time",
       });
     }
-  }
+    if (req.query.amount && req.query.operator) {
+      if (!Number.isInteger(Number(req.query.amount))) {
+        // does this need to be an integer
+        return res
+          .status(400)
+          .json({ error: "Bad Request - Amount is Invalid" });
+      }
 
-  // check amount and operator (must exist together)
-  if (
-    (req.query.amount && !req.query.operator) ||
-    (!req.query.amount && req.query.operator)
-  ) {
-    return res.status(400).json({
-      error: "Bad Request - Amount and Operator must exist at the same time",
+      if (req.query.operator !== "gte" && req.query.operator !== "lte") {
+        return res
+          .status(400)
+          .json({ error: "Bad Request - Operator is Invalid" });
+      }
+
+      if (req.query.operator === "gte") {
+        filter.amount = {
+          gte: Number(req.query.amount),
+        };
+      } else {
+        filter.amount = {
+          lte: Number(req.query.amount),
+        };
+      }
+    }
+
+    // check page and limit
+
+    // default values
+    if (req.query.page) {
+      if (!Number.isInteger(Number(req.query.page))) {
+        return res.status(400).json({ error: "Bad Request - Page is Invalid" });
+      }
+    }
+
+    if (req.query.limit) {
+      if (!Number.isInteger(Number(req.query.limit))) {
+        return res
+          .status(400)
+          .json({ error: "Bad Request - Limit is Invalid" });
+      }
+    }
+
+    let page = Number(req.query.page) || 1;
+    let limit = Number(req.query.limit) || 10;
+    if (page < 1 || limit < 1) {
+      return res.status(400).json({ error: "Page/limit must be positive" });
+    }
+
+    const skip = (page - 1) * limit;
+    const totalCount = await prisma.transaction.count({ where: filter });
+    const transactions = await prisma.transaction.findMany({
+      skip,
+      take: limit,
+      where: filter,
+      select: {
+        id: true,
+        userId: true,
+        amount: true,
+        type: true,
+        spent: true,
+        promotionIds: true,
+        suspicious: true,
+        remark: true,
+        creatorId: true,
+        relatedId: true,
+      },
+    });
+
+    const outputtedTransactions = await Promise.all(
+      transactions.map(async (transaction) => {
+        const userUtorid = await prisma.user.findUnique({
+          where: { id: transaction.userId },
+          select: { utorid: true },
+        });
+        const creatorUtorid = await prisma.user.findUnique({
+          where: { id: transaction.creatorId },
+          select: { utorid: true },
+        });
+
+        return {
+          id: transaction.id,
+          utorid: userUtorid.utorid,
+          amount: transaction.amount,
+          type: transaction.type,
+          relatedId: transaction.relatedId,
+          spent: transaction.spent,
+          promotionIds: transaction.promotionIds,
+          suspicious: transaction.suspicious,
+          remark: transaction.remark,
+          createdBy: creatorUtorid.utorid,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      count: totalCount,
+      results: outputtedTransactions,
     });
   }
-  if (req.query.amount && req.query.operator) {
-    if (!Number.isInteger(Number(req.query.amount))) {
-      // does this need to be an integer
-      return res.status(400).json({ error: "Bad Request - Amount is Invalid" });
-    }
-
-    if (req.query.operator !== "gte" && req.query.operator !== "lte") {
-      return res
-        .status(400)
-        .json({ error: "Bad Request - Operator is Invalid" });
-    }
-
-    if (req.query.operator === "gte") {
-      filter.amount = {
-        gte: Number(req.query.amount),
-      };
-    } else {
-      filter.amount = {
-        lte: Number(req.query.amount),
-      };
-    }
-  }
-
-  // check page and limit
-
-  // default values
-  if (req.query.page) {
-    if (!Number.isInteger(Number(req.query.page))) {
-      return res.status(400).json({ error: "Bad Request - Page is Invalid" });
-    }
-  }
-
-  if (req.query.limit) {
-    if (!Number.isInteger(Number(req.query.limit))) {
-      return res.status(400).json({ error: "Bad Request - Limit is Invalid" });
-    }
-  }
-
-  let page = Number(req.query.page) || 1;
-  let limit = Number(req.query.limit) || 10;
-  if (page < 1 || limit < 1) {
-    return res.status(400).json({ error: "Page/limit must be positive" });
-  }
-
-  const skip = (page - 1) * limit;
-  const totalCount = await prisma.transaction.count({ where: filter });
-  const transactions = await prisma.transaction.findMany({
-    skip,
-    take: limit,
-    where: filter,
-    select: {
-      id: true,
-      userId: true,
-      amount: true,
-      type: true,
-      spent: true,
-      promotionIds: true,
-      suspicious: true,
-      remark: true,
-      creatorId: true,
-      relatedId: true,
-    },
-  });
-
-  const outputtedTransactions = await Promise.all(
-    transactions.map(async (transaction) => {
-      const userUtorid = await prisma.user.findUnique({
-        where: { id: transaction.userId },
-        select: { utorid: true },
-      });
-      const creatorUtorid = await prisma.user.findUnique({
-        where: { id: transaction.creatorId },
-        select: { utorid: true },
-      });
-
-      return {
-        id: transaction.id,
-        utorid: userUtorid.utorid,
-        amount: transaction.amount,
-        type: transaction.type,
-        relatedId: transaction.relatedId,
-        spent: transaction.spent,
-        promotionIds: transaction.promotionIds,
-        suspicious: transaction.suspicious,
-        remark: transaction.remark,
-        createdBy: creatorUtorid.utorid,
-      };
-    })
-  );
-
-  return res.status(200).json({
-    count: totalCount,
-    results: outputtedTransactions,
-  });
-});
+);
 
 // invalid endpoints
 

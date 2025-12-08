@@ -19,15 +19,26 @@ export function DeleteEventsDialog({ id }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deletedEvent, setDeletedEvent] = useState();
   const [error, setError] = useState();
-
-  // only Managers and Superusers can delete events
-  const canDelete = user?.role === "manager" || user?.role === "superuser";
+  const [canDelete, setCanDelete] = useState(
+    user?.role === "manager" || user?.role === "superuser"
+  ); // only Managers and Superusers can delete events
 
   const fetchEvent = async () => {
     if (!canDelete) return;
     try {
       const res = await getSingleEvent(id, localStorage.token);
       setDeletedEvent(res);
+      const currentTime = new Date();
+      const startDateTime = new Date(res.startTime);
+      const endDateTime = new Date(res.endTime);
+
+      if (startDateTime <= currentTime || endDateTime <= currentTime) {
+        setCanDelete(false);
+      }
+
+      if (res.published) {
+        setCanDelete(false);
+      }
     } catch (apiError) {
       console.error(apiError);
       setError("Could not load event details.");
@@ -53,8 +64,6 @@ export function DeleteEventsDialog({ id }) {
 
   const handleClose = () => {
     setIsOpen(false);
-    // TODO based on state management
-    window.location.reload();
   };
 
   const handleDelete = async () => {
@@ -65,6 +74,7 @@ export function DeleteEventsDialog({ id }) {
     try {
       // hope this is right
       await deleteSingleEvent(id, localStorage.token);
+      window.location.reload();
       handleClose();
     } catch (error) {
       console.error("Event deletion failed:", error);
@@ -72,29 +82,17 @@ export function DeleteEventsDialog({ id }) {
     }
   };
 
-  if (!canDelete || !deletedEvent) {
-    if (error)
-      return (
-        <Alert severity="error" size="small">
-          {error}
-        </Alert>
-      );
-    return null;
-  }
-
-  const isPublished = deletedEvent.published;
-
   return (
     <>
       <Button
         variant="icon"
         onClick={handleClickOpen}
-        disabled={isPublished} // Disable if published
+        disabled={!canDelete} // Disable if published
         title={
-          isPublished ? "Published events cannot be deleted" : "Delete Event"
+          !canDelete ? "Published events cannot be deleted" : "Delete Event"
         }
       >
-        <DeleteIcon color={isPublished ? "disabled" : "error"} />
+        <DeleteIcon color={!canDelete ? "disabled" : "error"} />
       </Button>
 
       <Dialog open={isOpen} onClose={handleClose}>
@@ -111,16 +109,21 @@ export function DeleteEventsDialog({ id }) {
             following unpublished event:
           </DialogContentText>
 
-          <p>
-            <b>Name:</b> {deletedEvent.name}
-          </p>
-          <p>
-            <b>Location:</b> {deletedEvent.location}
-          </p>
-          <p>
-            <b>Starts:</b>{" "}
-            {new Date(deletedEvent.startTime).toLocaleDateString()}
-          </p>
+          {deletedEvent && (
+            <>
+              {" "}
+              <p>
+                <b>Name:</b> {deletedEvent.name}
+              </p>
+              <p>
+                <b>Location:</b> {deletedEvent.location}
+              </p>
+              <p>
+                <b>Starts:</b>{" "}
+                {new Date(deletedEvent.startTime).toLocaleDateString()}
+              </p>
+            </>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

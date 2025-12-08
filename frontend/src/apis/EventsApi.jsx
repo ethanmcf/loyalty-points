@@ -231,11 +231,12 @@ export async function deleteSingleEvent(eventId, authToken) {
     const allEventsResponse = await fetch(url, requestOptions);
 
     if (!allEventsResponse.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
+      const eventsJSON = await allEventsResponse.json();
+      console.error("Error occured: ", eventsJSON.error);
+      throw new Error(eventsJSON.error);
     }
 
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
+    return;
   } catch (error) {
     console.error("Error: ", error);
   }
@@ -290,12 +291,13 @@ export async function deleteOrganizerFromEvent(eventId, userId, authToken) {
   const url = `${baseURL}/events/${eventId}/organizers/${userId}`;
   const res = await fetch(url, requestOptions);
 
-  const eventsJSON = await res.json();
   if (!res.ok) {
+    const eventsJSON = await res.json();
+    console.error("Error occured: ", eventsJSON.error);
     throw new Error(eventsJSON.error);
   }
 
-  return eventsJSON; // expected should be no content
+  return; // expected should be no content
 }
 
 /**
@@ -400,5 +402,5 @@ export async function createEventTransaction(authToken, eventId, eventData) {
     throw new Error(error.error);
   }
 
-  return res.json();
+  return await res.json();
 }

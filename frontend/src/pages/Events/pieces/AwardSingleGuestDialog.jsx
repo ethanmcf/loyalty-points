@@ -45,9 +45,10 @@ export function AwardSingleGuestDialog({ userId }) {
     try {
       const res = await createEventTransaction(
         localStorage.token,
-        eventId,
+        Number(eventId),
         formJson
       );
+      console.log(res);
       setCreatedTransaction(res);
     } catch (error) {
       console.error(error);
@@ -79,11 +80,22 @@ export function AwardSingleGuestDialog({ userId }) {
           <>
             <DialogTitle>Event Award Transaction Confirmed</DialogTitle>
             <DialogContent>
-              You have successfully created a transaction record of awarding:
-              <DialogContentText>
-                <b>{res.awarded} Points</b> to <b>{res.recipient}</b>
-              </DialogContentText>
-              <p>Remarks: {res.remarks}</p>
+              <Alert>
+                You have successfully created a transaction record of awarding:
+                <DialogContentText>
+                  <b>{createdTransaction.awarded} Points</b> to{" "}
+                  <b>{createdTransaction.recipient}</b>
+                </DialogContentText>
+              </Alert>
+              <p>
+                Remarks:{" "}
+                {!createdTransaction.remarks ||
+                createdTransaction.remarks === "" ? (
+                  <>{"N/A"}</>
+                ) : (
+                  <>{createdTransaction.remarks}</>
+                )}
+              </p>
             </DialogContent>
             <DialogActions>
               <Button variant="text" onClick={handleClose}>

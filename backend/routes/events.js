@@ -14,7 +14,7 @@ const containsExtraFields = require("../helpers/extraFieldValidation");
 // Remove logged in user from event (Veda Kesarwani)
 router.delete(
   "/:eventId/guests/me",
-  authorize(["regular"]),
+  authorize(["regular", "cashier", "manager", "superuser"]),
   async (req, res) => {
     const loggedUser = await prisma.user.findFirst({
       where: { utorid: req.user.utorid },
