@@ -4,23 +4,19 @@ import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DialogActions from "@mui/material/DialogActions";
+import Alert from "@mui/material/Alert";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PendingActionsIcon from "@mui/icons-material/PendingActions"; 
+
 import { useUser } from "../../contexts/UserContext";
 import {
   getTransaction,
   setTransactionCompleted,
 } from "../../apis/TransactionsApi";
-import Alert from "@mui/material/Alert";
-import Chip from "@mui/material/Chip";
-import Tooltip from "@mui/material/Tooltip";
 
-/**
- * Dialog component for marking a redemption transaction as processed.
- * only for managers and superusers due to backend GET /:transactionId security.
- * @param {object} props - The component props.
- * @param {number} props.id - The ID of the transaction to process.
- */
 export function ProcessRedemptionTransactionsDialog({ id }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +32,7 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
     if (!canProcess) return;
     try {
       const res = await getTransaction(localStorage.token, id);
+      console.log(` API Response for Transaction ${id}:`, res);
       setTransaction(res);
       setError(null);
     } catch (error) {
@@ -49,8 +46,10 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
     fetchTransaction();
   }, [id]);
 
+  const isProcessed = transaction?.processed === true;
+
   const handleClickOpen = () => {
-    if (canProcess && transaction) {
+    if (canProcess && transaction && !isProcessed) {
       if (transaction.type !== "redemption") {
         setError("This is not a redemption transaction.");
         return;
@@ -77,15 +76,15 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
   };
 
   if (!canProcess)
-    return (
-      <Tooltip title="You are not authorized to process redemptions.">
-        <Chip label="N/A" />
-      </Tooltip>
-    ); // Don't  render if user is unauthorized
+  return (
+    <Tooltip title="You are not authorized to process redemptions.">
+      <Chip label="N/A" />
+    </Tooltip>
+  ); // Don't  render if user is unauthorized
 
-  const isProcessed = transaction?.processed;
+  
+  //if (!canProcess) return <Chip label="N/A" />;
 
-  // only show the button if it's a redemption and it hasn't been processed yet
   if (transaction?.type !== "redemption") {
     return (
       <Tooltip title="Only Unprocessed Redemption Transactions can be processed">
@@ -93,23 +92,28 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
       </Tooltip>
     );
   }
+
+  // if it is processed green check
   if (isProcessed) {
     return (
-      <Tooltip title="Only Unprocessed Redemption Transactions can be processed">
-        <Chip label="Processed" color="success" />
+      <Tooltip title={"Already processed"}>
+        <CheckCircleIcon color="success" />
       </Tooltip>
     );
   }
 
+  // if not processed action button
   return (
     <>
-      <Button
-        variant="icon"
-        onClick={handleClickOpen}
-        disabled={!transaction || isProcessed}
-      >
-        <CheckCircleIcon color={"success"} />
-      </Button>
+      <Tooltip title="Click to Process Redemption">
+        <Button
+          variant="icon"
+          onClick={handleClickOpen}
+          disabled={!transaction} 
+        >
+          <PendingActionsIcon color="primary" />
+        </Button>
+      </Tooltip>
 
       {transaction && (
         <Dialog open={isOpen} onClose={handleClose}>
@@ -122,13 +126,11 @@ export function ProcessRedemptionTransactionsDialog({ id }) {
               permanently deduct {transaction.amount} points from the user's
               balance.
             </DialogContentText>
-
-            <p>
-              <b>Affected User:</b> {transaction.utorid}
-            </p>
-            <p>
-              <b>Points to Deduct:</b> {transaction.amount}
-            </p>
+            
+            <div style={{ marginTop: '1rem' }}>
+                <p><b>Affected User:</b> {transaction.utorid}</p>
+                <p><b>Points to Deduct:</b> {transaction.amount}</p>
+            </div>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
