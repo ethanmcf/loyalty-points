@@ -174,6 +174,7 @@ export const TransactionColumns = [
     headerName: "ID",
     width: 100,
     type: "number",
+    filterable: false,
   },
   {
     field: "utorid",
@@ -293,6 +294,7 @@ const EventColumnsBase = [
     headerName: "ID",
     type: "number",
     width: 100,
+    filterable: false,
   },
   {
     field: "name",
@@ -428,6 +430,7 @@ const PromotionsColumnsBase = [
     headerName: "ID",
     type: "number",
     width: 100,
+    filterable: false,
   },
   {
     field: "name",
@@ -569,6 +572,7 @@ export const UserTransactionsColumns = [
     field: "id",
     headerName: "ID",
     type: "number",
+    filterable: false,
   },
   {
     field: "createdBy",
