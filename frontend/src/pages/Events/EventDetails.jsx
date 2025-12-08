@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
-import { SimpleTable } from "../../components/simple-table/SimpleTable";
+import { SimpleTable } from "../../components/simpleTable/SimpleTable";
 import { AddOrganizerInput } from "./pieces/AddOrganizerInput";
 import { AddGuestInput } from "./pieces/AddGuestInput";
 import dayjs from "dayjs";
