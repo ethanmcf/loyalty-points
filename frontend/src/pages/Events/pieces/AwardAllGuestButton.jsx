@@ -60,11 +60,13 @@ export function AwardAllGuestButton() {
           <>
             <DialogTitle>Event Award Transaction Confirmed</DialogTitle>
             <DialogContent>
-              You have successfully created a transaction record of awarding:
-              <DialogContentText>
-                <b>{createdTransaction[0].awarded} Points</b> to{" "}
-                <b>{userCount} Users</b>
-              </DialogContentText>
+              <Alert>
+                You have successfully created a transaction record of awarding:
+                <DialogContentText>
+                  <b>{createdTransaction[0].awarded} Points</b> to{" "}
+                  <b>{userCount} Users</b>
+                </DialogContentText>
+              </Alert>
               <p>
                 Remarks:{" "}
                 {!createdTransaction[0].remarks ||

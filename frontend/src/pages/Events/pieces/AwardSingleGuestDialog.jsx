@@ -80,12 +80,22 @@ export function AwardSingleGuestDialog({ userId }) {
           <>
             <DialogTitle>Event Award Transaction Confirmed</DialogTitle>
             <DialogContent>
-              You have successfully created a transaction record of awarding:
-              <DialogContentText>
-                <b>{createdTransaction.awarded} Points</b> to
-                <b>{createdTransaction.recipient}</b>
-              </DialogContentText>
-              <p>Remarks: {createdTransaction.remarks}</p>
+              <Alert>
+                You have successfully created a transaction record of awarding:
+                <DialogContentText>
+                  <b>{createdTransaction.awarded} Points</b> to{" "}
+                  <b>{createdTransaction.recipient}</b>
+                </DialogContentText>
+              </Alert>
+              <p>
+                Remarks:{" "}
+                {!createdTransaction.remarks ||
+                createdTransaction.remarks === "" ? (
+                  <>{"N/A"}</>
+                ) : (
+                  <>{createdTransaction.remarks}</>
+                )}
+              </p>
             </DialogContent>
             <DialogActions>
               <Button variant="text" onClick={handleClose}>
