@@ -79,7 +79,7 @@ export function DataTable({ baseURL, role, isOpen }) {
 
     // Make them into strings that work
     filters.forEach((filter) => {
-      if (!filter.value) {
+      if (!filter.value && filter.value !== false) {
         return;
       }
 

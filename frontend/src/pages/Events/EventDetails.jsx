@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getSingleEvent,
-  patchSingleEvent,
-} from "../../apis/EventsApi";
+import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -207,7 +204,6 @@ export function EventDetails() {
               name="capacity"
               label="Capacity"
               value={eventData.capacity}
-              required
               disabled={!isEditing}
             />
 

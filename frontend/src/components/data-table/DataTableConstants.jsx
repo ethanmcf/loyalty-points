@@ -40,7 +40,6 @@ export const UserColumns = [
     headerName: "UtorID",
     type: "string",
     flex: 1,
-    filterable: false,
   },
   {
     field: "email",
