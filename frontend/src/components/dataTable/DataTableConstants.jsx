@@ -231,6 +231,7 @@ export const TransactionColumns = [
     headerName: "Related ID",
     type: "number",
     minWidth: 150,
+    filterable: false,
     renderCell: (params) => {
       return (
         <RelatedIdDisplay type={params.row.type} id={params.row.relatedId} />
