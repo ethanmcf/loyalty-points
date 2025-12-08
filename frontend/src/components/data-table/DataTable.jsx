@@ -227,6 +227,7 @@ export function DataTable({ baseURL, role, isOpen }) {
             baseURL,
             handleBookmarkFilter,
             setFilterModel,
+            fetchData,
           },
         }}
         rowSelectionModel={rowSelectionModel}
@@ -248,6 +249,22 @@ export function DataTable({ baseURL, role, isOpen }) {
         paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        isRowSelectable={(params) => {
+          if (baseURL.includes("event")) {
+            if (params.row.published) {
+              return false;
+            }
+          }
+          const currentDateTime = new Date();
+          const startTime = new Date(params.row.startTime);
+          const endTime = new Date(params.row.endTime);
+
+          if (currentDateTime >= startTime || currentDateTime >= endTime) {
+            return false;
+          }
+
+          return true;
+        }}
       />
     </Box>
   );

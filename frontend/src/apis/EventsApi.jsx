@@ -231,11 +231,12 @@ export async function deleteSingleEvent(eventId, authToken) {
     const allEventsResponse = await fetch(url, requestOptions);
 
     if (!allEventsResponse.ok) {
-      console.error("Error occured: ", allEventsResponse.status);
+      const eventsJSON = await allEventsResponse.json();
+      console.error("Error occured: ", eventsJSON.error);
+      throw new Error(eventsJSON.error);
     }
 
-    const eventsJSON = await allEventsResponse.json();
-    return eventsJSON;
+    return;
   } catch (error) {
     console.error("Error: ", error);
   }
