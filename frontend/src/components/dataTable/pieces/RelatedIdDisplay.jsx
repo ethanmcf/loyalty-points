@@ -14,16 +14,20 @@ export function RelatedIdDisplay({ type, id }) {
   const redirectUser = () => {
     if (type === "transfer") {
       // id of the reciever, only manager and super user can access
-      navigate(`/users/${id}`);
+      // navigate(`/users/${id}`);
     } else if (type === "adjustment") {
       navigate(`/transactions/${id}`);
     } else if (type === "event") {
       navigate(`/events/${id}`); // if its published then regular users can access, otherwise, only managers and super users
     } else if (type === "redemption") {
-      if (id && id !== "N/A") {
-        // if user is not null
-        navigate(`/users/${id}`);
-      }
+      // if (id && id !== "N/A") {
+      //   // if user is not null
+      //   if (!Number.isInteger(Number(id))) {
+      //     // if its a letter than look for the id
+      //   } else {
+      //     navigate(`/users/${id}`);
+      //   }
+      // }
     }
   };
 
@@ -32,16 +36,15 @@ export function RelatedIdDisplay({ type, id }) {
       setRelatedData("N/A");
       setTooltipMessage("Purchases do not have a related id");
     } else if (type === "redemption") {
-      
-        if (id && id !== "N/A") {
-          setRelatedData(id); 
-          setTooltipMessage("User who processed the redemption.");
-        } else {
-          setRelatedData("N/A");
-          setTooltipMessage(
-            "User who processed the redemption. This transaction has not yet been processed."
-          );
-        }
+      if (id && id !== "N/A") {
+        setRelatedData(id);
+        setTooltipMessage("User who processed the redemption.");
+      } else {
+        setRelatedData("N/A");
+        setTooltipMessage(
+          "User who processed the redemption. This transaction has not yet been processed."
+        );
+      }
     } else if (type === "transfer") {
       // related id is the id of the reciever
       try {
