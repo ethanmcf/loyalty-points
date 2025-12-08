@@ -666,6 +666,7 @@ router.get("/", authorize(["cashier", "manager", "superuser"]), async (req, res)
       remark: true,
       creatorId: true,
       relatedId: true,
+      processorId: true,
     },
   });
 
@@ -680,12 +681,28 @@ router.get("/", authorize(["cashier", "manager", "superuser"]), async (req, res)
         select: { utorid: true },
       });
 
+    let finalRelatedId = transaction.relatedId;
+
+    // If it's a redemption and has a processorId, look up that user
+    if (transaction.type === "redemption" && transaction.processorId) {
+              
+       const processor = await prisma.user.findUnique({
+           where: { id: transaction.processorId },
+           select: { utorid: true }
+       });
+
+       if (processor) {
+           finalRelatedId = processor.utorid; 
+       } 
+    }
+    
+
       return {
         id: transaction.id,
         utorid: userUtorid.utorid,
         amount: transaction.amount,
         type: transaction.type,
-        relatedId: transaction.relatedId,
+        relatedId: finalRelatedId,
         spent: transaction.spent,
         promotionIds: transaction.promotionIds,
         suspicious: transaction.suspicious,
