@@ -664,51 +664,68 @@ router.get(
       return res.status(400).json({ error: "Page/limit must be positive" });
     }
 
-    const skip = (page - 1) * limit;
-    const totalCount = await prisma.transaction.count({ where: filter });
-    const transactions = await prisma.transaction.findMany({
-      skip,
-      take: limit,
-      where: filter,
-      select: {
-        id: true,
-        userId: true,
-        amount: true,
-        type: true,
-        spent: true,
-        promotionIds: true,
-        suspicious: true,
-        remark: true,
-        creatorId: true,
-        relatedId: true,
-      },
-    });
+  const skip = (page - 1) * limit;
+  const totalCount = await prisma.transaction.count({ where: filter });
+  const transactions = await prisma.transaction.findMany({
+    skip,
+    take: limit,
+    where: filter,
+    select: {
+      id: true,
+      userId: true,
+      amount: true,
+      type: true,
+      spent: true,
+      promotionIds: true,
+      suspicious: true,
+      remark: true,
+      creatorId: true,
+      relatedId: true,
+      processorId: true,
+    },
+  });
 
-    const outputtedTransactions = await Promise.all(
-      transactions.map(async (transaction) => {
-        const userUtorid = await prisma.user.findUnique({
-          where: { id: transaction.userId },
-          select: { utorid: true },
-        });
-        const creatorUtorid = await prisma.user.findUnique({
-          where: { id: transaction.creatorId },
-          select: { utorid: true },
-        });
+  const outputtedTransactions = await Promise.all(
+    transactions.map(async (transaction) => {
+      const userUtorid = await prisma.user.findUnique({
+        where: { id: transaction.userId },
+        select: { utorid: true },
+      });
+      const creatorUtorid = await prisma.user.findUnique({
+        where: { id: transaction.creatorId },
+        select: { utorid: true },
+      });
 
-        return {
-          id: transaction.id,
-          utorid: userUtorid.utorid,
-          amount: transaction.amount,
-          type: transaction.type,
-          relatedId: transaction.relatedId,
-          spent: transaction.spent,
-          promotionIds: transaction.promotionIds,
-          suspicious: transaction.suspicious,
-          remark: transaction.remark,
-          createdBy: creatorUtorid.utorid,
-        };
-      })
-    );
+    let finalRelatedId = transaction.relatedId;
+
+    // If it's a redemption and has a processorId, look up that user
+    if (transaction.type === "redemption" && transaction.processorId) {
+              
+       const processor = await prisma.user.findUnique({
+           where: { id: transaction.processorId },
+           select: { utorid: true }
+       });
+
+       if (processor) {
+           finalRelatedId = processor.utorid; 
+       } 
+    }
+    
+
+      return {
+        id: transaction.id,
+        utorid: userUtorid.utorid,
+        amount: transaction.amount,
+        type: transaction.type,
+        relatedId: finalRelatedId,
+        spent: transaction.spent,
+        promotionIds: transaction.promotionIds,
+        suspicious: transaction.suspicious,
+        remark: transaction.remark,
+        createdBy: creatorUtorid.utorid,
+      };
+    })
+  );
 
     return res.status(200).json({
       count: totalCount,

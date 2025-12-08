@@ -20,7 +20,7 @@ export function RelatedIdDisplay({ type, id }) {
     } else if (type === "event") {
       navigate(`/events/${id}`); // if its published then regular users can access, otherwise, only managers and super users
     } else if (type === "redemption") {
-      if (id) {
+      if (id && id !== "N/A") {
         // if user is not null
         navigate(`/users/${id}`);
       }
@@ -32,21 +32,16 @@ export function RelatedIdDisplay({ type, id }) {
       setRelatedData("N/A");
       setTooltipMessage("Purchases do not have a related id");
     } else if (type === "redemption") {
-      // related id is the id of the cashier
-      if (id) {
-        try {
-          const user = await getUserById(localStorage.token, Number(id));
-          setRelatedData(user.utorid);
-          setTooltipMessage("Cashier who processed the redemption.");
-        } catch (error) {
-          console.error("Error");
+      
+        if (id && id !== "N/A") {
+          setRelatedData(id); 
+          setTooltipMessage("User who processed the redemption.");
+        } else {
+          setRelatedData("N/A");
+          setTooltipMessage(
+            "User who processed the redemption. This transaction has not yet been processed."
+          );
         }
-      } else {
-        setRelatedData("N/A");
-        setTooltipMessage(
-          "Cashier who processed the redemption. This transaction has not yet been processed."
-        );
-      }
     } else if (type === "transfer") {
       // related id is the id of the reciever
       try {
