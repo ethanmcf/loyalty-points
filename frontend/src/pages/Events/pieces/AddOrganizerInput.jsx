@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import { postOrganizerToEvent } from "../../../apis/EventsApi";
 
-export function AddOrganizerInput() {
+export function AddOrganizerInput({ fetchData }) {
   const { eventId } = useParams();
   const [utorid, setUtorid] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +23,8 @@ export function AddOrganizerInput() {
         utorid,
         localStorage.token
       );
-      window.location.reload();
+      // window.location.reload();
+      fetchData();
     } catch (error) {
       setError(error.message);
     }

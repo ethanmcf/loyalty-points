@@ -39,6 +39,7 @@ export function EventDetails() {
   const fetchData = async () => {
     try {
       const res = await getSingleEvent(Number(eventId), localStorage.token);
+      console.log("Setting new data: ", res);
       setEventData(res);
       setOldEventData(res);
 

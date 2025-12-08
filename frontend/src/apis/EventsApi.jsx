@@ -290,12 +290,13 @@ export async function deleteOrganizerFromEvent(eventId, userId, authToken) {
   const url = `${baseURL}/events/${eventId}/organizers/${userId}`;
   const res = await fetch(url, requestOptions);
 
-  const eventsJSON = await res.json();
   if (!res.ok) {
+    const eventsJSON = await res.json();
+    console.error("Error occured: ", eventsJSON.error);
     throw new Error(eventsJSON.error);
   }
 
-  return eventsJSON; // expected should be no content
+  return; // expected should be no content
 }
 
 /**

@@ -41,11 +41,12 @@ export function DeleteOrganizerDialog({ userId }) {
     setIsOpen(false);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
     try {
       await deleteOrganizerFromEvent(eventId, userId, localStorage.token);
-      handleClose();
+      handleClose(e);
     } catch (error) {
+      console.error(error);
       setError(error.message);
     }
   };
