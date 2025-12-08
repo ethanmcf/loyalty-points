@@ -44,6 +44,7 @@ export function DeleteOrganizerDialog({ userId }) {
   const handleDelete = async (e) => {
     try {
       await deleteOrganizerFromEvent(eventId, userId, localStorage.token);
+      window.location.reload();
       handleClose(e);
     } catch (error) {
       console.error(error);

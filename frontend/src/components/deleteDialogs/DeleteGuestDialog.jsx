@@ -44,6 +44,7 @@ export function DeleteGuestDialog({ userId }) {
     // u could add a function here
     try {
       await removeGuest(localStorage.token, eventId, userId);
+      window.location.reload();
       handleClose();
     } catch (error) {
       setError(error.message);
