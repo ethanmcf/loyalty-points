@@ -8,14 +8,13 @@ import { TypeHistory } from "./VisualizationData";
 import { ActivityOverview } from "./DashboardActivity";
 
 // Table-related imports
-import { DataTable } from "../../components/data-table/DataTable";
+import { DataTable } from "../../components/dataTable/DataTable";
 import { AddGuestToEventDialog } from "../../components/addDialogs/AddGuestToEventDialog";
 import { VerifyUserDialog } from "../../components/actionDialogs/VerifyUserDialog";
 import { MarkCashierSuspiciousDialog } from "../../components/actionDialogs/MarkCashierSuspiciousDialog";
 import { PromoteUserDialog } from "../../components/actionDialogs/PromoteUserDialog";
 
 export function ManagerDashboard({ transactions }) {
-
   const { user } = useUser();
 
   return (

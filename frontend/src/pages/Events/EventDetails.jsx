@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getSingleEvent,
-  patchSingleEvent,
-} from "../../apis/EventsApi";
+import { getSingleEvent, patchSingleEvent } from "../../apis/EventsApi";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
-import { SimpleTable } from "../../components/simple-table/SimpleTable";
+import { SimpleTable } from "../../components/simpleTable/SimpleTable";
 import { AddOrganizerInput } from "./pieces/AddOrganizerInput";
 import { AddGuestInput } from "./pieces/AddGuestInput";
 import dayjs from "dayjs";
@@ -17,7 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import Alert from "@mui/material/Alert";
-import { DeleteEventsDialog } from "../../components/delete-dialogs/DeleteEventsDialog";
+import { DeleteEventsDialog } from "../../components/deleteDialogs/DeleteEventsDialog";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useUser } from "../../contexts/UserContext";
@@ -42,6 +39,7 @@ export function EventDetails() {
   const fetchData = async () => {
     try {
       const res = await getSingleEvent(Number(eventId), localStorage.token);
+      console.log("Setting new data: ", res);
       setEventData(res);
       setOldEventData(res);
 
@@ -63,12 +61,10 @@ export function EventDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
     const formJson = {
       ...Object.fromEntries(formData.entries()),
       published: formData.get("published") === "on",
     };
-    console.log(formJson.startTime);
     const isoStartTime = dayjs(
       formJson.startTime,
       "MM/DD/YYYY hh:mm A"
@@ -101,8 +97,7 @@ export function EventDetails() {
           formJson.capacity === ""
           ? null
           : Number(formJson.capacity),
-        Number(formJson.points) ===
-          Number(oldEventData.pointsAwarded + oldEventData.pointsRemain)
+        Number(formJson.points) === Number(oldEventData.pointsRemain)
           ? null
           : Number(formJson.points),
         formJson.published ? true : null,
@@ -207,7 +202,6 @@ export function EventDetails() {
               name="capacity"
               label="Capacity"
               value={eventData.capacity}
-              required
               disabled={!isEditing}
             />
 
@@ -246,10 +240,13 @@ export function EventDetails() {
             <TextField
               id="points"
               name="points"
-              label="Points"
-              value={eventData.pointsAwarded + eventData.pointsRemain}
+              label="Points Remaining"
+              value={eventData.pointsRemain}
               required
               disabled={!isEditing}
+              onChange={(e) =>
+                setEventData({ ...eventData, pointsRemain: e.target.value })
+              }
             />
             <FormControlLabel
               control={
@@ -275,7 +272,11 @@ export function EventDetails() {
             Guest Count:
             {eventData.guests ? eventData.guests.length : eventData.numGuests}
           </h4>
-          <AddGuestInput guestList={eventData.guests ?? []} canEdit={canEdit} />
+          <AddGuestInput
+            guestList={eventData.guests ?? []}
+            canEdit={canEdit}
+            fetchData={fetchData}
+          />
           {canEdit && <SimpleTable type={"guests"} data={eventData.guests} />}
         </>
       )}

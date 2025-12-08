@@ -1,5 +1,5 @@
 import { useUser } from "../../contexts/UserContext";
-import { DataTable } from "../../components/data-table/DataTable";
+import { DataTable } from "../../components/dataTable/DataTable";
 import { AddTransactionDialog } from "../../components/addDialogs/AddTransactionsDialog";
 import "../../styles/tablesPage.css";
 import Tooltip from "@mui/material/Tooltip";

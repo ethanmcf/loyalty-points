@@ -12,7 +12,6 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getUserById, updateUserById } from "../../apis/UsersApi";
-import { DeleteUserDialog } from "../../components/delete-dialogs/DeleteUserDialog";
 import { useUser } from "../../contexts/UserContext";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

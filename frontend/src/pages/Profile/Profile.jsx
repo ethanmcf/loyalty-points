@@ -5,8 +5,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import {
   PromotionsManagerColumns,
   PromotionsRegularColumns,
-} from "../../components/data-table/DataTableConstants";
-import { DataTable } from "../../components/data-table/DataTable";
+} from "../../components/dataTable/DataTableConstants";
+import { DataTable } from "../../components/dataTable/DataTable";
 import PersonalIfno from "./PersonalIfno";
 import UpdateInfo from "./UpdateInfo";
 import { useEffect, useState } from "react";

@@ -1,5 +1,5 @@
 import { useUser } from "../../contexts/UserContext";
-import { DataTable } from "../../components/data-table/DataTable";
+import { DataTable } from "../../components/dataTable/DataTable";
 import { AddEventsDialog } from "../../components/addDialogs/AddEventsDialog";
 import "../../styles/tablesPage.css";
 import { useState } from "react";

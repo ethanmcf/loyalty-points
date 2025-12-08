@@ -1,5 +1,5 @@
 import { ActionGuestDialog } from "../actionDialogs/ActionGuestDialog";
-import { DeleteOrganizerDialog } from "../delete-dialogs/DeleteOrganizerDialog";
+import { DeleteOrganizerDialog } from "../deleteDialogs/DeleteOrganizerDialog";
 
 export const OrganizersColumns = [
   { field: "id", headerName: "ID", type: "number", filterable: false },

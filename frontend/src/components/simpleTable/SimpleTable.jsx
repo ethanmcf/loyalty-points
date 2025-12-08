@@ -20,7 +20,7 @@ export function SimpleTable({ type, data }) {
     generateColumns();
     setRows(data);
     setIsLoading(true);
-  }, []);
+  }, [data]);
 
   function generateColumns() {
     let newColumns = [];

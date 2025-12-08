@@ -114,18 +114,11 @@ export function AddRedemptionTransactionDialog() {
           </>
         ) : (
           <>
-            <DialogTitle>Transaction Created</DialogTitle>
+            <DialogTitle>Success!</DialogTitle>
             <DialogContent>
-              {/* <div>
-                {Object.keys(createdTransaction).map((prop, index) => (
-                  <div key={index}>
-                    <b>{prop}: </b>
-                    {Array.isArray(createdTransaction[prop])
-                      ? createdTransaction[prop].join(", ")
-                      : createdTransaction[prop].toString()}
-                  </div>
-                ))}
-              </div> */}
+              <Alert severity="success" sx={{ mb: 2 }}>
+                A redemption transaction with id {createdTransaction.id} has been created!
+            </Alert>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Close</Button>

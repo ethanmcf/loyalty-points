@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { DeletePromotionsDialog } from "../../components/delete-dialogs/DeletePromotionsDialog";
+import { DeletePromotionsDialog } from "../../components/deleteDialogs/DeletePromotionsDialog";
 
 export function PromotionDetails() {
   const { promotionId } = useParams();

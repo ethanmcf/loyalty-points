@@ -5,8 +5,8 @@
 import { ViewDetailsButton } from "./pieces/ViewDetailsButton";
 import { SuspiciousTransactionsDialog } from "../actionDialogs/SuspiciousTransactionsDialog";
 import { ProcessRedemptionTransactionsDialog } from "../actionDialogs/ProcessRedemptionTransactionsDialog";
-import { DeletePromotionsDialog } from "../delete-dialogs/DeletePromotionsDialog";
-import { DeleteEventsDialog } from "../delete-dialogs/DeleteEventsDialog";
+import { DeletePromotionsDialog } from "../deleteDialogs/DeletePromotionsDialog";
+import { DeleteEventsDialog } from "../deleteDialogs/DeleteEventsDialog";
 import Chip from "@mui/material/Chip";
 import { RelatedIdDisplay } from "./pieces/RelatedIdDisplay";
 import {
@@ -40,7 +40,6 @@ export const UserColumns = [
     headerName: "UtorID",
     type: "string",
     flex: 1,
-    filterable: false,
   },
   {
     field: "email",

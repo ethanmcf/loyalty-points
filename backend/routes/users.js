@@ -418,8 +418,13 @@ router.get(
     // Add and verify optional query params
     const query = {};
     if (req.query.name) {
-      query["name"] = req.query.name;
+      query["name"] = { contains: req.query.name };
     }
+
+    if (req.query.utorid) {
+      query["utorid"] = { contains: req.query.utorid };
+    }
+
     if (req.query.role) {
       query["role"] = req.query.role;
     }

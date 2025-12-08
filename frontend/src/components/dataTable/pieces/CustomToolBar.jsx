@@ -30,8 +30,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Chip from "@mui/material/Chip";
 // Reference: https://mui.com/x/react-data-grid/components/toolbar/
 export function CustomToolBar(props) {
-  const { rowSelectionModel, baseURL, handleBookmarkFilter, setFilterModel } =
-    props;
+  const {
+    rowSelectionModel,
+    baseURL,
+    handleBookmarkFilter,
+    setFilterModel,
+    fetchData,
+  } = props;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState();
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false);
@@ -66,6 +71,7 @@ export function CustomToolBar(props) {
   };
 
   const handleClose = () => {
+    fetchData();
     setOpen(false);
     setError(null);
   };
@@ -85,6 +91,7 @@ export function CustomToolBar(props) {
         setOpen(false);
       }
     });
+    handleClose();
   };
 
   const handleCloseErrorDialog = (e) => {

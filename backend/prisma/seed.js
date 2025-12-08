@@ -179,7 +179,7 @@ async function createUsers() {
         resetExpiresAt: expiresAt.toISOString(),
       },
     });
-
+    console.log(created.utorid, created.resetToken);
     // generate token and update
     const { token } = createAuthToken(created);
     await prisma.user.update({ where: { id: created.id }, data: { token } });
