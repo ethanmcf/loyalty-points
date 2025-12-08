@@ -61,12 +61,10 @@ export function EventDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
     const formJson = {
       ...Object.fromEntries(formData.entries()),
       published: formData.get("published") === "on",
     };
-    console.log(formJson.startTime);
     const isoStartTime = dayjs(
       formJson.startTime,
       "MM/DD/YYYY hh:mm A"
@@ -99,8 +97,7 @@ export function EventDetails() {
           formJson.capacity === ""
           ? null
           : Number(formJson.capacity),
-        Number(formJson.points) ===
-          Number(oldEventData.pointsAwarded + oldEventData.pointsRemain)
+        Number(formJson.points) === Number(oldEventData.pointsRemain)
           ? null
           : Number(formJson.points),
         formJson.published ? true : null,
@@ -243,10 +240,13 @@ export function EventDetails() {
             <TextField
               id="points"
               name="points"
-              label="Points"
-              value={eventData.pointsAwarded + eventData.pointsRemain}
+              label="Points Remaining"
+              value={eventData.pointsRemain}
               required
               disabled={!isEditing}
+              onChange={(e) =>
+                setEventData({ ...eventData, pointsRemain: e.target.value })
+              }
             />
             <FormControlLabel
               control={

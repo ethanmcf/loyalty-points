@@ -62,9 +62,18 @@ export function AwardAllGuestButton() {
             <DialogContent>
               You have successfully created a transaction record of awarding:
               <DialogContentText>
-                <b>{res[0].awarded} Points</b> to <b>{userCount} Users</b>
+                <b>{createdTransaction[0].awarded} Points</b> to{" "}
+                <b>{userCount} Users</b>
               </DialogContentText>
-              <p>Remarks: {res[0].remarks}</p>
+              <p>
+                Remarks:{" "}
+                {!createdTransaction[0].remarks ||
+                createdTransaction[0].remarks === "" ? (
+                  <>{"N/A"}</>
+                ) : (
+                  <>{createdTransaction[0].remarks}</>
+                )}
+              </p>
             </DialogContent>
             <DialogActions>
               <Button variant="text" onClick={handleClose}>
