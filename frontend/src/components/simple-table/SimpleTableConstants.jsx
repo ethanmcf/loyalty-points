@@ -1,6 +1,4 @@
-import { AwardSingleGuestDialog } from "../../pages/Events/pieces/AwardSingleGuestDialog";
 import { ActionGuestDialog } from "../actionDialogs/ActionGuestDialog";
-import { DeleteGuestDialog } from "../delete-dialogs/DeleteGuestDialog";
 import { DeleteOrganizerDialog } from "../delete-dialogs/DeleteOrganizerDialog";
 
 export const OrganizersColumns = [

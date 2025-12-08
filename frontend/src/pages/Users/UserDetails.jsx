@@ -98,7 +98,6 @@ export function UserDetails() {
           </IconButton>
           <h2>User Details Page</h2>
         </div>
-        <DeleteUserDialog id={userId} />
       </div>
       {!error ? null : <Alert severity="error">{error}</Alert>}
       {userData && (

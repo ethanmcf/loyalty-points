@@ -1,16 +1,14 @@
 import {getSingleEvent, postOrganizerToEvent} from "../../apis/EventsApi";
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useUser } from "../../contexts/UserContext";
 import DialogActions from "@mui/material/DialogActions";
 import Alert from "@mui/material/Alert";
-import { getUserById } from "../../apis/UsersApi";
 
 /* 
 * This Dialog is for adding an organizer to an Event.

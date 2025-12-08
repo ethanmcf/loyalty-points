@@ -9,12 +9,12 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import RedeemIcon from "@mui/icons-material/Redeem";
 import "./NavBar.css";
 import Badge from "@mui/material/Badge";
+
 const pages = ["Dashboard", "Users", "Events", "Transactions", "Promotions"];
 const settings = ["Profile", "Logout"];
 

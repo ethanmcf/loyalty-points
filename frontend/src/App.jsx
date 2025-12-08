@@ -8,7 +8,6 @@ import Profile from "./pages/Profile/Profile";
 import Reset from "./pages/Reset/Reset";
 import { Users } from "./pages/Users/Users";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import { useEffect } from "react";
 
 import { EventDetails } from "./pages/Events/EventDetails";
 import { Promotions } from "./pages/Promotions/Promotions";

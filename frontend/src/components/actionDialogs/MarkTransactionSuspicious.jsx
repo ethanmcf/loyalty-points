@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
@@ -11,9 +11,7 @@ import {
   getTransaction,
   markTransactionSuspicious,
 } from "../../apis/TransactionsApi";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useUser } from "../../contexts/UserContext";
-import Menu from "@mui/material/Menu";
 import TextField from "@mui/material/TextField";
 
 /*
